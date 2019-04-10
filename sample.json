@@ -2,7 +2,7 @@
     "info": {
         "name": "conflict",
         "artist": "siromaru + cranky",
-        "bpm": "180",
+        "bpm": "160",
         "color": {
             "r": 255, "g": 255, "b": 255
         },
@@ -13,7 +13,9 @@
             "easy": 1,
             "normal": 3,
             "hard": 7
-        }
+        },
+        "author": "mtsgi",
+        "comment": "譜面データのテストです。"
     },
 
     "easy": {

@@ -23,17 +23,36 @@ form{
     border-radius: 5px;
     line-height: 35px;
 }
+#info-toggle{
+    display: block;
+    cursor: pointer;
+    background: #909090;
+    color: #ffffff;
+    padding: 0 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    border-radius: 5px 5px 0 0;
+}
+#info-toggle:hover{
+    background: #707070;
+}
 #info strong{
     display: inline-block;
     width: 150px;
 }
-#info input{
+#info input, #comment{
     border: none;
     font-size: 15px;
     margin: 0 2px;
     border-radius: 5px;
     padding: 5px;
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+}
+#comment{
+    width: 210px;
+    height: 60px;
+    resize: vertical;
+    margin-top: 6px;
 }
 footer{
     margin-top: 10px;
