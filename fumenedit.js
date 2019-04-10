@@ -1,7 +1,7 @@
 var fumendata = new Object();
 
 $(document).ready( function(){
-    pushNotice("エディタを読み込みました。");
+    pushNotice("エディターを読み込みました(クリックで閉じる)。");
 
     $("#info-toggle").on("click", () => {
         $("#info-forms").slideToggle(500);
@@ -22,7 +22,11 @@ $(document).ready( function(){
     });
 
     $("#jacket-view").on("click", () => {
-        pushNotice("<img src='icon.png'>");
+        pushNotice("<img src='" + $("#jacket").val() + "'>");
+    });
+
+    $("#demo-play").on("click", () => {
+        pushNotice("<audio src='" + $("#music").val() + "' controls></audio>");
     });
 
     document.forms.port.import.addEventListener("change", (e) => {
@@ -78,6 +82,14 @@ function attatchFumendata(FD){
         }
     }
     $("#lv-normal-notes").text( notes + "notes" );
+    notes = 0;
+    for( let i in FD.extra ){
+        for( let k of FD.extra[i] ){
+            if( typeof k == "object" ) notes += k.length;
+            else notes++;
+        }
+    }
+    $("#lv-ex-notes").text( notes + "notes" );
     notes = 0;
     for( let i in FD.hard ){
         for( let k of FD.hard[i] ){
