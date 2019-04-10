@@ -12,8 +12,21 @@ header{
 form{
     background: #505050;
     margin: 12px;
-    padding: 12px;
-    border-radius: 5px;
+    padding: 0;
+    display: flex;
+}
+#import{
+    display: none;
+}
+.port-button{
+    width: 50%;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+    color: #ffffff;
+}
+.port-button:hover{
+    background: #a0a0a0;
 }
 #info{
     background: #e0e0e0;
@@ -47,6 +60,9 @@ form{
     border-radius: 5px;
     padding: 5px;
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+}
+#info input:focus{
+    box-shadow: 0 0 0 2px rgba(30,80,220,.5);
 }
 #comment{
     width: 210px;
@@ -91,4 +107,25 @@ footer{
     background: #e0e0e0;
     width: 50%;
     height: 400px;
+}
+#notice{
+    display: none;
+    cursor: default;
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: #e0e0e0;
+    color: #505050;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #505050;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.2);
+    max-width: 400px;
+}
+#demo-play, #jacket-view{
+    cursor: pointer;
+    border: 1px solid #909090;
+    padding: 3px;
+    margin-left: 4px;
+    border-radius: 4px;
 }

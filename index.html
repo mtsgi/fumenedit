@@ -14,8 +14,9 @@
 <body>
     <header>譜面エディター</header>
     <form name="port">
-        開く：<input type="file" name="import" id="import"><br>
-        保存：<button>ファイルを保存</button>
+        <label for="import" class="port-button">ファイルを開く</label>
+        <input type="file" name="import" id="import"><br>
+        <a class="port-button" id="export">保存する</a>
     </form>
     <div id="info">
         <a id="info-toggle">譜面情報の編集</a>
@@ -25,14 +26,14 @@
             <strong>BPM</strong><input type="text" id="bpm"><br>
             <strong>カラー</strong>rgb(<input type="text" id="r" size="2">,<input type="text" id="g" size="2">,<input
                 type="text" id="b" size="2">)<br>
-            <strong>ジャケット画像</strong><input type="text" id="jacket"><br>
-            <strong>楽曲ファイル</strong><input type="text" id="music"><br>
-            <strong>オフセット</strong><input type="text" id="offset">
+            <strong>ジャケット画像</strong><input type="text" id="jacket"><a id="jacket-view">表示</a><br>
+            <strong>楽曲ファイル</strong><input type="text" id="music"><a id="demo-play">▶</a><br>
+            <strong>オフセット</strong><input type="number" id="offset">
             <hr>
             <strong>譜面製作者</strong><input type="text" id="author"><br>
-            <strong>EASY</strong>Lv <input type="text" id="lv-easy" size="5"> <span id="lv-easy-notes"></span><br>
-            <strong>NORMAL</strong>Lv <input type="text" id="lv-normal" size="5"> <span id="lv-normal-notes"></span><br>
-            <strong>HARD</strong>Lv <input type="text" id="lv-hard" size="5"> <span id="lv-hard-notes"></span><br>
+            <strong>EASY</strong>Lv <input type="text" id="lv-easy" size="5"> <span id="lv-easy-notes">- notes</span><br>
+            <strong>NORMAL</strong>Lv <input type="text" id="lv-normal" size="5"> <span id="lv-normal-notes">- notes</span><br>
+            <strong>HARD</strong>Lv <input type="text" id="lv-hard" size="5"> <span id="lv-hard-notes">- notes</span><br>
             <strong>コメント</strong><textarea id="comment"></textarea>
         </div>
     </div>
@@ -46,6 +47,7 @@
         <div id="preview"></div>
     </div>
     <footer>mtsgi/fumenedit</footer>
+    <div id="notice"></div>
 </body>
 
 </html>

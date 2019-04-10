@@ -1,8 +1,28 @@
 var fumendata = new Object();
 
 $(document).ready( function(){
+    pushNotice("エディタを読み込みました。");
+
     $("#info-toggle").on("click", () => {
         $("#info-forms").slideToggle(500);
+    });
+
+    $("#export").on("click", () => {
+		let text = JSON.stringify(fumendata);
+		var blob = new Blob([text], {type: "application/json"});
+		var a = document.getElementById("export");
+		a.href = URL.createObjectURL(blob);
+		a.target = "_blank";
+		a.download = "譜面データ.json";
+        pushNotice( "データを出力しました。" );
+    });
+
+    $("#notice").on("click", () => {
+        $("#notice").fadeOut(100);
+    });
+
+    $("#jacket-view").on("click", () => {
+        pushNotice("<img src='icon.png'>");
     });
 
     document.forms.port.import.addEventListener("change", (e) => {
@@ -14,14 +34,18 @@ $(document).ready( function(){
             $("#textarea").text(reader.result);
             try{
                 fumendata = JSON.parse(reader.result);
+                attatchFumendata(fumendata);
             }
             catch(error){
-                alert( "譜面データの読み込みに失敗しました\n\n" + error );
+                pushNotice( "譜面データの読み込みに失敗しました<br>" + error );
             }
-            attatchFumendata(fumendata);
         })
     });
 });
+
+function pushNotice(STR){
+    $("#notice").html(STR).fadeIn(100);
+}
 
 function attatchFumendata(FD){
     $("#name").val(FD.info.name);
@@ -61,5 +85,6 @@ function attatchFumendata(FD){
             else notes++;
         }
     }
-    $("#lv-hard-notes").text( notes + "notes" )
+    $("#lv-hard-notes").text( notes + "notes" );
+    pushNotice( "譜面データを読み込みました。" );
 }
