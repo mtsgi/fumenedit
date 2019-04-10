@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>譜面エディター</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="fumenedit.js"></script>
+</head>
+<body>
+    <header>譜面エディター</header>
+    <form>
+            開く：<input type="file" name="import" id="import"><br>
+            保存：<button>ファイルを保存</button>
+    </form>
+    <div id="info">
+            <strong>楽曲名</strong><input type="text" id="name"><br>
+            <strong>アーティスト</strong><input type="text" id="artist"><br>
+            <strong>BPM</strong><input type="text" id="bpm"><br>
+            <strong>カラー</strong>rgb(<input type="text" id="r" size="2">,<input type="text" id="g" size="2">,<input type="text" id="b" size="2">)<br>
+            <strong>ジャケット画像</strong><input type="text" id="jacket"><br>
+            <strong>楽曲ファイル</strong><input type="text" id="music"><br>
+            <strong>オフセット</strong><input type="text" id="offset"><hr>
+            <strong>EASY</strong>Lv <input type="text" id="lv-easy" size="5"><br>
+            <strong>NORMAL</strong>Lv <input type="text" id="lv-easy" size="5"><br>
+            <strong>HARD</strong>Lv <input type="text" id="lv-easy" size="5">
+    </div>
+    <div id="area-head">
+        <div>入力</div>
+        <div>プレビュー</div>
+    </div>
+    <div id="main">
+        <textarea name="textarea" id="textarea"></textarea>
+        <div id="preview"></div>
+    </div>
+    <footer>mtsgi/fumenedit</footer>
+</body>
+</html>
