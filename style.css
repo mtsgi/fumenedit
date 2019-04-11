@@ -1,7 +1,32 @@
+/* 汎用 */
 body{
     background: #303030;
     margin: 0;
     color: #ffffff;
+}
+.button{
+    cursor: pointer;
+    border: 1px solid #909090;
+    padding: 4px;
+    margin-left: 4px;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+    color: #404040;
+    background : linear-gradient(#FFFFFF 0%,#E0E0E0 100%);
+}
+.button:hover{
+    background : linear-gradient(#EBEBEB 0%,#C9C9C9 100%);
+}
+input, #comment{
+    border: none;
+    font-size: 15px;
+    margin: 0 2px;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+}
+input:focus{
+    box-shadow: 0 0 0 2px rgba(30,80,220,.5);
 }
 header{
     background: whitesmoke;
@@ -9,6 +34,8 @@ header{
     padding: 5px;
     font-size: 22px;
 }
+
+/* impoprtとexport */
 form{
     background: #505050;
     margin: 12px;
@@ -28,6 +55,8 @@ form{
 .port-button:hover{
     background: #a0a0a0;
 }
+
+/* 譜面情報 */
 #info{
     background: #e0e0e0;
     color: #303030;
@@ -52,17 +81,6 @@ form{
 #info strong{
     display: inline-block;
     width: 150px;
-}
-#info input, #comment{
-    border: none;
-    font-size: 15px;
-    margin: 0 2px;
-    border-radius: 5px;
-    padding: 5px;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
-}
-#info input:focus{
-    box-shadow: 0 0 0 2px rgba(30,80,220,.5);
 }
 #comment{
     width: 210px;
@@ -122,10 +140,10 @@ footer{
     box-shadow: 0 1px 3px 0 rgba(0,0,0,.2);
     max-width: 400px;
 }
-#demo-play, #jacket-view{
-    cursor: pointer;
-    border: 1px solid #909090;
-    padding: 3px;
-    margin-left: 4px;
-    border-radius: 4px;
+/* プレビュー */
+#preview-control{
+    padding: 8px;
+}
+#measure{
+    width: 100px;
 }

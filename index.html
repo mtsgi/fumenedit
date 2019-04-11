@@ -26,8 +26,8 @@
             <strong>BPM</strong><input type="text" id="bpm"><br>
             <strong>カラー</strong>rgb(<input type="text" id="r" size="2">,<input type="text" id="g" size="2">,<input
                 type="text" id="b" size="2">)<br>
-            <strong>ジャケット画像</strong><input type="text" id="jacket"><a id="jacket-view">表示</a><br>
-            <strong>楽曲ファイル</strong><input type="text" id="music"><a id="demo-play">▶</a><br>
+            <strong>ジャケット画像</strong><input type="text" id="jacket"><a id="jacket-view" class="button">表示</a><br>
+            <strong>楽曲ファイル</strong><input type="text" id="music"><a id="demo-play" class="button">▶</a><br>
             <strong>オフセット</strong><input type="number" id="offset">
             <hr>
             <strong>譜面製作者</strong><input type="text" id="author"><br>
@@ -45,7 +45,14 @@
     </div>
     <div id="main">
         <textarea name="textarea" id="textarea"></textarea>
-        <div id="preview"></div>
+        <div id="preview">
+            <div id="preview-control">
+                    <a class="button">先頭</a>
+                    <a class="button">前</a>
+                <input type="number" id="measure" step="1" min="0">
+                <a class="button">次</a>
+            </div>
+        </div>
     </div>
     <footer>mtsgi/fumenedit</footer>
     <div id="notice"></div>

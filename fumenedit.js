@@ -1,11 +1,13 @@
 var fumendata = new Object();
 
 $(document).ready( function(){
-    pushNotice("エディターを読み込みました(クリックで閉じる)。");
+    pushNotice("エディターを読み込みました。");
 
     $("#info-toggle").on("click", () => {
         $("#info-forms").slideToggle(500);
     });
+
+    $("#info input").on("change", updateFumendata);
 
     $("#export").on("click", () => {
 		let text = JSON.stringify(fumendata);
@@ -38,7 +40,7 @@ $(document).ready( function(){
             $("#textarea").text(reader.result);
             try{
                 fumendata = JSON.parse(reader.result);
-                attatchFumendata(fumendata);
+                inputFumendata(fumendata);
             }
             catch(error){
                 pushNotice( "譜面データの読み込みに失敗しました<br>" + error );
@@ -51,7 +53,7 @@ function pushNotice(STR){
     $("#notice").html(STR).fadeIn(100);
 }
 
-function attatchFumendata(FD){
+function inputFumendata(FD){
     $("#name").val(FD.info.name);
     $("#artist").val(FD.info.artist);
     $("#bpm").val(FD.info.bpm);
@@ -66,6 +68,35 @@ function attatchFumendata(FD){
     $("#lv-normal").val(FD.info.difficulty.normal);
     $("#lv-hard").val(FD.info.difficulty.hard);
     $("#comment").text(FD.info.comment);
+    countNotes(FD);
+    pushNotice( "譜面データを読み込みました。" );
+}
+
+function updateFumendata(){
+    try {  
+        fumendata.info.name = $("#name").val();
+        fumendata.info.artist = $("#artist").val();
+        fumendata.info.bpm = $("#bpm").val();
+        fumendata.info.color.r = $("#r").val();
+        fumendata.info.color.g = $("#g").val();
+        fumendata.info.color.b = $("#b").val();
+        fumendata.info.jacket = $("#jacket").val();
+        fumendata.info.music = $("#music").val();
+        fumendata.info.offset = $("#offset").val();
+        fumendata.info.author = $("#author").val();
+        fumendata.info.difficulty.easy = $("#lv-easy").val();
+        fumendata.info.difficulty.normal = $("#lv-normal").val();
+        fumendata.info.difficulty.hard = $("#lv-hard").val();
+        fumendata.info.comment = $("#comment").text();
+        countNotes(fumendata);
+        pushNotice( "譜面データを更新しました。" );
+    } catch (error) {
+        pushNotice( "ファイルをロードし直してください。" );
+    }
+    $("#notice").fadeOut(1500);
+}
+
+function countNotes(FD){
     let notes = 0;
     for( let i in FD.easy ){
         for( let k of FD.easy[i] ){
@@ -83,14 +114,6 @@ function attatchFumendata(FD){
     }
     $("#lv-normal-notes").text( notes + "notes" );
     notes = 0;
-    for( let i in FD.extra ){
-        for( let k of FD.extra[i] ){
-            if( typeof k == "object" ) notes += k.length;
-            else notes++;
-        }
-    }
-    $("#lv-ex-notes").text( notes + "notes" );
-    notes = 0;
     for( let i in FD.hard ){
         for( let k of FD.hard[i] ){
             if( typeof k == "object" ) notes += k.length;
@@ -98,5 +121,12 @@ function attatchFumendata(FD){
         }
     }
     $("#lv-hard-notes").text( notes + "notes" );
-    pushNotice( "譜面データを読み込みました。" );
+    notes = 0;
+    for( let i in FD.extra ){
+        for( let k of FD.extra[i] ){
+            if( typeof k == "object" ) notes += k.length;
+            else notes++;
+        }
+    }
+    $("#lv-ex-notes").text( notes + "notes" );
 }
