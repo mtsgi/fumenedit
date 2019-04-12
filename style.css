@@ -147,3 +147,23 @@ footer{
 #measure{
     width: 100px;
 }
+#preview-area{
+    padding: 10px;
+    color: #505050;
+}
+select{
+    border: none;
+    font-size: 15px;
+    margin: 0 2px;
+    border-radius: 5px;
+    padding: 2px 5px;
+    border: 1px solid #909090;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+}
+#preview-area div{
+    border-bottom: 1px solid #909090;
+    padding: 5px;
+}
+#preview-area div:hover{
+    background: #f0f0f0;
+}

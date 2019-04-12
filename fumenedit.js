@@ -1,6 +1,36 @@
-var fumendata = new Object();
+var currentMeasure = 0;
+var currentLevel = "easy";
+var fumendata = {
+    "info": {
+        "name": "",
+        "artist": "",
+        "bpm": "150",
+        "color": {
+            "r": 255, "g": 255, "b": 255
+        },
+        "jacket": "",
+        "music": "",
+        "offset": 0,
+        "difficulty": {
+            "easy": null,
+            "normal": null,
+            "hard": null,
+            "ex": null
+        },
+        "author": "",
+        "comment": ""
+    },
+
+    "kantan": {},
+    "easy": {},
+    "normal": {},
+    "hard": {},
+    "extra": {}
+};
 
 $(document).ready( function(){
+    inputFumendata(fumendata);
+    updateFumendata();
     pushNotice("エディターを読み込みました。");
 
     $("#info-toggle").on("click", () => {
@@ -9,8 +39,18 @@ $(document).ready( function(){
 
     $("#info input").on("change", updateFumendata);
 
+    $("#measure").on("change", () => {
+        moveTo( Number($("#measure").val()) );
+    }).val(0);
+
+    $("#level").on("change", () => {
+        currentLevel = $("#level").val();
+        moveTo(currentMeasure);
+        pushNotice( currentLevel + "に切り替えました。");
+    }).val("easy");
+
     $("#export").on("click", () => {
-		let text = JSON.stringify(fumendata);
+		let text = JSON.stringify(fumendata, null, 4);
 		var blob = new Blob([text], {type: "application/json"});
 		var a = document.getElementById("export");
 		a.href = URL.createObjectURL(blob);
@@ -51,6 +91,7 @@ $(document).ready( function(){
 
 function pushNotice(STR){
     $("#notice").html(STR).fadeIn(100);
+    console.log(STR);
 }
 
 function inputFumendata(FD){
@@ -87,13 +128,14 @@ function updateFumendata(){
         fumendata.info.difficulty.easy = $("#lv-easy").val();
         fumendata.info.difficulty.normal = $("#lv-normal").val();
         fumendata.info.difficulty.hard = $("#lv-hard").val();
-        fumendata.info.comment = $("#comment").text();
+        fumendata.info.comment = $("#comment").val();
         countNotes(fumendata);
         pushNotice( "譜面データを更新しました。" );
     } catch (error) {
         pushNotice( "ファイルをロードし直してください。" );
     }
     $("#notice").fadeOut(1500);
+    $("#textarea").text(JSON.stringify(fumendata, null, 4))
 }
 
 function countNotes(FD){
@@ -129,4 +171,20 @@ function countNotes(FD){
         }
     }
     $("#lv-ex-notes").text( notes + "notes" );
+}
+
+function moveTo(NUM){
+    currentMeasure = NUM;
+    let measureObject = fumendata[currentLevel][NUM];
+    if( !measureObject ){
+        pushNotice(NUM + "小節を読み込めません。");
+        $("#preview-area").text("ノーツがありません");
+        return;
+    }
+    $("#preview-area").text( measureObject.length + "分割" );
+    let per = measureObject.length;
+    for( let i=0; i<per; i++ ){
+        $("#preview-area").append("<div>"+measureObject[i]+"</div>")
+    }
+    $("#measure").val(NUM);
 }

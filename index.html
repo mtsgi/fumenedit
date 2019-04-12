@@ -47,11 +47,19 @@
         <textarea name="textarea" id="textarea"></textarea>
         <div id="preview">
             <div id="preview-control">
-                    <a class="button">先頭</a>
-                    <a class="button">前</a>
+                <select id="level">
+                        <option value="kantan">KANTAN</option>
+                        <option value="easy" selected>EASY</option>
+                        <option value="normal">NORMAL</option>
+                        <option value="hard">HARD</option>
+                        <option value="extra">EXTRA</option>
+                </select>
+                <a class="button" onclick="moveTo(0)">先頭</a>
+                <a class="button" onclick="moveTo(currentMeasure-1)">前</a>
                 <input type="number" id="measure" step="1" min="0">
-                <a class="button">次</a>
+                <a class="button" onclick="moveTo(currentMeasure+1)">次</a>
             </div>
+            <div id="preview-area"></div>
         </div>
     </div>
     <footer>mtsgi/fumenedit</footer>
