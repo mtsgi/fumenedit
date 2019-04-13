@@ -41,6 +41,14 @@ $(document).ready( function(){
         $("#info-forms-2").slideToggle(500);
     });
 
+    $("#menu-open").on("click", () => {
+        $("#menu").css("left", "0px");
+    });
+
+    $("#menu-close").on("click", () => {
+        $("#menu").css("left", "-220px");
+    });
+
     $("#info input").on("change", updateFumendata);
 
     $("#measure").on("change", () => {

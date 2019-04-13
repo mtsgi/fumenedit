@@ -13,7 +13,15 @@
 </head>
 
 <body>
-    <header>譜面エディター</header>
+    <header>
+        <a id="menu-open">≡</a>
+        譜面エディター
+    </header>
+    <div id="menu">
+            <a id="menu-close">❎もどる</a>
+            <a href="sample.json" download="sample.json">⬇️サンプル譜面ファイルのダウンロード</a>
+    </div>
+
     <form name="port">
         <label for="import" class="port-button">📂ファイルを開く</label>
         <input type="file" name="import" id="import"><br>
@@ -39,7 +47,6 @@
             <strong>HARD</strong>Lv <input type="text" id="lv-hard" size="5"> <span id="lv-hard-notes">- notes</span><br>
             <strong>(EXTRA)</strong>Lv <input type="text" id="lv-ex" size="5"> <span id="lv-ex-notes">- notes</span><br>
             <strong>コメント</strong><textarea id="comment"></textarea>
-            <strong>ダウンロード</strong><a href="sample.json" download="sample.json">サンプル譜面ファイル</a>
         </div>
     </div>
     </div>

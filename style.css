@@ -31,10 +31,43 @@ input:focus{
 header{
     background: whitesmoke;
     color: #505050;
-    padding: 5px;
+    padding: 5px 5px 5px 45px;
     font-size: 22px;
 }
-
+/* メニュー */
+header #menu-open{
+    cursor: pointer;
+    background: #acf;
+    padding: 0 12px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 44px;
+    border-radius: 0 0 5px 0;
+}
+header #menu-open:hover{
+    opacity: .5;
+}
+#menu{
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: -220px;
+    width: 200px;
+    height: 100%;
+    box-shadow: 0 0 15px 0 rgba(0,0,0,.3);
+    transition: .5s all ease;
+}
+#menu a{
+    cursor: pointer;
+    display: block;
+    color: #505050;
+    text-decoration: none;
+    padding: 10px;
+}
+#menu a:hover{
+    background: #eee;
+}
 /* impoprtとexport */
 form{
     background: #505050;
