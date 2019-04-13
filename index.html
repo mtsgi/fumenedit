@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>譜面エディター</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css" media="screen and (max-width: 600px)">
     <script src="jquery.min.js"></script>
     <script src="fumenedit.js"></script>
 </head>
@@ -19,7 +20,7 @@
         <a class="port-button" id="export">💾保存する</a>
     </form>
     <div id="info">
-        <a id="info-toggle">譜面情報の編集</a>
+        <a id="info-toggle">楽曲情報の編集</a>
         <div id="info-forms">
             <strong>楽曲名</strong><input type="text" id="name"><br>
             <strong>アーティスト</strong><input type="text" id="artist"><br>
@@ -29,13 +30,16 @@
             <strong>ジャケット画像</strong><input type="text" id="jacket"><a id="jacket-view" class="button">表示</a><br>
             <strong>楽曲ファイル</strong><input type="text" id="music"><a id="demo-play" class="button">▶</a><br>
             <strong>オフセット</strong><input type="number" id="offset">
-            <hr>
+        </div>
+        <a id="info-toggle-2">譜面情報の編集</a>
+        <div id="info-forms-2">
             <strong>譜面製作者</strong><input type="text" id="author"><br>
             <strong>EASY</strong>Lv <input type="text" id="lv-easy" size="5"> <span id="lv-easy-notes">- notes</span><br>
             <strong>NORMAL</strong>Lv <input type="text" id="lv-normal" size="5"> <span id="lv-normal-notes">- notes</span><br>
             <strong>HARD</strong>Lv <input type="text" id="lv-hard" size="5"> <span id="lv-hard-notes">- notes</span><br>
             <strong>(EXTRA)</strong>Lv <input type="text" id="lv-ex" size="5"> <span id="lv-ex-notes">- notes</span><br>
             <strong>コメント</strong><textarea id="comment"></textarea>
+            <strong>ダウンロード</strong><a href="sample.json" download="sample.json">サンプル譜面ファイル</a>
         </div>
     </div>
     </div>
@@ -56,7 +60,7 @@
                 </select>
                 <a class="button" onclick="moveTo(0)">先頭</a>
                 <a class="button" onclick="moveTo(currentMeasure-1)">前</a>
-                <input type="number" id="measure" step="1" min="0">
+                <input type="number" id="measure" step="1">
                 <a class="button" onclick="moveTo(currentMeasure+1)">次</a>
             </div>
             <div id="preview-area"></div>

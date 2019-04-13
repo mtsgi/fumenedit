@@ -37,6 +37,10 @@ $(document).ready( function(){
         $("#info-forms").slideToggle(500);
     });
 
+    $("#info-toggle-2").on("click", () => {
+        $("#info-forms-2").slideToggle(500);
+    });
+
     $("#info input").on("change", updateFumendata);
 
     $("#measure").on("change", () => {
@@ -176,6 +180,7 @@ function countNotes(FD){
 function moveTo(NUM){
     currentMeasure = NUM;
     let measureObject = fumendata[currentLevel][NUM];
+    $("#measure").val(NUM);
     if( !measureObject ){
         pushNotice(NUM + "小節を読み込めません。");
         $("#preview-area").text("ノーツがありません");
@@ -186,5 +191,4 @@ function moveTo(NUM){
     for( let i=0; i<per; i++ ){
         $("#preview-area").append("<div>"+measureObject[i]+"</div>")
     }
-    $("#measure").val(NUM);
 }

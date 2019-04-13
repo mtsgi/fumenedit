@@ -1,0 +1,12 @@
+#area-head{
+  display: none;
+}
+#main{
+  display: block;
+}
+#info input:not([size]), textarea{
+  width: 100px;
+}
+#preview, #textarea{
+  width: 100%;
+}
