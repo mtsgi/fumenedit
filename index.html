@@ -27,12 +27,13 @@
         <input type="file" name="import" id="import"><br>
         <a class="port-button" id="export">💾保存する</a>
     </form>
+
     <div id="info">
         <a id="info-toggle">楽曲情報の編集</a>
         <div id="info-forms">
             <strong>楽曲名</strong><input type="text" id="name"><br>
             <strong>アーティスト</strong><input type="text" id="artist"><br>
-            <strong>BPM</strong><input type="text" id="bpm"><br>
+            <strong>BPM</strong><input type="text" id="bpm"><a id="bpm-play" class="button">▶</a><br>
             <strong>カラー</strong>rgb(<input type="text" id="r" size="2">,<input type="text" id="g" size="2">,<input
                 type="text" id="b" size="2">)<br>
             <strong>ジャケット画像</strong><input type="text" id="jacket"><a id="jacket-view" class="button">表示</a><br>
@@ -50,6 +51,9 @@
         </div>
     </div>
     </div>
+
+    <audio id="audio" style="width: 100%" controls></audio>
+
     <div id="area-head">
         <div>入力</div>
         <div>プレビュー</div>
@@ -65,16 +69,19 @@
                         <option value="hard">HARD</option>
                         <option value="extra">EXTRA</option>
                 </select>
-                <a class="button" onclick="moveTo(0)">先頭</a>
+                <a class="button" onclick="moveTo(0)">⏪</a>
                 <a class="button" onclick="moveTo(currentMeasure-1)">前</a>
                 <input type="number" id="measure" step="1">
                 <a class="button" onclick="moveTo(currentMeasure+1)">次</a>
+                <a class="button" onclick="playCurrentMeasure()">▶</a>
             </div>
             <div id="preview-area"></div>
         </div>
     </div>
     <footer>mtsgi/fumenedit</footer>
     <div id="notice"></div>
+
+    <audio src="guide.mp3" id="guide"></audio>
 </body>
 
 </html>

@@ -79,8 +79,16 @@ $(document).ready( function(){
         pushNotice("<img src='" + $("#jacket").val() + "'>");
     });
 
+    $("#bpm-play").on("click", () => {
+        playGuide();
+        let ippaku = 60 / Number( fumendata.info.bpm ) * 1000;
+        setTimeout( playGuide, ippaku );
+        setTimeout( playGuide, ippaku * 2 );
+        setTimeout( playGuide, ippaku * 3 );
+    });
+
     $("#demo-play").on("click", () => {
-        pushNotice("<audio src='" + $("#music").val() + "' controls></audio>");
+        $("#audio")[0].play();
     });
 
     document.forms.port.import.addEventListener("change", (e) => {
@@ -135,6 +143,7 @@ function updateFumendata(){
         fumendata.info.color.b = $("#b").val();
         fumendata.info.jacket = $("#jacket").val();
         fumendata.info.music = $("#music").val();
+        $("#audio").attr( "src", $("#music").val() );
         fumendata.info.offset = $("#offset").val();
         fumendata.info.author = $("#author").val();
         fumendata.info.difficulty.easy = $("#lv-easy").val();
@@ -189,14 +198,27 @@ function moveTo(NUM){
     currentMeasure = NUM;
     let measureObject = fumendata[currentLevel][NUM];
     $("#measure").val(NUM);
+    let time = 60 * 4 * Number(NUM) / Number(fumendata.info.bpm);
     if( !measureObject ){
         pushNotice(NUM + "小節を読み込めません。");
-        $("#preview-area").text("ノーツがありません");
+        $("#preview-area").text("ノーツがありません 秒数:" + time);
         return;
     }
-    $("#preview-area").text( measureObject.length + "分割" );
+    $("#preview-area").text( "分割:" + measureObject.length + " 秒数:" + time );
     let per = measureObject.length;
     for( let i=0; i<per; i++ ){
-        $("#preview-area").append("<div>"+measureObject[i]+"</div>")
+        $("#preview-area").append("<div>" + measureObject[i] + "</div>")
     }
+}
+
+function playGuide(){
+    new Audio("guide.mp3").play();
+}
+
+function playCurrentMeasure(){
+    document.getElementById("audio").currentTime =  60 * 4 * currentMeasure / Number(fumendata.info.bpm) + fumendata.info.offset;
+    document.getElementById("audio").play();
+    setTimeout(() => {
+        document.getElementById("audio").pause();
+    }, 60 / Number( fumendata.info.bpm ) * 4);
 }
