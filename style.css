@@ -208,6 +208,9 @@ select{
     border-bottom: 1px solid #909090;
     width: 270px;
 }
+.preview-measure:hover{
+    color: red;
+}
 .preview-measure div{
     box-sizing: border-box;
     background: transparent;
@@ -226,12 +229,12 @@ select{
     border-bottom: 4px solid transparent;
 }
 .div-note{
-    border-bottom: 4px solid rgb(226, 50, 50);
+    border-bottom: 4px solid rgb(98, 145, 233);
 }
 .div-each{
-    border-bottom: 4px solid rgb(255, 156, 42);
+    border-bottom: 4px solid rgb(28, 98, 228);
 }
 .div-skill{
-    border-bottom: 4px solid rgb(166, 226, 0);
+    border-bottom: 4px solid rgb(228, 18, 18);
     width: 250px!important;
 }
