@@ -31,6 +31,12 @@ var fumendata = {
 $(document).ready( function(){
     inputFumendata(fumendata);
     updateFumendata();
+
+    if( localStorage.getItem("fumenedit-level") ){
+        $("#level").val(localStorage.getItem("fumenedit-level")).change();
+        currentLevel = localStorage.getItem("fumenedit-level");
+    }
+
     pushNotice("エディターを読み込みました。");
 
     //操作パネルの折りたたみ
@@ -66,9 +72,10 @@ $(document).ready( function(){
     //難易度切り替え
     $("#level").on("change", () => {
         currentLevel = $("#level").val();
+        localStorage.setItem("fumenedit-level", currentLevel);
         moveTo(currentMeasure);
         pushNotice( currentLevel + "に切り替えました。");
-    }).val("easy");
+    });
 
     //jsonファイルを書き出し
     $("#export").on("click", () => {
@@ -263,6 +270,8 @@ function moveTo(NUM){
         //文字の時
         else if( typeof measureObject[i] == "string" ){
             if( measureObject[i] == "S" ) APPEND+= "<div class='div-skill'></div>";
+            else if( measureObject[i] == "L" ) APPEND+= "<div class='div-rest'></div><div class='div-left'></div><div class='div-rest'></div>";
+            else if( measureObject[i] == "R" ) APPEND+= "<div class='div-rest'></div><div class='div-right'></div><div class='div-rest'></div>";
         }
         APPEND += "</div>";
         $("#preview-area").append( APPEND );

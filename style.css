@@ -218,6 +218,7 @@ select{
     padding: 0;
     width: 50px;
     display: block;
+    box-shadow:inset -1px 0 0 0 #c0c0c0;
 }
 .preview-measure div:hover{
     background: #f0f0f0;
@@ -237,4 +238,26 @@ select{
 .div-skill{
     border-bottom: 4px solid rgb(228, 18, 18);
     width: 250px!important;
+}
+.div-left, .div-right{
+    margin: 0 0px!important;
+    width: 150px!important;
+    border-bottom: 4px solid rgb(200,0,200);
+    position: relative;
+}
+.div-left:after{
+    color: rgb(200,0,200);
+    position: absolute;
+    bottom: -5px;
+    content: "< < <";
+    width: 150px;
+    text-align: center;
+}
+.div-right:after{
+    color: rgb(200,0,200);
+    position: absolute;
+    bottom: -5px;
+    content: "> > >";
+    width: 150px;
+    text-align: center;
 }
