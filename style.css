@@ -182,6 +182,9 @@ footer{
 #measure{
     width: 60px;
 }
+#height{
+    width: 80px;
+}
 #preview-area{
     padding: 10px;
     color: #505050;

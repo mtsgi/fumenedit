@@ -1,5 +1,6 @@
 var currentMeasure = 0;
 var currentLevel = "easy";
+var previewHeight = 300;
 var fumendata = {
     "info": {
         "name": "",
@@ -57,6 +58,10 @@ $(document).ready( function(){
 
     //入力時に譜面情報を更新
     $("#info input").on("change", updateFumendata);
+    $("#textarea").on("change", () =>{
+        fumendata = JSON.parse( $("#textarea").val() );
+        updateFumendata();
+    });
 
     //小節移動
     $("#measure").on("change", () => {
@@ -65,9 +70,15 @@ $(document).ready( function(){
 
     //左右キーで小節移動
     $(document).on("keydown", function(e){
-        if(e.which == 37) $("#measure-prev").click();
-        else if(e.which == 39)  $("#measure-next").click();
+        //if(e.which == 37) $("#measure-prev").click();
+        //else if(e.which == 39)  $("#measure-next").click();
       });
+
+    //小節移動
+    $("#height").on("change", () => {
+        previewHeight = Number($("#height").val())
+        moveTo(currentMeasure);
+    }).val(300);
 
     //難易度切り替え
     $("#level").on("change", () => {
@@ -178,6 +189,7 @@ function updateFumendata(){
     }
     $("#notice").fadeOut(1500);
     $("#textarea").text(JSON.stringify(fumendata, null, 4))
+    moveTo(currentMeasure);
 }
 
 //FDオブジェクトからノーツ数算出
@@ -275,7 +287,7 @@ function moveTo(NUM){
         }
         APPEND += "</div>";
         $("#preview-area").append( APPEND );
-        $(".preview-measure div").css("height", 300 / measureObject.length + "px");
+        $(".preview-measure div").css("height", previewHeight / measureObject.length + "px");
     }
 }
 
