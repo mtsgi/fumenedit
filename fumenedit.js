@@ -33,34 +33,44 @@ $(document).ready( function(){
     updateFumendata();
     pushNotice("エディターを読み込みました。");
 
+    //操作パネルの折りたたみ
     $("#info-toggle").on("click", () => {
         $("#info-forms").slideToggle(500);
     });
-
     $("#info-toggle-2").on("click", () => {
         $("#info-forms-2").slideToggle(500);
     });
 
+    //メニューバーのトグル
     $("#menu-open").on("click", () => {
         $("#menu").css("left", "0px");
     });
-
     $("#menu-close").on("click", () => {
         $("#menu").css("left", "-220px");
     });
 
+    //入力時に譜面情報を更新
     $("#info input").on("change", updateFumendata);
 
+    //小節移動
     $("#measure").on("change", () => {
         moveTo( Number($("#measure").val()) );
     }).val(0);
 
+    //左右キーで小節移動
+    $(document).on("keydown", function(e){
+        if(e.which == 37) $("#measure-prev").click();
+        else if(e.which == 39)  $("#measure-next").click();
+      });
+
+    //難易度切り替え
     $("#level").on("change", () => {
         currentLevel = $("#level").val();
         moveTo(currentMeasure);
         pushNotice( currentLevel + "に切り替えました。");
     }).val("easy");
 
+    //jsonファイルを書き出し
     $("#export").on("click", () => {
 		let text = JSON.stringify(fumendata, null, 4);
 		var blob = new Blob([text], {type: "application/json"});
@@ -79,6 +89,7 @@ $(document).ready( function(){
         pushNotice("<img src='" + $("#jacket").val() + "'>");
     });
 
+    //BPMに合わせてメトロノーム
     $("#bpm-play").on("click", () => {
         playGuide();
         let ippaku = 60 / Number( fumendata.info.bpm ) * 1000;
@@ -91,6 +102,7 @@ $(document).ready( function(){
         $("#audio")[0].play();
     });
 
+    //jsonファイルのインポート
     document.forms.port.import.addEventListener("change", (e) => {
         let result = e.target.files[0];
         console.log(result);
@@ -114,6 +126,7 @@ function pushNotice(STR){
     console.log(STR);
 }
 
+//FDオブジェクトから譜面データの読み込み
 function inputFumendata(FD){
     $("#name").val(FD.info.name);
     $("#artist").val(FD.info.artist);
@@ -133,6 +146,7 @@ function inputFumendata(FD){
     pushNotice( "譜面データを読み込みました。" );
 }
 
+//入力値から譜面データの更新
 function updateFumendata(){
     try {  
         fumendata.info.name = $("#name").val();
@@ -159,6 +173,7 @@ function updateFumendata(){
     $("#textarea").text(JSON.stringify(fumendata, null, 4))
 }
 
+//FDオブジェクトからノーツ数算出
 function countNotes(FD){
     let notes = 0;
     for( let i in FD.easy ){
@@ -194,6 +209,7 @@ function countNotes(FD){
     $("#lv-ex-notes").text( notes + "notes" );
 }
 
+//NUM小節をプレビュー
 function moveTo(NUM){
     currentMeasure = NUM;
     let measureObject = fumendata[currentLevel][NUM];
@@ -254,6 +270,7 @@ function moveTo(NUM){
     }
 }
 
+//メトロノーム(ガイド音)を1回再生するだけ
 function playGuide(){
     new Audio("guide.mp3").play();
 }

@@ -70,9 +70,9 @@
                         <option value="extra">EXTRA</option>
                 </select>
                 <a class="button" onclick="moveTo(0)">⏪</a>
-                <a class="button" onclick="moveTo(currentMeasure-1)">前</a>
+                <a class="button" id="measure-prev" onclick="moveTo(currentMeasure-1)">前</a>
                 <input type="number" id="measure" step="1">
-                <a class="button" onclick="moveTo(currentMeasure+1)">次</a>
+                <a class="button" id="measure-next" onclick="moveTo(currentMeasure+1)">次</a>
                 <a class="button" onclick="playCurrentMeasure()">▶</a>
             </div>
             <div id="preview-area"></div>
