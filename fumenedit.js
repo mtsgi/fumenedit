@@ -201,13 +201,56 @@ function moveTo(NUM){
     let time = 60 * 4 * Number(NUM) / Number(fumendata.info.bpm);
     if( !measureObject ){
         pushNotice(NUM + "小節を読み込めません。");
-        $("#preview-area").text("ノーツがありません 秒数:" + time);
+        $("#preview-area").html("<div id='measureinfo'>ノーツがありません 秒数:" + time + "</div>");
         return;
     }
-    $("#preview-area").text( "分割:" + measureObject.length + " 秒数:" + time );
+    $("#preview-area").html( "<div id='measureinfo'>分割:" + measureObject.length + " 秒数:" + time + "</div>" );
     let per = measureObject.length;
     for( let i=0; i<per; i++ ){
-        $("#preview-area").append("<div>" + measureObject[i] + "</div>")
+        let APPEND = "<div class='preview-measure'><div class='div-num'>" + (i+1) + "</div>";
+        //数字の時
+        if( typeof measureObject[i] == "number" ){
+            //1番レーン
+            if( measureObject[i] == 1 ) APPEND += "<div class='div-note'></div>";
+            else APPEND += "<div class='div-rest'></div>";
+            //2番レーン
+            if( measureObject[i] == 2 ) APPEND += "<div class='div-note'></div>";
+            else APPEND += "<div class='div-rest'></div>";
+            //3番レーン
+            if( measureObject[i] == 3 ) APPEND += "<div class='div-note'></div>";
+            else APPEND += "<div class='div-rest'></div>";
+            //4番レーン
+            if( measureObject[i] == 4 ) APPEND += "<div class='div-note'></div>";
+            else APPEND += "<div class='div-rest'></div>";
+            //5番レーン
+            if( measureObject[i] == 5 ) APPEND += "<div class='div-note'></div>";
+            else APPEND += "<div class='div-rest'></div>";
+        }
+        //配列の時
+        else if(typeof measureObject[i] == "object" ){
+            //1番レーン
+            if( measureObject[i].indexOf(1) >= 0 ) APPEND += "<div class='div-each'></div>";
+            else APPEND += "<div class='div-rest'></div>";
+            //2番レーン
+            if( measureObject[i].indexOf(2) >= 0 ) APPEND += "<div class='div-each'></div>";
+            else APPEND += "<div class='div-rest'></div>";
+            //3番レーン
+            if( measureObject[i].indexOf(3) >= 0 ) APPEND += "<div class='div-each'></div>";
+            else APPEND += "<div class='div-rest'></div>";
+            //4番レーン
+            if( measureObject[i].indexOf(4) >= 0 ) APPEND += "<div class='div-each'></div>";
+            else APPEND += "<div class='div-rest'></div>";
+            //5番レーン
+            if( measureObject[i].indexOf(5) >= 0 ) APPEND += "<div class='div-each'></div>";
+            else APPEND += "<div class='div-rest'></div>";
+        }
+        //文字の時
+        else if( typeof measureObject[i] == "string" ){
+            if( measureObject[i] == "S" ) APPEND+= "<div class='div-skill'></div>";
+        }
+        APPEND += "</div>";
+        $("#preview-area").append( APPEND );
+        $(".preview-measure div").css("height", 300 / measureObject.length + "px");
     }
 }
 

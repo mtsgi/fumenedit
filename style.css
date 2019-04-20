@@ -105,11 +105,13 @@ form{
     color: #ffffff;
     padding: 0 10px;
     text-align: center;
-    margin-bottom: 10px;
     border-radius: 5px;
 }
 #info-toggle:hover, #info-toggle-2:hover{
     background: #707070;
+}
+#info-forms, #info-forms-2{
+    padding: 5px 0;
 }
 #info strong{
     display: inline-block;
@@ -183,6 +185,8 @@ footer{
 #preview-area{
     padding: 10px;
     color: #505050;
+    display: flex;
+    flex-direction: column-reverse;
 }
 select{
     border: none;
@@ -193,10 +197,41 @@ select{
     border: 1px solid #909090;
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
 }
-#preview-area div{
-    border-bottom: 1px solid #909090;
-    padding: 5px;
+#measureinfo{
+    padding: 3px;
+    border-radius: 5px;
+    border: 1px solid #909090;
+    margin: 8px 0;
 }
-#preview-area div:hover{
+.preview-measure{
+    display: flex;
+    border-bottom: 1px solid #909090;
+    width: 270px;
+}
+.preview-measure div{
+    box-sizing: border-box;
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    width: 50px;
+    display: block;
+}
+.preview-measure div:hover{
     background: #f0f0f0;
+}
+.div-num{
+    width: 20px!important;
+}
+.div-rest{
+    border-bottom: 4px solid transparent;
+}
+.div-note{
+    border-bottom: 4px solid rgb(226, 50, 50);
+}
+.div-each{
+    border-bottom: 4px solid rgb(255, 156, 42);
+}
+.div-skill{
+    border-bottom: 4px solid rgb(166, 226, 0);
+    width: 250px!important;
 }
