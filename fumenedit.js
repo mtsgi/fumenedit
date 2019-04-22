@@ -131,6 +131,7 @@ $(document).ready( function(){
             try{
                 fumendata = JSON.parse(reader.result);
                 inputFumendata(fumendata);
+                moveTo(currentMeasure);
             }
             catch(error){
                 pushNotice( "譜面データの読み込みに失敗しました<br>" + error );

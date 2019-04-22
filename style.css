@@ -31,25 +31,27 @@ input:focus{
 header{
     background: whitesmoke;
     color: #505050;
-    padding: 5px 5px 5px 45px;
+    padding: 5px 5px 5px 65px;
     font-size: 22px;
 }
 /* メニュー */
 header #menu-open{
     cursor: pointer;
     background: #acf;
-    padding: 0 12px;
+    padding: 5px 20px;
     position: fixed;
     top: 0;
     left: 0;
-    height: 44px;
-    border-radius: 0 0 5px 0;
+    height: 60px;
+    box-sizing: border-box;
+    border-radius: 0 0 80% 0;
 }
 header #menu-open:hover{
     opacity: .5;
 }
 #menu{
     background: #fff;
+    color: #303030;
     position: fixed;
     top: 0;
     left: -220px;

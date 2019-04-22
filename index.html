@@ -20,6 +20,7 @@
     <div id="menu">
             <a id="menu-close">❎もどる</a>
             <a href="sample.json" download="sample.json">⬇️サンプル譜面ファイルのダウンロード</a>
+            <a>高さ：<input type="number" id="height" step="10"></a>
     </div>
 
     <form name="port">
@@ -74,7 +75,6 @@
                 <input type="number" id="measure" step="1">
                 <a class="button" id="measure-next" onclick="moveTo(currentMeasure+1)">次</a>
                 <a class="button" onclick="playCurrentMeasure()">▶</a>
-                ↕️<input type="number" id="height" step="10">
             </div>
             <div id="preview-area"></div>
         </div>

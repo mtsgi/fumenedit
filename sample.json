@@ -6,7 +6,7 @@
         "color": {
             "r": 255, "g": 255, "b": 255
         },
-        "jacket": "hoge.png",
+        "jacket": "hoge.jpg",
         "music": "hoge.wav",
         "offset": 1000,
         "difficulty": {
