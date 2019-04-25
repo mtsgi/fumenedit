@@ -226,29 +226,29 @@ select{
     box-shadow:inset -1px 0 0 0 #c0c0c0;
 }
 .preview-measure div:hover{
-    background: #f0f0f0;
+    background: rgba(255,255,255,.7);
 }
 .div-num{
     width: 20px!important;
 }
 .div-rest{
-    border-bottom: 4px solid transparent;
+    border-bottom: 6px solid transparent;
 }
 .div-note{
-    border-bottom: 4px solid rgb(98, 145, 233);
+    border-bottom: 6px solid rgb(98, 145, 233);
 }
 .div-each{
-    border-bottom: 4px solid rgb(28, 98, 228);
+    border-bottom: 6px solid rgb(28, 98, 228);
 }
 .div-skill{
-    border-bottom: 4px solid rgb(228, 18, 18);
+    border-bottom: 6px solid rgb(228, 18, 18);
     width: 250px!important;
 }
 .div-left, .div-right{
-    margin: 0 0px!important;
+    margin: 0 70px!important;
     width: 150px!important;
-    border-bottom: 4px solid rgb(200,0,200);
-    position: relative;
+    border-bottom: 6px solid rgb(200,0,200);
+    position: absolute;
 }
 .div-left:after{
     color: rgb(200,0,200);
@@ -264,5 +264,29 @@ select{
     bottom: -5px;
     content: "> > >";
     width: 150px;
+    text-align: center;
+}
+.div-long-start{
+    position: relative;
+    border-bottom: 4px solid rgb(0,0,0);
+}
+.div-long-start:after{
+    color: rgb(0,0,0);
+    position: absolute;
+    bottom: 0;
+    content: "△";
+    width: 50px;
+    text-align: center;
+}
+.div-long-end{
+    position: relative;
+    border-bottom: 4px solid rgb(0,0,0);
+}
+.div-long-end:after{
+    color: rgb(0,0,0);
+    position: absolute;
+    bottom: -30px;
+    content: "▼";
+    width: 50px;
     text-align: center;
 }

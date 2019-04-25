@@ -13,6 +13,7 @@ var fumendata = {
         "music": "",
         "offset": 0,
         "difficulty": {
+            "raku": null,
             "easy": null,
             "normal": null,
             "hard": null,
@@ -22,7 +23,7 @@ var fumendata = {
         "comment": ""
     },
 
-    "kantan": {},
+    "raku": {},
     "easy": {},
     "normal": {},
     "hard": {},
@@ -157,6 +158,7 @@ function inputFumendata(FD){
     $("#music").val(FD.info.music);
     $("#offset").val(FD.info.offset);
     $("#author").val(FD.info.author);
+    $("#lv-raku").val(FD.info.difficulty.raku);
     $("#lv-easy").val(FD.info.difficulty.easy);
     $("#lv-normal").val(FD.info.difficulty.normal);
     $("#lv-hard").val(FD.info.difficulty.hard);
@@ -179,6 +181,7 @@ function updateFumendata(){
         $("#audio").attr( "src", $("#music").val() );
         fumendata.info.offset = $("#offset").val();
         fumendata.info.author = $("#author").val();
+        fumendata.info.difficulty.raku = $("#lv-raku").val();
         fumendata.info.difficulty.easy = $("#lv-easy").val();
         fumendata.info.difficulty.normal = $("#lv-normal").val();
         fumendata.info.difficulty.hard = $("#lv-hard").val();
@@ -196,6 +199,14 @@ function updateFumendata(){
 //FDオブジェクトからノーツ数算出
 function countNotes(FD){
     let notes = 0;
+    for( let i in FD.raku ){
+        for( let k of FD.raku[i] ){
+            if( typeof k == "object" ) notes += k.length;
+            else notes++;
+        }
+    }
+    $("#lv-raku-notes").text( notes + "notes" );
+    notes = 0;
     for( let i in FD.easy ){
         for( let k of FD.easy[i] ){
             if( typeof k == "object" ) notes += k.length;
@@ -266,30 +277,70 @@ function moveTo(NUM){
         else if(typeof measureObject[i] == "object" ){
             //1番レーン
             if( measureObject[i].indexOf(1) >= 0 ) APPEND += "<div class='div-each'></div>";
+            else if( measureObject[i].indexOf("a") >= 0 ) APPEND += "<div class='div-long-start'></div>";
+            else if( measureObject[i].indexOf("A") >= 0 ) APPEND += "<div class='div-long-end'></div>";
             else APPEND += "<div class='div-rest'></div>";
             //2番レーン
             if( measureObject[i].indexOf(2) >= 0 ) APPEND += "<div class='div-each'></div>";
+            else if( measureObject[i].indexOf("b") >= 0 ) APPEND += "<div class='div-long-start'></div>";
+            else if( measureObject[i].indexOf("B") >= 0 ) APPEND += "<div class='div-long-end'></div>";
             else APPEND += "<div class='div-rest'></div>";
             //3番レーン
             if( measureObject[i].indexOf(3) >= 0 ) APPEND += "<div class='div-each'></div>";
+            else if( measureObject[i].indexOf("c") >= 0 ) APPEND += "<div class='div-long-start'></div>";
+            else if( measureObject[i].indexOf("C") >= 0 ) APPEND += "<div class='div-long-end'></div>";
             else APPEND += "<div class='div-rest'></div>";
             //4番レーン
             if( measureObject[i].indexOf(4) >= 0 ) APPEND += "<div class='div-each'></div>";
+            else if( measureObject[i].indexOf("d") >= 0 ) APPEND += "<div class='div-long-start'></div>";
+            else if( measureObject[i].indexOf("D") >= 0 ) APPEND += "<div class='div-long-end'></div>";
             else APPEND += "<div class='div-rest'></div>";
             //5番レーン
             if( measureObject[i].indexOf(5) >= 0 ) APPEND += "<div class='div-each'></div>";
+            else if( measureObject[i].indexOf("e") >= 0 ) APPEND += "<div class='div-long-start'></div>";
+            else if( measureObject[i].indexOf("E") >= 0 ) APPEND += "<div class='div-long-end'></div>";
             else APPEND += "<div class='div-rest'></div>";
+            
+            //右フリック
+            if( measureObject[i].indexOf("R") >= 0 ) APPEND += "<div class='div-right'></div>";
+            //左フリック
+            if( measureObject[i].indexOf("L") >= 0 ) APPEND += "<div class='div-left'></div>";
         }
         //文字の時
         else if( typeof measureObject[i] == "string" ){
+            //音札とフリック
             if( measureObject[i] == "S" ) APPEND+= "<div class='div-skill'></div>";
-            else if( measureObject[i] == "L" ) APPEND+= "<div class='div-rest'></div><div class='div-left'></div><div class='div-rest'></div>";
-            else if( measureObject[i] == "R" ) APPEND+= "<div class='div-rest'></div><div class='div-right'></div><div class='div-rest'></div>";
+            else if( measureObject[i] == "L" ) APPEND+= "<div class='div-rest'></div><div class='div-rest'></div><div class='div-rest'></div><div class='div-rest'></div><div class='div-rest'></div><div class='div-left'></div>";
+            else if( measureObject[i] == "R" ) APPEND+= "<div class='div-rest'></div><div class='div-rest'></div><div class='div-rest'></div><div class='div-rest'></div><div class='div-rest'></div><div class='div-right'></div>";
+
+            //ロングノーツ
+            else{
+                //1番レーン
+                if( measureObject[i].indexOf("a") >= 0 ) APPEND += "<div class='div-long-start'></div>";
+                else if( measureObject[i].indexOf("A") >= 0 ) APPEND += "<div class='div-long-end'></div>";
+                else APPEND += "<div class='div-rest'></div>";
+                //1番レーン
+                if( measureObject[i].indexOf("b") >= 0 ) APPEND += "<div class='div-long-start'></div>";
+                else if( measureObject[i].indexOf("B") >= 0 ) APPEND += "<div class='div-long-end'></div>";
+                else APPEND += "<div class='div-rest'></div>";
+                //1番レーン
+                if( measureObject[i].indexOf("c") >= 0 ) APPEND += "<div class='div-long-start'></div>";
+                else if( measureObject[i].indexOf("C") >= 0 ) APPEND += "<div class='div-long-end'></div>";
+                else APPEND += "<div class='div-rest'></div>";
+                //1番レーン
+                if( measureObject[i].indexOf("d") >= 0 ) APPEND += "<div class='div-long-start'></div>";
+                else if( measureObject[i].indexOf("D") >= 0 ) APPEND += "<div class='div-long-end'></div>";
+                else APPEND += "<div class='div-rest'></div>";
+                //1番レーン
+                if( measureObject[i].indexOf("e") >= 0 ) APPEND += "<div class='div-long-start'></div>";
+                else if( measureObject[i].indexOf("E") >= 0 ) APPEND += "<div class='div-long-end'></div>";
+                else APPEND += "<div class='div-rest'></div>";
+            }
         }
         APPEND += "</div>";
         $("#preview-area").append( APPEND );
-        $(".preview-measure div").css("height", previewHeight / measureObject.length + "px");
     }
+    $(".preview-measure div").css("height", previewHeight / measureObject.length + "px");
 }
 
 //メトロノーム(ガイド音)を1回再生するだけ
