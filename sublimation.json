@@ -1,13 +1,13 @@
 {
     "info": {
-        "name": "conflict",
-        "artist": "siromaru + cranky",
+        "name": "Sublimation",
+        "artist": "Yuta Ida",
         "bpm": 160.0,
         "color": {
-            "r": 255, "g": 255, "b": 255
+            "r": 200, "g": 80, "b": 80
         },
         "jacket": "hoge.jpg",
-        "music": "hoge.wav",
+        "music": "sublimation.wav",
         "offset": 1000,
         "difficulty": {
             "raku": -1,

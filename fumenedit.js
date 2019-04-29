@@ -110,8 +110,8 @@ $(document).ready( function(){
 
     //BPMに合わせてメトロノーム
     $("#bpm-play").on("click", () => {
-        playGuide();
         let ippaku = 60 / Number( fumendata.info.bpm ) * 1000;
+        setTimeout( playGuide, 0 );
         setTimeout( playGuide, ippaku );
         setTimeout( playGuide, ippaku * 2 );
         setTimeout( playGuide, ippaku * 3 );
@@ -138,6 +138,10 @@ $(document).ready( function(){
                 pushNotice( "譜面データの読み込みに失敗しました<br>" + error );
             }
         })
+    });
+
+    //譜面エディット
+    $(".div-rest").off().on("click", ()=> {
     });
 });
 
@@ -258,48 +262,48 @@ function moveTo(NUM){
         //数字の時
         if( typeof measureObject[i] == "number" ){
             //1番レーン
-            if( measureObject[i] == 1 ) APPEND += "<div class='div-note'></div>";
-            else APPEND += "<div class='div-rest'></div>";
+            if( measureObject[i] == 1 ) APPEND += "<div class='div-note' data-cut='"+(i+1)+"' data-lane='1'></div>";
+            else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='1'></div>";
             //2番レーン
-            if( measureObject[i] == 2 ) APPEND += "<div class='div-note'></div>";
-            else APPEND += "<div class='div-rest'></div>";
+            if( measureObject[i] == 2 ) APPEND += "<div class='div-note' data-cut='"+(i+1)+"' data-lane='2'></div>";
+            else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='2'></div>";
             //3番レーン
-            if( measureObject[i] == 3 ) APPEND += "<div class='div-note'></div>";
-            else APPEND += "<div class='div-rest'></div>";
+            if( measureObject[i] == 3 ) APPEND += "<div class='div-note' data-cut='"+(i+1)+"' data-lane='3'></div>";
+            else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='3'></div>";
             //4番レーン
-            if( measureObject[i] == 4 ) APPEND += "<div class='div-note'></div>";
-            else APPEND += "<div class='div-rest'></div>";
+            if( measureObject[i] == 4 ) APPEND += "<div class='div-note' data-cut='"+(i+1)+"' data-lane='4'></div>";
+            else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='4'></div>";
             //5番レーン
-            if( measureObject[i] == 5 ) APPEND += "<div class='div-note'></div>";
-            else APPEND += "<div class='div-rest'></div>";
+            if( measureObject[i] == 5 ) APPEND += "<div class='div-note' data-cut='"+(i+1)+"' data-lane='5'></div>";
+            else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='5'></div>";
         }
         //配列の時
         else if(typeof measureObject[i] == "object" ){
             //1番レーン
-            if( measureObject[i].indexOf(1) >= 0 ) APPEND += "<div class='div-each'></div>";
-            else if( measureObject[i].indexOf("a") >= 0 ) APPEND += "<div class='div-long-start'></div>";
-            else if( measureObject[i].indexOf("A") >= 0 ) APPEND += "<div class='div-long-end'></div>";
-            else APPEND += "<div class='div-rest'></div>";
+            if( measureObject[i].indexOf(1) >= 0 ) APPEND += "<div class='div-each' data-cut='"+(i+1)+"' data-lane='1'></div>";
+            else if( measureObject[i].indexOf("a") >= 0 ) APPEND += "<div class='div-long-start' data-cut='"+(i+1)+"' data-lane='1'></div>";
+            else if( measureObject[i].indexOf("A") >= 0 ) APPEND += "<div class='div-long-end' data-cut='"+(i+1)+"' data-lane='1'></div>";
+            else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='1'></div>";
             //2番レーン
-            if( measureObject[i].indexOf(2) >= 0 ) APPEND += "<div class='div-each'></div>";
-            else if( measureObject[i].indexOf("b") >= 0 ) APPEND += "<div class='div-long-start'></div>";
-            else if( measureObject[i].indexOf("B") >= 0 ) APPEND += "<div class='div-long-end'></div>";
-            else APPEND += "<div class='div-rest'></div>";
+            if( measureObject[i].indexOf(2) >= 0 ) APPEND += "<div class='div-each' data-cut='"+(i+1)+"' data-lane='2'></div>";
+            else if( measureObject[i].indexOf("b") >= 0 ) APPEND += "<div class='div-long-start' data-cut='"+(i+1)+"' data-lane='2'></div>";
+            else if( measureObject[i].indexOf("B") >= 0 ) APPEND += "<div class='div-long-end' data-cut='"+(i+1)+"' data-lane='2'></div>";
+            else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='2'></div>";
             //3番レーン
-            if( measureObject[i].indexOf(3) >= 0 ) APPEND += "<div class='div-each'></div>";
-            else if( measureObject[i].indexOf("c") >= 0 ) APPEND += "<div class='div-long-start'></div>";
-            else if( measureObject[i].indexOf("C") >= 0 ) APPEND += "<div class='div-long-end'></div>";
-            else APPEND += "<div class='div-rest'></div>";
+            if( measureObject[i].indexOf(3) >= 0 ) APPEND += "<div class='div-each' data-cut='"+(i+1)+"' data-lane='3'></div>";
+            else if( measureObject[i].indexOf("c") >= 0 ) APPEND += "<div class='div-long-start' data-cut='"+(i+1)+"' data-lane='3'></div>";
+            else if( measureObject[i].indexOf("C") >= 0 ) APPEND += "<div class='div-long-end' data-cut='"+(i+1)+"' data-lane='3'></div>";
+            else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='3'></div>";
             //4番レーン
-            if( measureObject[i].indexOf(4) >= 0 ) APPEND += "<div class='div-each'></div>";
-            else if( measureObject[i].indexOf("d") >= 0 ) APPEND += "<div class='div-long-start'></div>";
-            else if( measureObject[i].indexOf("D") >= 0 ) APPEND += "<div class='div-long-end'></div>";
-            else APPEND += "<div class='div-rest'></div>";
+            if( measureObject[i].indexOf(4) >= 0 ) APPEND += "<div class='div-each' data-cut='"+(i+1)+"' data-lane='4'></div>";
+            else if( measureObject[i].indexOf("d") >= 0 ) APPEND += "<div class='div-long-start' data-cut='"+(i+1)+"' data-lane='4'></div>";
+            else if( measureObject[i].indexOf("D") >= 0 ) APPEND += "<div class='div-long-end' data-cut='"+(i+1)+"' data-lane='4'></div>";
+            else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='4'></div>";
             //5番レーン
-            if( measureObject[i].indexOf(5) >= 0 ) APPEND += "<div class='div-each'></div>";
-            else if( measureObject[i].indexOf("e") >= 0 ) APPEND += "<div class='div-long-start'></div>";
-            else if( measureObject[i].indexOf("E") >= 0 ) APPEND += "<div class='div-long-end'></div>";
-            else APPEND += "<div class='div-rest'></div>";
+            if( measureObject[i].indexOf(5) >= 0 ) APPEND += "<div class='div-each' data-cut='"+(i+1)+"' data-lane='5'></div>";
+            else if( measureObject[i].indexOf("e") >= 0 ) APPEND += "<div class='div-long-start' data-cut='"+(i+1)+"' data-lane='5'></div>";
+            else if( measureObject[i].indexOf("E") >= 0 ) APPEND += "<div class='div-long-end' data-cut='"+(i+1)+"' data-lane='5'></div>";
+            else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='5'></div>";
             
             //右フリック
             if( measureObject[i].indexOf("R") >= 0 ) APPEND += "<div class='div-right'></div>";
@@ -316,25 +320,25 @@ function moveTo(NUM){
             //ロングノーツ
             else{
                 //1番レーン
-                if( measureObject[i].indexOf("a") >= 0 ) APPEND += "<div class='div-long-start'></div>";
-                else if( measureObject[i].indexOf("A") >= 0 ) APPEND += "<div class='div-long-end'></div>";
-                else APPEND += "<div class='div-rest'></div>";
-                //1番レーン
-                if( measureObject[i].indexOf("b") >= 0 ) APPEND += "<div class='div-long-start'></div>";
-                else if( measureObject[i].indexOf("B") >= 0 ) APPEND += "<div class='div-long-end'></div>";
-                else APPEND += "<div class='div-rest'></div>";
-                //1番レーン
-                if( measureObject[i].indexOf("c") >= 0 ) APPEND += "<div class='div-long-start'></div>";
-                else if( measureObject[i].indexOf("C") >= 0 ) APPEND += "<div class='div-long-end'></div>";
-                else APPEND += "<div class='div-rest'></div>";
-                //1番レーン
-                if( measureObject[i].indexOf("d") >= 0 ) APPEND += "<div class='div-long-start'></div>";
-                else if( measureObject[i].indexOf("D") >= 0 ) APPEND += "<div class='div-long-end'></div>";
-                else APPEND += "<div class='div-rest'></div>";
-                //1番レーン
-                if( measureObject[i].indexOf("e") >= 0 ) APPEND += "<div class='div-long-start'></div>";
-                else if( measureObject[i].indexOf("E") >= 0 ) APPEND += "<div class='div-long-end'></div>";
-                else APPEND += "<div class='div-rest'></div>";
+                if( measureObject[i].indexOf("a") >= 0 ) APPEND += "<div class='div-long-start' data-cut='"+(i+1)+"' data-lane='1'></div>";
+                else if( measureObject[i].indexOf("A") >= 0 ) APPEND += "<div class='div-long-end' data-cut='"+(i+1)+"' data-lane='1'></div>";
+                else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='1'></div>";
+                //2番レーン
+                if( measureObject[i].indexOf("b") >= 0 ) APPEND += "<div class='div-long-start' data-cut='"+(i+1)+"' data-lane='2'></div>";
+                else if( measureObject[i].indexOf("B") >= 0 ) APPEND += "<div class='div-long-end' data-cut='"+(i+1)+"' data-lane='2'></div>";
+                else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='2'></div>";
+                //3番レーン
+                if( measureObject[i].indexOf("c") >= 0 ) APPEND += "<div class='div-long-start' data-cut='"+(i+1)+"' data-lane='3'></div>";
+                else if( measureObject[i].indexOf("C") >= 0 ) APPEND += "<div class='div-long-end' data-cut='"+(i+1)+"' data-lane='3'></div>";
+                else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='3'></div>";
+                //4番レーン
+                if( measureObject[i].indexOf("d") >= 0 ) APPEND += "<div class='div-long-start' data-cut='"+(i+1)+"' data-lane='4'></div>";
+                else if( measureObject[i].indexOf("D") >= 0 ) APPEND += "<div class='div-long-end' data-cut='"+(i+1)+"' data-lane='4'></div>";
+                else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='4'></div>";
+                //5番レーン
+                if( measureObject[i].indexOf("e") >= 0 ) APPEND += "<div class='div-long-start' data-cut='"+(i+1)+"' data-lane='5'></div>";
+                else if( measureObject[i].indexOf("E") >= 0 ) APPEND += "<div class='div-long-end' data-cut='"+(i+1)+"' data-lane='5'></div>";
+                else APPEND += "<div class='div-rest' data-cut='"+(i+1)+"' data-lane='5'></div>";
             }
         }
         APPEND += "</div>";
