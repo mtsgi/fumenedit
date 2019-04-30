@@ -7,17 +7,17 @@
             "r": 200, "g": 80, "b": 80
         },
         "jacket": "hoge.jpg",
-        "music": "sublimation.wav",
-        "offset": 1000,
+        "music": "sublimation.mp3",
+        "offset": 2000,
         "difficulty": {
             "raku": -1,
-            "easy": 1,
-            "normal": 3,
-            "hard": 7,
+            "easy": 3,
+            "normal": 6,
+            "hard": 10,
             "extra": -1
         },
         "author": "mtsgi",
-        "comment": "譜面データのテストです。"
+        "comment": "Sublimation"
     },
 
     "raku": {
