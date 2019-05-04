@@ -32,6 +32,8 @@ header{
     background: whitesmoke;
     color: #505050;
     padding: 5px 5px 5px 65px;
+    height: 46px;
+    box-sizing: border-box;
     font-size: 22px;
 }
 /* メニュー */
@@ -42,9 +44,8 @@ header #menu-open{
     position: fixed;
     top: 0;
     left: 0;
-    height: 60px;
+    height: 46px;
     box-sizing: border-box;
-    border-radius: 0 0 80% 0;
 }
 header #menu-open:hover{
     opacity: .5;

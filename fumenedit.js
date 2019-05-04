@@ -75,11 +75,16 @@ $(document).ready( function(){
         //else if(e.which == 39)  $("#measure-next").click();
       });
 
-    //小節移動
+    //プレビューの高さ調整
     $("#height").on("change", () => {
+        localStorage.setItem("fumenedit-height", $("#height").val());
         previewHeight = Number($("#height").val())
         moveTo(currentMeasure);
     }).val(300);
+    if( localStorage.getItem("fumenedit-height") ){
+        $("#height").val( localStorage.getItem("fumenedit-height") );
+        previewHeight = Number(localStorage.getItem("fumenedit-height"))
+    }
 
     //難易度切り替え
     $("#level").on("change", () => {
@@ -167,6 +172,7 @@ function inputFumendata(FD){
     $("#lv-normal").val(FD.info.difficulty.normal);
     $("#lv-hard").val(FD.info.difficulty.hard);
     $("#comment").text(FD.info.comment);
+    $("#audio").attr( "src", FD.info.music );
     countNotes(FD);
     pushNotice( "譜面データを読み込みました。" );
 }
@@ -353,7 +359,8 @@ function playGuide(){
 }
 
 function playCurrentMeasure(){
-    document.getElementById("audio").currentTime =  60 * 4 * currentMeasure / Number(fumendata.info.bpm) + fumendata.info.offset;
+    document.getElementById("audio").currentTime =  60 * 4 * currentMeasure / Number(fumendata.info.bpm) + fumendata.info.offset / 1000;
+    console.log("再生を開始:" + 60 * 4 * currentMeasure / Number(fumendata.info.bpm) + fumendata.info.offset / 1000);
     document.getElementById("audio").play();
     setTimeout(() => {
         document.getElementById("audio").pause();
