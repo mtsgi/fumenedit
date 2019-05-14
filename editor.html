@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>エディタ</title>
+    <script src="jquery.min.js"></script>
+    <script src="editor.js"></script>
+</head>
+<body>
+    <h3>簡易エディタ</h3>
+    <form>
+        タイプ：
+        <select id="form-type">
+                <option value="1">1 - 通常</option>
+                <option value="2">2 - ロング(未対応)</option>
+                <option value="3">3 - 左フリック</option>
+                <option value="4">4 - 右フリック</option>
+                <option value="5">5 - 音札ノーツ</option>
+                <option value="99">99 - BPM変化</option>
+        </select>
+        <br>
+        レーン：
+        <select id="form-lane">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+        </select>
+        <br>
+        小節数：
+        <input type="number" id="form-measure" value="1">
+        <br>
+        小節上の位置：
+        <input type="text" id="form-position" size="2">
+        ／
+        <input type="text" id="form-split" size="2">
+        <br>
+        オプション値：
+        <input type="text" id="form-option" size="10" value="-1">
+        <input type="button" id="form-add" value="追加">
+    </form>
+    <h3>出力</h3>
+    <textarea id="output" cols="30" rows="10"></textarea>
+</body>
+</html>

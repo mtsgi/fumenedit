@@ -1,30 +1,36 @@
 {
-    "info": {
-        "name": "conflict",
-        "artist": "siromaru + cranky",
-        "bpm": 160.0,
-        "color": {
-            "r": 255, "g": 255, "b": 255
-        },
-        "jacket": "hoge.jpg",
-        "music": "hoge.wav",
-        "offset": 1000,
-        "difficulty": {
-            "raku": -1,
-            "easy": 1,
-            "normal": 3,
-            "hard": 7,
-            "extra": -1
-        },
-        "author": "mtsgi",
-        "comment": "譜面データのテストです。"
-    },
+    "raku": [
+        {
+            "type": 1,
+            "measure": 4,
+            "lane": 3,
+            "position": 1,
+            "split": 1,
+            "option": -1
+        }
+    ],
 
-    "raku": {
-        "4": [1]
-    },
+    "easy": [
+        {
+            "type": 1,
+            "measure": 1,
+            "lane": 1,
+            "position": 0,
+            "split": 1,
+            "option": -1
+        },
+        
+        {
+            "type": 1,
+            "measure": 1,
+            "lane": 1,
+            "position": 1,
+            "split": 1,
+            "option": -1
+        }
+    ],
 
-    "easy": {
+    "easy_old": {
         "1": [[1,5]],
         "2": [2],
         "3": ["S"],
