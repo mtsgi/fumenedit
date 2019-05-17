@@ -11,10 +11,13 @@
 <body>
     <h3>簡易エディタ</h3>
     <form>
+        <input type="button" value="Undo" id="form-undo">
+        <input type="button" value="Redo" id="form-redo">
+        <br>
         タイプ：
         <select id="form-type">
                 <option value="1">1 - 通常</option>
-                <option value="2">2 - ロング(未対応)</option>
+                <option value="2">2 - ロング</option>
                 <option value="3">3 - 左フリック</option>
                 <option value="4">4 - 右フリック</option>
                 <option value="5">5 - 音札ノーツ</option>
@@ -23,11 +26,11 @@
         <br>
         レーン：
         <select id="form-lane">
-                <option value="1">1</option>
+                <option value="1">1(左)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
-                <option value="5">5</option>
+                <option value="5">5(右)</option>
         </select>
         <br>
         小節数：
@@ -42,7 +45,39 @@
         <input type="text" id="form-option" size="10" value="-1">
         <input type="button" id="form-add" value="追加">
     </form>
-    <h3>出力</h3>
-    <textarea id="output" cols="30" rows="10"></textarea>
+
+    <form id="endform" style="display: none">
+        <h4>ロング終点</h4>
+        タイプ：
+        <select id="endform-type">
+                <option value="1">1 - 通常</option>
+                <option value="2">2 - 中点(未対応)</option>
+        </select>
+        <br>
+        レーン：
+        <select id="endform-lane">
+                <option value="1">1(左)</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5(右)</option>
+        </select>
+        <br>
+        小節数：
+        <input type="number" id="endform-measure" value="1">
+        <br>
+        小節上の位置：
+        <input type="text" id="endform-position" size="2">
+        ／
+        <input type="text" id="endform-split" size="2">
+        <br>
+        オプション値：
+        <input type="text" id="endform-option" size="10" value="-1" disabled>
+    </form>
+
+    <h3>出力 <input type="button" id="copy2cb" value="コピー"></h3>
+    <textarea id="output" cols="30" rows="20"></textarea>
+    <br>
+    <code style="background: #eee" id="debug"></code>
 </body>
 </html>
