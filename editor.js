@@ -16,15 +16,17 @@ $(document).ready( function(){
         let option = Number($("#form-option").val());
         let end = {};
         if( type == 2 ){
-            end = {
-                "type": 1,
-                "measure": Number($("#endform-measure").val()),
-                "lane": Number($("#endform-lane").val()),
-                "position": Number($("#endform-position").val()),
-                "split": Number($("#endform-split").val()),
-                option: -1,
-                end: {}
-            }
+            end = [
+                {
+                    "type": 1,
+                    "measure": Number($("#endform-measure").val()),
+                    "lane": Number($("#endform-lane").val()),
+                    "position": Number($("#endform-position").val()),
+                    "split": Number($("#endform-split").val()),
+                    option: -1,
+                    end: new Array()
+                }
+            ]
         }
         arrobj.push({
             "type": type,
@@ -45,6 +47,7 @@ $(document).ready( function(){
 
     $("#form-redo").on("click", ()=>{
         if( !prev ){
+            $("#debug").text("Redoできません。");
             return;
         };
         arrobj.push( prev );

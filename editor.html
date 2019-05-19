@@ -10,7 +10,8 @@
 </head>
 <body>
     <h3>簡易エディタ</h3>
-    <form>
+    <a style="color: blue" href="./format.md">譜面フォーマットについて</a>
+    <form autocomplete="off">
         <input type="button" value="Undo" id="form-undo">
         <input type="button" value="Redo" id="form-redo">
         <br>
@@ -21,7 +22,8 @@
                 <option value="3">3 - 左フリック</option>
                 <option value="4">4 - 右フリック</option>
                 <option value="5">5 - 音札ノーツ</option>
-                <option value="99">99 - BPM変化</option>
+                <option value="98">98 - BPM変化</option>
+                <option value="99">99 - EOF</option>
         </select>
         <br>
         レーン：
@@ -37,16 +39,16 @@
         <input type="number" id="form-measure" value="1">
         <br>
         小節上の位置：
-        <input type="text" id="form-position" size="2">
+        <input type="text" id="form-position" size="2" placeholder="pos">
         ／
-        <input type="text" id="form-split" size="2">
+        <input type="text" id="form-split" size="2" placeholder="spl">
         <br>
         オプション値：
         <input type="text" id="form-option" size="10" value="-1">
         <input type="button" id="form-add" value="追加">
     </form>
 
-    <form id="endform" style="display: none">
+    <form id="endform" style="display: none" autocomplete="off">
         <h4>ロング終点</h4>
         タイプ：
         <select id="endform-type">
@@ -67,16 +69,16 @@
         <input type="number" id="endform-measure" value="1">
         <br>
         小節上の位置：
-        <input type="text" id="endform-position" size="2">
+        <input type="text" id="endform-position" size="2" placeholder="pos">
         ／
-        <input type="text" id="endform-split" size="2">
+        <input type="text" id="endform-split" size="2" placeholder="spl">
         <br>
         オプション値：
         <input type="text" id="endform-option" size="10" value="-1" disabled>
     </form>
 
     <h3>出力 <input type="button" id="copy2cb" value="コピー"></h3>
-    <textarea id="output" cols="30" rows="20"></textarea>
+    <textarea id="output" cols="30" rows="20" disabled></textarea>
     <br>
     <code style="background: #eee" id="debug"></code>
 </body>
