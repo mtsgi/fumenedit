@@ -7,7 +7,7 @@ $(document).ready( function(){
     $("#form-add").on("click", ()=>{
         let type = Number($("#form-type").val())
         let measure = Number($("#form-measure").val());
-        let lane = {};
+        let lane = -1;
         if( type == 1 || type ==2 ){
             lane = Number($("#form-lane").val());
         }
