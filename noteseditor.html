@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>譜面エディター</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css" media="screen and (max-width: 600px)">
+    <script src="jquery.min.js"></script>
+    <script src="fumenedit.js"></script>
+</head>
+
+<body>
+    <header>
+        <a id="menu-open">≡</a>
+        譜面エディター
+    </header>
+    <div id="menu">
+            <a id="menu-close">❎もどる</a>
+            <a href="sample.json" download="sample.json">⬇️サンプル譜面ファイルのダウンロード</a>
+            <a>高さ：<input type="number" id="height" step="10"></a>
+    </div>
+
+    <form name="port">
+        <label for="import" class="port-button">📂ファイルを開く</label>
+        <input type="file" name="import" id="import"><br>
+        <a class="port-button" id="export">💾保存する</a>
+    </form>
+
+    <div id="info">
+        <a id="info-toggle">楽曲情報の編集</a>
+        <div id="info-forms">
+            <strong>楽曲名</strong><input type="text" id="name"><br>
+            <strong>アーティスト</strong><input type="text" id="artist"><br>
+            <strong>BPM</strong><input type="text" id="bpm"><a id="bpm-play" class="button">▶</a><br>
+            <strong>カラー</strong>rgb(<input type="text" id="r" size="2">,<input type="text" id="g" size="2">,<input
+                type="text" id="b" size="2">)<br>
+            <strong>ジャケット画像</strong><input type="text" id="jacket"><a id="jacket-view" class="button">表示</a><br>
+            <strong>楽曲ファイル</strong><input type="text" id="music"><a id="demo-play" class="button">▶</a><br>
+            <strong>オフセット</strong><input type="number" id="offset">
+        </div>
+        <a id="info-toggle-2">譜面情報の編集</a>
+        <div id="info-forms-2">
+            <strong>譜面製作者</strong><input type="text" id="author"><br>            <strong>(RAKU)</strong>Lv <input type="text" id="lv-raku" size="5"> <span id="lv-raku-notes">- notes</span><br>
+            <strong>EASY</strong>Lv <input type="text" id="lv-easy" size="5"> <span id="lv-easy-notes">- notes</span><br>
+            <strong>NORMAL</strong>Lv <input type="text" id="lv-normal" size="5"> <span id="lv-normal-notes">- notes</span><br>
+            <strong>HARD</strong>Lv <input type="text" id="lv-hard" size="5"> <span id="lv-hard-notes">- notes</span><br>
+            <strong>(EXTRA)</strong>Lv <input type="text" id="lv-ex" size="5"> <span id="lv-ex-notes">- notes</span><br>
+            <strong>コメント</strong><textarea id="comment"></textarea>
+        </div>
+    </div>
+    </div>
+
+    <audio id="audio" style="width: 100%" controls></audio>
+
+    <div id="area-head">
+        <div>入力</div>
+        <div>プレビュー</div>
+    </div>
+    <div id="main">
+        <textarea name="textarea" id="textarea"></textarea>
+        <div id="preview">
+            <div id="preview-control">
+                <select id="level">
+                        <option value="raku">RAKU</option>
+                        <option value="easy" selected>EASY</option>
+                        <option value="normal">NORMAL</option>
+                        <option value="hard">HARD</option>
+                        <option value="extra">EXTRA</option>
+                </select>
+                <a class="button" onclick="moveTo(0)">⏪</a>
+                <a class="button" id="measure-prev" onclick="moveTo(currentMeasure-1)">前</a>
+                <input type="number" id="measure" step="1">
+                <a class="button" id="measure-next" onclick="moveTo(currentMeasure+1)">次</a>
+                <a class="button" onclick="playCurrentMeasure()">▶</a>
+                <select id="notetype">
+                    <option value="normal">通常</option>
+                </select>
+            </div>
+            <div id="preview-area"></div>
+        </div>
+    </div>
+    <footer>mtsgi/fumenedit</footer>
+    <div id="notice"></div>
+
+    <audio src="guide.mp3" id="guide"></audio>
+</body>
+
+</html>
