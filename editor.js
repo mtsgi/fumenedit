@@ -64,6 +64,19 @@ $(document).ready( function(){
         }
     });
 
+    //キーボード操作
+    $(document).on("keyup", (e) => {
+        //Enterキーでノート追加
+        if( e.which == 13 ) $("#form-add").click();
+        //左右キーでlane移動
+        else if( e.which == 37 ){
+            $("#form")[0].lane.value = Number($("#form")[0].lane.value) - 1;
+        }
+        else if( e.which == 39 ){
+            $("#form")[0].lane.value = Number($("#form")[0].lane.value) + 1;
+        }
+    }).on("keyup keydown keypress", () => drawShadow() );
+
     //小節前後移動
     $("#form-prev").on("click", () => $("#form-measure").val( Number($("#form-measure").val()) -1 ) );
     $("#form-next").on("click", () => $("#form-measure").val( Number($("#form-measure").val()) +1 ) );
@@ -89,14 +102,21 @@ $(document).ready( function(){
 
     //次の小節に移動
     $("#form-position").on("change", ()=>{
-        let pos = $("#form-position").val();
-        let spl = $("#form-split").val();
+        let pos = Number($("#form-position").val());
+        let spl = Number($("#form-split").val());
         if( pos < 0 ){
             $("#form-position").val(0);
-        }
+        };
         if( pos == spl ){
             $("#form-position").val(0);
             $("#form-next").click();
+        };
+        if( pos == -1 ){
+            $("#form-position").val( spl-1 );
+            $("#form-prev").click();
+        };
+        if( spl < 1 ){
+            $("#form-split").val(1);
         };
     });
 
@@ -127,7 +147,7 @@ function drawPreview(obj){
     for( let i of obj ){
         notesnum++;
         if( Number(i.measure) > maxMeasure ) maxMeasure = Number(i.measure);
-        $("#preview").append("<span id='note"+notesnum+"'></span>");
+        $("#preview").append("<span id='note"+notesnum+"' data-n='"+(notesnum-1)+"'></span>");
         let noteEl = $("#note"+notesnum);
         noteEl.addClass("type"+i.type).css("right", (Number(i.lane)-1)*60 ).css("top", (Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split)) );
         if( i.type == 98 ){
@@ -137,6 +157,13 @@ function drawPreview(obj){
             noteEl.text("BEAT:"+i.option+"/4");
         }
     }
+
+    //クリックしたノートを削除
+    $("#preview span").click( function(){
+        fumenObject[currentLevel].splice( this.getAttribute("data-n"),1 );
+        drawPreview( fumenObject[currentLevel] );
+    });
+
     //小節線の描画
     for( let i = 0; i <= maxMeasure; i++ ){
         $("#preview").append("<span id='measure"+i+"'>"+i+"</span>");
@@ -144,8 +171,15 @@ function drawPreview(obj){
         measureEl.addClass("measure").css("top", i*measureHeight);
     }
     $("#notesnum").text(notesnum+" notes");
+    drawShadow();
 }
 
 function message( text ){
     $("#debug").text( text );
+}
+
+function drawShadow(){
+    $("#noteShadow").remove();
+    $("#preview").append("<span id='noteShadow'></span>");
+    $("#noteShadow").addClass("type"+$("#form-type").val()).css("right", (Number($("#form")[0].lane.value)-1)*60 ).css("top", (Number($("#form-measure").val())*measureHeight) + measureHeight*(Number($("#form-position").val())/Number($("#form-split").val())) );
 }

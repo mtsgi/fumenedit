@@ -68,6 +68,11 @@ input[type="button"]{
   background-position: top;
   background-size: auto 200px;
 }
+
+#noteShadow{
+  opacity: .5;
+}
+
 .type1{
   position: absolute;
   height: 5px;
@@ -77,18 +82,35 @@ input[type="button"]{
   border-left: 3px solid #303030;
   border-right: 3px solid #303030;
 	animation: addNotes .6s ease-out;
+  z-index: 81;
+}
+
+.type1:hover, .type3:hover, .type4:hover, .type5:hover{
+  box-shadow: 0 0 0 3px red;
 }
 .type5{
   position: absolute;
   height: 6px;
   width: 300px;
-  right: 0px;
+  left: 0px;
   background: gold;
   box-sizing: border-box;
   box-shadow: 0 -4px 3px -2px white;
   border-left: 3px solid #303030;
   border-right: 3px solid #303030;
 	animation: addNotes .6s ease-out;
+  z-index: 75;
+}
+.type3{
+  position: absolute;
+  height: 5px;
+  width: 60px;
+  background: limegreen;
+  box-sizing: border-box;
+  border-left: 3px solid #303030;
+  border-right: 3px solid #303030;
+	animation: addNotes .6s ease-out;
+  z-index: 83;
 }
 .type97{
   transform: rotate(180deg);
@@ -97,7 +119,7 @@ input[type="button"]{
   background: limegreen;
   height: 1px;
   width: 300px;
-  right: 0px;
+  left: 0px;
 	animation: addNotes .6s ease-out;
   z-index: 97;
 }
@@ -108,7 +130,7 @@ input[type="button"]{
   background: red;
   height: 1px;
   width: 300px;
-  right: 0px;
+  left: 0px;
 	animation: addNotes .6s ease-out;
   z-index: 98;
 }
@@ -116,6 +138,7 @@ input[type="button"]{
   transform: rotate(180deg);
   position: absolute;
   background: transparent;
+  background : linear-gradient(to left, transparent 19.5%,#E0E0E0 20%,transparent 20.5%,transparent 39.5%,#E0E0E0 40%,transparent 40.5%,transparent 59.5%,#E0E0E0 60%,transparent 60.5%,transparent 79.5%,#E0E0E0 80%,transparent 80.5%);
   border-top: 1px solid #909090;
   text-align: right;
   line-height: 390px;
