@@ -19,7 +19,10 @@ $(document).ready( function(){
         }
         let position = Number($("#form-position").val());
         let split = Number($("#form-split").val());
-        let option = Number($("#form-option").val());
+        let option = -1;
+        if( type == 97 || type == 98 ){
+            option = Number($("#form-option").val());
+        }
         let end = new Array();
         if( type == 2 ){
             end = [
@@ -61,6 +64,11 @@ $(document).ready( function(){
         }
     });
 
+    //小節前後移動
+    $("#form-prev").on("click", () => $("#form-measure").val( Number($("#form-measure").val()) -1 ) );
+    $("#form-next").on("click", () => $("#form-measure").val( Number($("#form-measure").val()) +1 ) );
+
+    //UndoとRedo
     $("#form-undo").on("click", ()=>{
         prev[currentLevel] = fumenObject[currentLevel].pop() || prev[currentLevel];
         $("#output").html( JSON.stringify(fumenObject[currentLevel], null, 4) );
@@ -78,6 +86,20 @@ $(document).ready( function(){
         message("Redoしました");
         drawPreview(fumenObject[currentLevel]);
     });
+
+    //次の小節に移動
+    $("#form-position").on("change", ()=>{
+        let pos = $("#form-position").val();
+        let spl = $("#form-split").val();
+        if( pos < 0 ){
+            $("#form-position").val(0);
+        }
+        if( pos == spl ){
+            $("#form-position").val(0);
+            $("#form-next").click();
+        };
+    });
+
 
     $("#copy2cb").on("click", function(){
         let _range = document.createRange();
@@ -104,9 +126,22 @@ function drawPreview(obj){
     //1ノートずつ処理
     for( let i of obj ){
         notesnum++;
+        if( Number(i.measure) > maxMeasure ) maxMeasure = Number(i.measure);
         $("#preview").append("<span id='note"+notesnum+"'></span>");
         let noteEl = $("#note"+notesnum);
         noteEl.addClass("type"+i.type).css("right", (Number(i.lane)-1)*60 ).css("top", (Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split)) );
+        if( i.type == 98 ){
+            noteEl.text("BPM:"+i.option);
+        }
+        else if( i.type == 97 ){
+            noteEl.text("BEAT:"+i.option+"/4");
+        }
+    }
+    //小節線の描画
+    for( let i = 0; i <= maxMeasure; i++ ){
+        $("#preview").append("<span id='measure"+i+"'>"+i+"</span>");
+        let measureEl = $("#measure"+i);
+        measureEl.addClass("measure").css("top", i*measureHeight);
     }
     $("#notesnum").text(notesnum+" notes");
 }

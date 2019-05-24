@@ -10,18 +10,18 @@
     <link rel="stylesheet" href="editor.css">
 </head>
 <body>
-    <h3>簡易エディタ</h3>
-    <a style="color: blue" href="./format.md">譜面フォーマットについて</a>
+    <h3>譜面エディタ</h3>
     <form id="form" autocomplete="off">
         難易度：<input type="text" id="form-level" value="easy"><input type="button" value="Load" id="form-load">
         <br>
-        <input type="button" value="Undo" id="form-undo">
-        <input type="button" value="Redo" id="form-redo">
-        <div>
+        <div style="padding: 6px; background: #ddd; margin: 10px 0">
+            <input type="button" value="Undo" id="form-undo">
+            <input type="button" value="Redo" id="form-redo">
+            <br>
             <input type="button" value="◀" id="form-prev">
             <input type="number" id="form-measure" value="1"> 小節
             <input type="button" value="▶" id="form-next">
-        <div>
+        </div>
         タイプ：
         <select id="form-type">
                 <option value="1">1 - 通常</option>
@@ -29,6 +29,7 @@
                 <option value="3">3 - 左フリック</option>
                 <option value="4">4 - 右フリック</option>
                 <option value="5">5 - 音札ノーツ</option>
+                <option value="97">97 - 拍子変化</option>
                 <option value="98">98 - BPM変化</option>
                 <option value="99">99 - EOF</option>
         </select>
@@ -53,7 +54,7 @@
         小節上の位置：
         <input type="number" id="form-position" class="pos" placeholder="pos" value="0">
         ／
-        <input type="number" id="form-split" class="pos" placeholder="spl" value="1">
+        <input type="number" id="form-split" class="pos" placeholder="spl" value="4">
         <br>
         オプション値：
         <input type="text" id="form-option" value="-1">
@@ -97,6 +98,9 @@
     <div id="preview">
 
     </div>
+    <a style="color: blue" href="./format.md">譜面フォーマットについて</a>
+    <br>
+    <a style="color: blue" href="./sample.json">sample.json</a>
 
     <code id="debug"></code>
 </body>
