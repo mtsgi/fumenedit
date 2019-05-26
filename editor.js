@@ -132,16 +132,25 @@ $(document).ready( function(){
         $("#debug").text("クリップボードにコピーしました。");
     });
 
+    $("input, select").on("change", () => drawShadow() );
+
     $("#form-type").on("change", function(){
         if( this.value == 2 ) $("#endform").show();
         else $("#endform").hide();
+
+        if( this.value == 97 || this.value == 98 ){
+            $("#form-option").css("background", "yellow");
+        }
+        else{
+            $("#form-option").css("background", "");
+        }
     });
 
     message( currentLevel + "をロードしました");
 } );
 
 function drawPreview(obj){
-    $("#preview").html("");
+    $("#preview").html("<canvas id='canvas' width='300'></canvas>");
     let notesnum = 0, maxMeasure = 0;
     //1ノートずつ処理
     for( let i of obj ){
@@ -155,6 +164,28 @@ function drawPreview(obj){
         }
         else if( i.type == 97 ){
             noteEl.text("BEAT:"+i.option+"/4");
+        }
+        else if( i.type == 99 ){
+            noteEl.text("EOF");
+        }
+        else if( i.type == 2 ){
+            for( let j in i.end ){
+                noteEl.text(notesnum);
+                $("#preview").append("<span id='end"+notesnum+"-"+j+"' data-n='"+(notesnum-1)+"'>"+notesnum+"</span>");
+                $("#end"+notesnum+"-"+j).addClass("type"+i.end[j].type).css("right", (Number(i.end[j].lane)-1)*60 ).css("top", (Number(i.end[j].measure)*measureHeight) + measureHeight*(Number(i.end[j].position)/Number(i.end[j].split)) );
+            }
+        }
+        else if( i.type == 2 && false ){
+            var ctx = document.getElementById("canvas").getContext("2d");
+            for( let j in i.end ){
+                noteEl.append("<span id='end"+notesnum+"-"+j+"' data-n='"+(notesnum-1)+"'></span>");
+                $("#end"+notesnum+"-"+j).addClass("type"+i.end[j].type).css("right", (Number(i.end[j].lane)-1)*60 ).css("top", (Number(i.end[j].measure)*measureHeight) + measureHeight*(Number(i.end[j].position)/Number(i.end[j].split)) );
+                ctx.beginPath();
+                ctx.moveTo( 300-(Number(i.lane)-1)*60, (Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split)));
+                ctx.lineTo( 300-(Number(i.end[j].lane)-1)*60, (Number(i.end[j].measure)*measureHeight) + measureHeight*(Number(i.end[j].position)/Number(i.end[j].split)) );
+                console.log(ctx);
+                ctx.stroke();
+            }
         }
     }
 
@@ -179,7 +210,13 @@ function message( text ){
 }
 
 function drawShadow(){
-    $("#noteShadow").remove();
+    $("#noteShadow, #noteShadowEnd").remove();
     $("#preview").append("<span id='noteShadow'></span>");
     $("#noteShadow").addClass("type"+$("#form-type").val()).css("right", (Number($("#form")[0].lane.value)-1)*60 ).css("top", (Number($("#form-measure").val())*measureHeight) + measureHeight*(Number($("#form-position").val())/Number($("#form-split").val())) );
+
+    if( $("#form-type").val() == 2 ){
+        $("#noteShadow").text("n");
+        $("#preview").append("<span id='noteShadowEnd'>n</span>");
+        $("#noteShadowEnd").addClass("type"+$("#endform-type").val()).css("right", (Number($("#endform-lane").val())-1)*60 ).css("top", (Number($("#endform-measure").val())*measureHeight) + measureHeight*(Number($("#endform-position").val())/Number($("#endform-split").val())) );
+    }
 }

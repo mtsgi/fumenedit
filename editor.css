@@ -69,7 +69,13 @@ input[type="button"]{
   background-size: auto 200px;
 }
 
-#noteShadow{
+#canvas{
+  width: 300px;
+  height: auto;
+}
+
+#noteShadow, #noteShadowEnd{
+  z-index: 1;
   opacity: .5;
 }
 
@@ -85,7 +91,19 @@ input[type="button"]{
   z-index: 81;
 }
 
-.type1:hover, .type3:hover, .type4:hover, .type5:hover{
+.type2{
+  position: absolute;
+  height: 5px;
+  width: 60px;
+  background: orange;
+  box-sizing: border-box;
+  border-left: 3px solid #303030;
+  border-right: 3px solid #303030;
+	animation: addNotes .6s ease-out;
+  z-index: 81;
+}
+
+.type1:hover,.type2:hover, .type3:hover, .type4:hover, .type5:hover{
   box-shadow: 0 0 0 3px red;
 }
 .type5{
@@ -101,7 +119,7 @@ input[type="button"]{
 	animation: addNotes .6s ease-out;
   z-index: 75;
 }
-.type3{
+.type3, .type4{
   position: absolute;
   height: 5px;
   width: 60px;
@@ -129,6 +147,17 @@ input[type="button"]{
   position: absolute;
   background: red;
   height: 1px;
+  width: 300px;
+  left: 0px;
+	animation: addNotes .6s ease-out;
+  z-index: 98;
+}
+.type99{
+  transform: rotate(180deg);
+  color: #f0f0f0;
+  position: absolute;
+  background: yellow;
+  height: 3px;
   width: 300px;
   left: 0px;
 	animation: addNotes .6s ease-out;
