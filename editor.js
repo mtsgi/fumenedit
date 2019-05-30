@@ -71,9 +71,11 @@ $(document).ready( function(){
         //左右キーでlane移動
         else if( e.which == 37 ){
             $("#form")[0].lane.value = Number($("#form")[0].lane.value) - 1;
+            $("#endform-lane").val( $("#form")[0].lane.value );
         }
         else if( e.which == 39 ){
             $("#form")[0].lane.value = Number($("#form")[0].lane.value) + 1;
+            $("#endform-lane").val( $("#form")[0].lane.value );
         }
     }).on("keyup keydown keypress", () => drawShadow() );
 
@@ -117,6 +119,24 @@ $(document).ready( function(){
         };
         if( spl < 1 ){
             $("#form-split").val(1);
+        };
+    });
+    $("#endform-position").on("change", ()=>{
+        let pos = Number($("#endform-position").val());
+        let spl = Number($("#endform-split").val());
+        if( pos < 0 ){
+            $("#endform-position").val(0);
+        };
+        if( pos == spl ){
+            $("#endform-position").val(0);
+            $("#endform-measure").val( Number($("#endform-measure").val()) + 1 );
+        };
+        if( pos == -1 ){
+            $("#endform-position").val( spl-1 );
+            $("#endform-measure").val( Number($("#endform-measure").val()) - 1 );
+        };
+        if( spl < 1 ){
+            $("#endform-split").val(1);
         };
     });
 
@@ -171,8 +191,13 @@ function drawPreview(obj){
         else if( i.type == 2 ){
             for( let j in i.end ){
                 noteEl.text(notesnum);
+                if( Number(i.end[j].measure) > maxMeasure ) maxMeasure = Number(i.end[j].measure);
                 $("#preview").append("<span id='end"+notesnum+"-"+j+"' data-n='"+(notesnum-1)+"'>"+notesnum+"</span>");
                 $("#end"+notesnum+"-"+j).addClass("type"+i.end[j].type).css("right", (Number(i.end[j].lane)-1)*60 ).css("top", (Number(i.end[j].measure)*measureHeight) + measureHeight*(Number(i.end[j].position)/Number(i.end[j].split)) );
+                if( i.lane == i.end[j].lane ){
+                    $("#preview").append("<i id='long"+notesnum+"-"+j+"' data-n='"+(notesnum-1)+"'></i>");
+                    $("#long"+notesnum+"-"+j).addClass("long").css("right", (Number(i.lane)-1)*60 ).css("top", (Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split))).css("height", Math.abs( ((Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split))) - ((Number(i.end[j].measure)*measureHeight) + measureHeight*(Number(i.end[j].position)/Number(i.end[j].split))) ) );
+                }
             }
         }
         else if( i.type == 2 && false ){
@@ -191,6 +216,7 @@ function drawPreview(obj){
 
     //クリックしたノートを削除
     $("#preview span").click( function(){
+        prev[currentLevel] = fumenObject[currentLevel][Number(this.getAttribute("data-n"))];
         fumenObject[currentLevel].splice( this.getAttribute("data-n"),1 );
         drawPreview( fumenObject[currentLevel] );
     });
@@ -218,5 +244,7 @@ function drawShadow(){
         $("#noteShadow").text("n");
         $("#preview").append("<span id='noteShadowEnd'>n</span>");
         $("#noteShadowEnd").addClass("type"+$("#endform-type").val()).css("right", (Number($("#endform-lane").val())-1)*60 ).css("top", (Number($("#endform-measure").val())*measureHeight) + measureHeight*(Number($("#endform-position").val())/Number($("#endform-split").val())) );
+        //$("#preview").append("<i id='long"+notesnum+"-"+j+"' data-n='"+(notesnum-1)+"'></i>");
+        //$("#long"+notesnum+"-"+j).addClass("long").css("right", (Number($("#endform-lane").val())-1)*60 ).css("top", (Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split))).css("height", Math.abs( ((Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split))) - ((Number(i.end[j].measure)*measureHeight) + measureHeight*(Number(i.end[j].position)/Number(i.end[j].split))) ) );
     }
 }

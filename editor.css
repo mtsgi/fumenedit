@@ -163,6 +163,12 @@ input[type="button"]{
 	animation: addNotes .6s ease-out;
   z-index: 98;
 }
+.long{
+  position: absolute;
+  background: whitesmoke;
+  width: 27px;
+  margin: 0 15px;
+}
 .measure{
   transform: rotate(180deg);
   position: absolute;
