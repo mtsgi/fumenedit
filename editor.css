@@ -74,7 +74,8 @@ input[type="button"]{
   height: auto;
 }
 
-#noteShadow, #noteShadowEnd{
+#noteShadow, #noteShadowEnd, #long-shadow{
+  animation: addNotes 1s infinite ease-out;
   z-index: 1;
   opacity: .5;
 }
@@ -166,8 +167,10 @@ input[type="button"]{
 .long{
   position: absolute;
   background: whitesmoke;
+  opacity: .9;
   width: 27px;
   margin: 0 15px;
+  z-index: 80;
 }
 .measure{
   transform: rotate(180deg);
@@ -182,6 +185,7 @@ input[type="button"]{
   right: 0px;
   top: 0px;
   color: #fff;
+  font-size: 20px;
 }
 
 @keyframes addNotes{

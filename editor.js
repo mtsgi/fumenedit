@@ -244,7 +244,9 @@ function drawShadow(){
         $("#noteShadow").text("n");
         $("#preview").append("<span id='noteShadowEnd'>n</span>");
         $("#noteShadowEnd").addClass("type"+$("#endform-type").val()).css("right", (Number($("#endform-lane").val())-1)*60 ).css("top", (Number($("#endform-measure").val())*measureHeight) + measureHeight*(Number($("#endform-position").val())/Number($("#endform-split").val())) );
-        //$("#preview").append("<i id='long"+notesnum+"-"+j+"' data-n='"+(notesnum-1)+"'></i>");
-        //$("#long"+notesnum+"-"+j).addClass("long").css("right", (Number($("#endform-lane").val())-1)*60 ).css("top", (Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split))).css("height", Math.abs( ((Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split))) - ((Number(i.end[j].measure)*measureHeight) + measureHeight*(Number(i.end[j].position)/Number(i.end[j].split))) ) );
+        $("#preview").append("<i id='long-shadow'></i>");
+        $("#long-shadow").addClass("long").css("right", (Number($("#endform-lane").val())-1)*60 )
+        .css("top", Number( $("#form-measure").val() ) * measureHeight + measureHeight * ( Number( $("#form-position").val() ) / Number( $("#form-split").val() ) ) )
+        .css("height", Math.abs( ( Number($("#form-measure").val() ) * measureHeight) + measureHeight * ( Number( $("#form-position").val() ) / Number( $("#form-split").val() ) ) - ( ( Number( $("#endform-measure").val() ) * measureHeight ) + measureHeight * ( Number( $("#endform-position").val() ) / Number( $("#endform-split").val() ) ) ) ) );
     }
 }
