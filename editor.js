@@ -10,13 +10,24 @@ var currentLevel = "easy"
 $(document).ready( function(){
     $("#output").html( JSON.stringify(fumenObject[currentLevel], null, 4) );
 
+    // ノーツを追加
     $("#form-add").on("click", ()=>{
         let type = Number($("#form-type").val())
         let measure = Number($("#form-measure").val());
+
         let lane = -1;
         if( type == 1 || type ==2 ){
             lane = Number($("#form")[0].lane.value);
         }
+        else if( type == 3 || type == 4 ){
+            lane = Number($("#form")[0].lane.value);
+            if( lane == 1 || lane == 5 ){
+                message("そのレーン位置にフリックノーツを配置することはできません。");
+                return;
+            }
+        }
+        else if( type == 5 ) lane = 3;
+
         let position = Number($("#form-position").val());
         let split = Number($("#form-split").val());
         let option = -1;
@@ -232,11 +243,11 @@ function drawPreview(obj){
 }
 
 function message( text ){
-    $("#debug").text( text );
+    $("#debug").hide().show().text( text ).fadeOut(5000);
 }
 
 function drawShadow(){
-    $("#noteShadow, #noteShadowEnd").remove();
+    $("#noteShadow, #noteShadowEnd, #long-shadow").remove();
     $("#preview").append("<span id='noteShadow'></span>");
     $("#noteShadow").addClass("type"+$("#form-type").val()).css("right", (Number($("#form")[0].lane.value)-1)*60 ).css("top", (Number($("#form-measure").val())*measureHeight) + measureHeight*(Number($("#form-position").val())/Number($("#form-split").val())) );
 
