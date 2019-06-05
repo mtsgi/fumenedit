@@ -122,14 +122,35 @@ input[type="button"]{
 }
 .type3, .type4{
   position: absolute;
-  height: 5px;
+  height: 2px;
   width: 60px;
-  background: limegreen;
+  background: skyblue;
   box-sizing: border-box;
-  border-left: 3px solid #303030;
-  border-right: 3px solid #303030;
 	animation: addNotes .6s ease-out;
   z-index: 83;
+  transform: scaleX(3);
+}
+.type3:after{
+  transform: scaleX(.5);
+  display: block;
+  letter-spacing: -2px;
+  text-align: center;
+  font-size: 24px;
+  content: "−−−−−>";
+  color: skyblue;
+  position: relative;
+  top: -5px;
+}
+.type4:after{
+  transform: scaleX(.5);
+  display: block;
+  letter-spacing: -2px;
+  text-align: center;
+  font-size: 24px;
+  content: "<−−−−−";
+  color: skyblue;
+  position: relative;
+  top: -5px;
 }
 .type97{
   transform: rotate(180deg);

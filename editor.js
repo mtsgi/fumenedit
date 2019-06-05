@@ -88,6 +88,10 @@ $(document).ready( function(){
             $("#form")[0].lane.value = Number($("#form")[0].lane.value) + 1;
             $("#endform-lane").val( $("#form")[0].lane.value );
         }
+        else if( e.shiftKey ){
+            if( e.which == 38 ) $("#form-position").val( Number($("#form-position").val()) +1 );
+            else if( e.which == 40 ) $("#form-position").val( Number($("#form-position").val()) -1 );
+        }
     }).on("keyup keydown keypress", () => drawShadow() );
 
     //小節前後移動
