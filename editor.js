@@ -8,7 +8,7 @@ var measureHeight = 200;
 var currentLevel = "easy"
 
 $(document).ready( function(){
-    $("#output").html( JSON.stringify(fumenObject[currentLevel], null, 4) );
+    $("#output").html( JSON.stringify(fumenObject, null, 4) );
 
     // ノーツを追加
     $("#form-add").on("click", ()=>{
@@ -57,7 +57,7 @@ $(document).ready( function(){
             "option": option,
             "end": end
         });
-        $("#output").html( JSON.stringify(fumenObject[currentLevel], null, 4) );
+        $("#output").html( JSON.stringify(fumenObject, null, 4) );
 
         drawPreview(fumenObject[currentLevel]);
     });
@@ -70,7 +70,7 @@ $(document).ready( function(){
         else{
             currentLevel = _level;
             message( _level + "をロードしました");
-            $("#output").html( JSON.stringify(fumenObject[currentLevel], null, 4) );
+            $("#output").html( JSON.stringify(fumenObject, null, 4) );
             drawPreview(fumenObject[currentLevel]);
         }
     });
@@ -88,9 +88,39 @@ $(document).ready( function(){
             $("#form")[0].lane.value = Number($("#form")[0].lane.value) + 1;
             $("#endform-lane").val( $("#form")[0].lane.value );
         }
+        //Shift押しながら上下でノーツ(始点)移動
         else if( e.shiftKey ){
-            if( e.which == 38 ) $("#form-position").val( Number($("#form-position").val()) +1 );
-            else if( e.which == 40 ) $("#form-position").val( Number($("#form-position").val()) -1 );
+            if( e.which == 38 ){
+                $("#form-position").val( Number($("#form-position").val()) +1 );
+            }
+            else if( e.which == 40 ){
+                $("#form-position").val( Number($("#form-position").val()) -1 );
+            }
+            let pos = Number($("#form-position").val());
+            let spl = Number($("#form-split").val());
+            if( pos < 0 ){
+                $("#form-position").val(0);
+            };
+            if( pos == spl ){
+                $("#form-position").val(0);
+                $("#form-next").click();
+            };
+            if( pos == -1 ){
+                $("#form-position").val( spl-1 );
+                $("#form-prev").click();
+            };
+            if( spl < 1 ){
+                $("#form-split").val(1);
+            };
+        }
+        //スペースキーでノーツタイプ変更
+        else if( e.which == 32 ){
+            if( $("#form-type").val() == 99 ) $("#form-type").val(1);
+            else if( $("#form-type").val() == 5 ) $("#form-type").val(97);
+            else $("#form-type").val( Number($("#form-type").val()) + 1);
+
+            if( $("#form-type").val() == 2 ) $("#endform").show();
+            else $("#endform").hide();
         }
     }).on("keyup keydown keypress", () => drawShadow() );
 
@@ -101,7 +131,7 @@ $(document).ready( function(){
     //UndoとRedo
     $("#form-undo").on("click", ()=>{
         prev[currentLevel] = fumenObject[currentLevel].pop() || prev[currentLevel];
-        $("#output").html( JSON.stringify(fumenObject[currentLevel], null, 4) );
+        $("#output").html( JSON.stringify(fumenObject, null, 4) );
         drawPreview(fumenObject[currentLevel]);
     });
 
@@ -112,7 +142,7 @@ $(document).ready( function(){
         };
         fumenObject[currentLevel].push( prev[currentLevel] );
         prev[currentLevel] = null;
-        $("#output").html( JSON.stringify(fumenObject[currentLevel], null, 4) );
+        $("#output").html( JSON.stringify(fumenObject, null, 4) );
         message("Redoしました");
         drawPreview(fumenObject[currentLevel]);
     });
