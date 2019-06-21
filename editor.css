@@ -56,9 +56,10 @@ input[type="button"]{
 }
 #preview{
   transform: rotate(180deg);
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   position: fixed;
-  width: 300px;
+  width: 320px;
   height: 100%;
   top: 0px;
   right: 0px;
@@ -70,7 +71,7 @@ input[type="button"]{
 }
 
 #canvas{
-  width: 300px;
+  width: 320px;
   height: auto;
 }
 
@@ -122,35 +123,36 @@ input[type="button"]{
 }
 .type3, .type4{
   position: absolute;
-  height: 2px;
+  height: 5px;
   width: 60px;
-  background: skyblue;
   box-sizing: border-box;
 	animation: addNotes .6s ease-out;
   z-index: 83;
   transform: scaleX(3);
 }
+.type3{
+  background: lightskyblue;
+}
+.type4{
+  background: lightseagreen;
+}
 .type3:after{
   transform: scaleX(.5);
-  display: block;
-  letter-spacing: -2px;
-  text-align: center;
   font-size: 24px;
-  content: "−−−−−>";
-  color: skyblue;
-  position: relative;
-  top: -5px;
+  content: "▶";
+  color: lightskyblue;
+  position: absolute;
+  top: -12px;
+  right: -7px;
 }
 .type4:after{
   transform: scaleX(.5);
-  display: block;
-  letter-spacing: -2px;
-  text-align: center;
   font-size: 24px;
-  content: "<−−−−−";
-  color: skyblue;
-  position: relative;
-  top: -5px;
+  content: "◀";
+  color: lightseagreen;
+  position: absolute;
+  top: -11px;
+  left: -9px;
 }
 .type97{
   transform: rotate(180deg);
@@ -158,10 +160,11 @@ input[type="button"]{
   position: absolute;
   background: limegreen;
   height: 1px;
-  width: 300px;
+  width: 320px;
   left: 0px;
 	animation: addNotes .6s ease-out;
   z-index: 97;
+  text-align: right;
 }
 .type98{
   transform: rotate(180deg);
@@ -169,10 +172,11 @@ input[type="button"]{
   position: absolute;
   background: red;
   height: 1px;
-  width: 300px;
+  width: 320px;
   left: 0px;
 	animation: addNotes .6s ease-out;
   z-index: 98;
+  text-align: right;
 }
 .type99{
   transform: rotate(180deg);
@@ -199,6 +203,7 @@ input[type="button"]{
   background: transparent;
   background : linear-gradient(to left, transparent 19.5%,#E0E0E0 20%,transparent 20.5%,transparent 39.5%,#E0E0E0 40%,transparent 40.5%,transparent 59.5%,#E0E0E0 60%,transparent 60.5%,transparent 79.5%,#E0E0E0 80%,transparent 80.5%);
   border-top: 1px solid #909090;
+  border-right: 1px solid #909090;
   text-align: right;
   line-height: 390px;
   height: 200px;

@@ -10,7 +10,7 @@ var currentLevel = "easy"
 $(document).ready( function(){
     $("#output").html( JSON.stringify(fumenObject, null, 4) );
 
-    // ノーツを追加
+    //ノーツを追加
     $("#form-add").on("click", ()=>{
         let type = Number($("#form-type").val())
         let measure = Number($("#form-measure").val());
@@ -30,9 +30,11 @@ $(document).ready( function(){
 
         let position = Number($("#form-position").val());
         let split = Number($("#form-split").val());
-        let option = -1;
+        let option = [];
         if( type == 97 || type == 98 ){
-            option = Number($("#form-option").val());
+            if( type == 97 ) option[0] = "beatchange";
+            else if( type == 98 ) option[0] = "bpmchange";
+            option[1] = Number($("#form-option").val());
         }
         let end = new Array();
         if( type == 2 ){
@@ -185,7 +187,7 @@ $(document).ready( function(){
         };
     });
 
-
+    //クリップボードにコピー
     $("#copy2cb").on("click", function(){
         let _range = document.createRange();
         _range.selectNode( $("#output")[0] );
@@ -197,9 +199,19 @@ $(document).ready( function(){
         $("#debug").text("クリップボードにコピーしました。");
     });
 
+    //シャドーノーツ(置く場所の目印)を表示
     $("input, select").on("change", () => drawShadow() );
 
+    //フォームのタイプ変更時
     $("#form-type").on("change", function(){
+        //ノーツタイプによってoptionキーの種類を表示
+        let _type = $("#form-type").val();
+        if( _type == 97 ) $("#form-option-key").text("beatchange");
+        else if( _type == 98 ) $("#form-option-key").text("bpmchange");
+        else if( _type == 3 || _type == 4 ) $("#form-option-key").text("notewidth");
+        else $("#form-option-key").text("使用なし");
+
+        //ロングなら終点フォームを表示
         if( this.value == 2 ) $("#endform").show();
         else $("#endform").hide();
 
@@ -219,16 +231,16 @@ function drawPreview(obj){
     let notesnum = 0, maxMeasure = 0;
     //1ノートずつ処理
     for( let i of obj ){
-        notesnum++;
+        if( i.type == 1 || i.type == 2 || i.type == 3 || i.type == 4 || i.type == 5 ) notesnum++;
         if( Number(i.measure) > maxMeasure ) maxMeasure = Number(i.measure);
         $("#preview").append("<span id='note"+notesnum+"' data-n='"+(notesnum-1)+"'></span>");
         let noteEl = $("#note"+notesnum);
         noteEl.addClass("type"+i.type).css("right", (Number(i.lane)-1)*60 ).css("top", (Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split)) );
         if( i.type == 98 ){
-            noteEl.text("BPM:"+i.option);
+            noteEl.text(i.option);
         }
         else if( i.type == 97 ){
-            noteEl.text("BEAT:"+i.option+"/4");
+            noteEl.text(i.option+"/4");
         }
         else if( i.type == 99 ){
             noteEl.text("EOF");
@@ -281,11 +293,14 @@ function message( text ){
 }
 
 function drawShadow(){
+    let _type = $("#form-type").val();
+
     $("#noteShadow, #noteShadowEnd, #long-shadow").remove();
     $("#preview").append("<span id='noteShadow'></span>");
-    $("#noteShadow").addClass("type"+$("#form-type").val()).css("right", (Number($("#form")[0].lane.value)-1)*60 ).css("top", (Number($("#form-measure").val())*measureHeight) + measureHeight*(Number($("#form-position").val())/Number($("#form-split").val())) );
+    $("#noteShadow").addClass("type"+_type).css("right", (Number($("#form")[0].lane.value)-1)*60 ).css("top", (Number($("#form-measure").val())*measureHeight) + measureHeight*(Number($("#form-position").val())/Number($("#form-split").val())) );
 
-    if( $("#form-type").val() == 2 ){
+    //シャドー終点の描画
+    if( _type == 2 ){
         $("#noteShadow").text("n");
         $("#preview").append("<span id='noteShadowEnd'>n</span>");
         $("#noteShadowEnd").addClass("type"+$("#endform-type").val()).css("right", (Number($("#endform-lane").val())-1)*60 ).css("top", (Number($("#endform-measure").val())*measureHeight) + measureHeight*(Number($("#endform-position").val())/Number($("#endform-split").val())) );
