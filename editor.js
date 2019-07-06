@@ -64,19 +64,6 @@ $(document).ready( function(){
         drawPreview(fumenObject[currentLevel]);
     });
 
-    $("#form-load").on("click", ()=>{
-        let _level = $("#form-level").val();
-        if( !fumenObject[_level] ){
-            message( _level + "は不明な難易度です");
-        }
-        else{
-            currentLevel = _level;
-            message( _level + "をロードしました");
-            $("#output").html( JSON.stringify(fumenObject, null, 4) );
-            drawPreview(fumenObject[currentLevel]);
-        }
-    });
-
     //キーボード操作
     $(document).on("keyup", (e) => {
         //Enterキーでノート追加
@@ -308,5 +295,18 @@ function drawShadow(){
         $("#long-shadow").addClass("long").css("right", (Number($("#endform-lane").val())-1)*60 )
         .css("top", Number( $("#form-measure").val() ) * measureHeight + measureHeight * ( Number( $("#form-position").val() ) / Number( $("#form-split").val() ) ) )
         .css("height", Math.abs( ( Number($("#form-measure").val() ) * measureHeight) + measureHeight * ( Number( $("#form-position").val() ) / Number( $("#form-split").val() ) ) - ( ( Number( $("#endform-measure").val() ) * measureHeight ) + measureHeight * ( Number( $("#endform-position").val() ) / Number( $("#endform-split").val() ) ) ) ) );
+    }
+}
+
+function selectLevel( level ){
+    if( !fumenObject[level] ){
+        message( level + "は不明な難易度です");
+    }
+    else{
+        currentLevel = level;
+        message( level + "をロードしました");
+        $("#output").html( JSON.stringify(fumenObject, null, 4) );
+        drawPreview(fumenObject[currentLevel]);
+        $("#head-level").text(level);
     }
 }

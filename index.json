@@ -1,37 +1,107 @@
 {
-    "sample": {
-        "name": "Sample",
-        "artist": "Sample Artist",
-        "bpm": 160.0,
-        "color": [255, 255, 255],
-        
-        "offset": 1000,
-
-        "raku": -1,
-        "easy": 1,
-        "normal": 3,
-        "hard": 7,
-        "extra": -1,
-        
-        "author": "mtsgi",
-        "comment": "譜面データのテストです。"
+	"index": 
+	[
+    {
+      "id": "sample",
+      "name": "Sample",
+      "artist": "Sample Artist",
+      "bpm": 160.0,
+      "dispbpm":  "160",
+      "color": [ 255, 255, 255 ],
+      "offset": 1000,
+      "raku": -1,
+      "easy": 1,
+      "normal": 3,
+      "hard": 7,
+      "extra": -1,
+      "author": "mtsgi",
+      "comment": "譜面データのテストです。",
+      "demo":  2000
     },
-
-    "sublimation": {
-        "name": "Sublimation",
-        "artist": "Yuta Ida",
-        "bpm": 165.0,
-        "color": [255, 255, 255],
-        
-        "offset": 1000,
-
-        "raku": -1,
-        "easy": 3,
-        "normal": 6,
-        "hard": 10,
-        "extra": -1,
-        
-        "author": "mtsgi",
-        "comment": "Sublimation"
+    {
+      "id": "sublimation",
+      "name": "Sublimation",
+      "artist": "Yuta Ida",
+      "bpm": 165.0,
+      "dispbpm": "165",
+      "color": [ 155, 255, 205 ],
+      "offset": 1000,
+      "raku": -1,
+      "easy": 7,
+      "normal": 10,
+      "hard": 13,
+      "extra": -1,
+      "author": "mtsgi",
+      "comment": "Sublimation",
+      "demo": 2000
+    },
+    {
+      "id": "sakurafubuki",
+      "name": "Sakura Fubuki",
+      "artist": "Street",
+      "bpm": 175.0,
+      "dispbpm": "175",
+      "color": [ 255, 205, 205 ],
+      "offset": 1000,
+      "raku": -1,
+      "easy": 3,
+      "normal": 6,
+      "hard": 11,
+      "extra": -1,
+      "author": "mtsgi",
+      "comment": "",
+      "demo": 2000
+    },
+    {
+      "id": "conflict",
+      "name": "conflict",
+      "artist": "nora2r + cranky",
+      "bpm": 160.0,
+      "dispbpm": "160",
+      "color": [ 175, 175, 175 ],
+      "offset": 1000,
+      "raku": -1,
+      "easy": 6,
+      "normal": 8,
+      "hard": 12,
+      "extra": -1,
+      "author": "mtsgi",
+      "comment": "",
+      "demo": 2000
+    },
+    {
+      "id": "onsen",
+      "name": "温泉大作戦",
+      "artist": "Freezer",
+      "bpm": 205.0,
+      "dispbpm": "205",
+      "color": [ 155, 205, 255 ],
+      "offset": 1000,
+      "raku": -1,
+      "easy": 3,
+      "normal": 7,
+      "hard": 12,
+      "extra": -1,
+      "author": "mtsgi",
+      "comment": "",
+      "demo": 2000
+    },
+    {
+      "id": "q",
+      "name": "？？？",
+      "artist": "？？？",
+      "bpm": 246,
+      "dispbpm": "24 - 492",
+      "color": [ 250, 250, 250 ],
+      "offset": 1000,
+      "raku": -1,
+      "easy": 10,
+      "normal": 13,
+      "hard": 15,
+      "extra": -1,
+      "author": "mtsgi",
+      "comment": "",
+      "demo": 2000
     }
+	]
 }

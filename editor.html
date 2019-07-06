@@ -10,13 +10,17 @@
     <link rel="stylesheet" href="editor.css">
 </head>
 <body>
-    <h3>譜面エディタ</h3>
+    <h3>譜面エディタ <span id="head-level">easy</span></h3>
     <form id="form" autocomplete="off">
         <div style="padding: 6px; background: #ddd; margin: 10px 0">
             <input type="button" value="ファイルを開く" id="form-open">
             <input type="button" value="名前をつけて保存" id="form-save">
         </div>
-        難易度：<input type="text" id="form-level" value="easy"><input type="button" value="Load" id="form-load">
+        <input type="button" value="RAKU" onclick="selectLevel('raku')">
+        <input type="button" value="EASY" onclick="selectLevel('easy')">
+        <input type="button" value="NORMAL" onclick="selectLevel('normal')">
+        <input type="button" value="HARD" onclick="selectLevel('hard')">
+        <input type="button" value="EXTRA" onclick="selectLevel('extra')">
         <br>
         <div style="padding: 6px; background: #ddd; margin: 10px 0">
             <input type="button" value="Undo" id="form-undo">
