@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="editor.css">
 </head>
 <body>
-    <h3>譜面エディタ <span id="head-level">easy</span></h3>
+    <h3>譜面エディタ [<span id="head-level">easy</span>]</h3>
     <form id="form" autocomplete="off">
         <div style="padding: 6px; background: #ddd; margin: 10px 0">
-            <input type="button" value="ファイルを開く" id="form-open">
-            <input type="button" value="名前をつけて保存" id="form-save">
+            <input type="button" value="ファイルを開く" id="form-open" onclick="openFile()">
+            <input type="button" value="名前をつけて保存" id="form-save" onclick="saveFile()">
         </div>
         <input type="button" value="RAKU" onclick="selectLevel('raku')">
         <input type="button" value="EASY" onclick="selectLevel('easy')">
@@ -23,9 +23,11 @@
         <input type="button" value="EXTRA" onclick="selectLevel('extra')">
         <br>
         <div style="padding: 6px; background: #ddd; margin: 10px 0">
+            <!--
             <input type="button" value="Undo" id="form-undo">
             <input type="button" value="Redo" id="form-redo">
             <br>
+            -->
             <input type="button" value="◀" id="form-prev">
             <input type="number" id="form-measure" value="1"> 小節
             <input type="button" value="▶" id="form-next">

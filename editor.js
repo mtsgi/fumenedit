@@ -12,6 +12,7 @@ $(document).ready( function(){
 
     //ノーツを追加
     $("#form-add").on("click", ()=>{
+        prev[currentLevel] = fumenObject[currentLevel];
         let type = Number($("#form-type").val())
         let measure = Number($("#form-measure").val());
 
@@ -119,7 +120,11 @@ $(document).ready( function(){
 
     //UndoとRedo
     $("#form-undo").on("click", ()=>{
-        prev[currentLevel] = fumenObject[currentLevel].pop() || prev[currentLevel];
+        if( prev[currentLevel] ){
+            fumenObject[currentLevel] = prev[currentLevel];
+            prev[currentLevel] = null;
+        }
+        else message("Undoできません");
         $("#output").html( JSON.stringify(fumenObject, null, 4) );
         drawPreview(fumenObject[currentLevel]);
     });
@@ -215,13 +220,14 @@ $(document).ready( function(){
 
 function drawPreview(obj){
     $("#preview").html("<canvas id='canvas' width='300'></canvas>");
-    let notesnum = 0, maxMeasure = 0;
+    let notesnum = 0, notesid = 0, maxMeasure = 0;
     //1ノートずつ処理
     for( let i of obj ){
+        notesid++;
         if( i.type == 1 || i.type == 2 || i.type == 3 || i.type == 4 || i.type == 5 ) notesnum++;
         if( Number(i.measure) > maxMeasure ) maxMeasure = Number(i.measure);
-        $("#preview").append("<span id='note"+notesnum+"' data-n='"+(notesnum-1)+"'></span>");
-        let noteEl = $("#note"+notesnum);
+        $("#preview").append("<span id='note"+notesid+"' data-n='"+(notesid-1)+"'></span>");
+        let noteEl = $("#note"+notesid);
         noteEl.addClass("type"+i.type).css("right", (Number(i.lane)-1)*60 ).css("top", (Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split)) );
         if( i.type == 98 ){
             noteEl.text(i.option);
@@ -234,13 +240,13 @@ function drawPreview(obj){
         }
         else if( i.type == 2 ){
             for( let j in i.end ){
-                noteEl.text(notesnum);
+                noteEl.text(notesid);
                 if( Number(i.end[j].measure) > maxMeasure ) maxMeasure = Number(i.end[j].measure);
-                $("#preview").append("<span id='end"+notesnum+"-"+j+"' data-n='"+(notesnum-1)+"'>"+notesnum+"</span>");
-                $("#end"+notesnum+"-"+j).addClass("type"+i.end[j].type).css("right", (Number(i.end[j].lane)-1)*60 ).css("top", (Number(i.end[j].measure)*measureHeight) + measureHeight*(Number(i.end[j].position)/Number(i.end[j].split)) );
+                $("#preview").append("<span id='end"+notesid+"-"+j+"' data-n='"+(notesid-1)+"'>"+notesid+"</span>");
+                $("#end"+notesid+"-"+j).addClass("type"+i.end[j].type).css("right", (Number(i.end[j].lane)-1)*60 ).css("top", (Number(i.end[j].measure)*measureHeight) + measureHeight*(Number(i.end[j].position)/Number(i.end[j].split)) );
                 if( i.lane == i.end[j].lane ){
-                    $("#preview").append("<i id='long"+notesnum+"-"+j+"' data-n='"+(notesnum-1)+"'></i>");
-                    $("#long"+notesnum+"-"+j).addClass("long").css("right", (Number(i.lane)-1)*60 ).css("top", (Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split))).css("height", Math.abs( ((Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split))) - ((Number(i.end[j].measure)*measureHeight) + measureHeight*(Number(i.end[j].position)/Number(i.end[j].split))) ) );
+                    $("#preview").append("<i id='long"+notesid+"-"+j+"' data-n='"+(notesid-1)+"'></i>");
+                    $("#long"+notesid+"-"+j).addClass("long").css("right", (Number(i.lane)-1)*60 ).css("top", (Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split))).css("height", Math.abs( ((Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split))) - ((Number(i.end[j].measure)*measureHeight) + measureHeight*(Number(i.end[j].position)/Number(i.end[j].split))) ) );
                 }
             }
         }
@@ -260,7 +266,7 @@ function drawPreview(obj){
 
     //クリックしたノートを削除
     $("#preview span").click( function(){
-        prev[currentLevel] = fumenObject[currentLevel][Number(this.getAttribute("data-n"))];
+        prev[currentLevel] = fumenObject[currentLevel];
         fumenObject[currentLevel].splice( this.getAttribute("data-n"),1 );
         drawPreview( fumenObject[currentLevel] );
     });
@@ -276,7 +282,7 @@ function drawPreview(obj){
 }
 
 function message( text ){
-    $("#debug").hide().show().text( text ).fadeOut(5000);
+    $("#debug").show().text( text ).on("click", ()=> $("#debug").hide() );
 }
 
 function drawShadow(){
@@ -309,4 +315,33 @@ function selectLevel( level ){
         drawPreview(fumenObject[currentLevel]);
         $("#head-level").text(level);
     }
+}
+
+function openFile(){
+    if( window.confirm("ファイルを開くと保存していない現在の内容は破棄されます。\n続行しますか？") ){
+        let reader = new FileReader();
+        reader.onload = function(event) {
+            fumenObject = JSON.parse( event.target.result );
+            prev = {
+                "raku": null, "easy": null, "normal": null, "hard": null, "extra": null
+            };
+            console.log(fumenObject);
+            $("#output").html( JSON.stringify(fumenObject, null, 4) );
+            selectLevel(currentLevel);
+        };
+
+        $('<input type="file" accept=".json, application/json">').on('change', function(event) {
+            reader.readAsText(event.target.files[0]);
+        })[0].click();
+    }
+}
+
+function saveFile(){
+    let blob = new Blob([JSON.stringify(fumenObject, null, 4)], { type: "application/json" });
+    let a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '曲名.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
