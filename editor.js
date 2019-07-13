@@ -65,6 +65,14 @@ $(document).ready( function(){
         drawPreview(fumenObject[currentLevel]);
     });
 
+    //小節の高さ
+    if( localStorage.getItem("fumenedit-measure-height") ) measureHeight = Number( localStorage.getItem("fumenedit-measure-height") );
+    $("#measure-height").val(measureHeight).on("change", function(){
+        measureHeight = this.value;
+        localStorage.setItem("fumenedit-measure-height", this.value);
+        selectLevel(currentLevel);
+    });
+
     //キーボード操作
     $(document).on("keyup", (e) => {
         //Enterキーでノート追加
@@ -277,6 +285,7 @@ function drawPreview(obj){
         let measureEl = $("#measure"+i);
         measureEl.addClass("measure").css("top", i*measureHeight);
     }
+    $(".measure").css("height", measureHeight + "px");
     $("#notesnum").text(notesnum+" notes");
     drawShadow();
 }
