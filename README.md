@@ -4,3 +4,4 @@ json形式の譜面ファイルを読み書きする制作支援ツール
 otoge専用形式の譜面制作とプレビュー
 ### 試す
 https://mtsgi.github.io/fumenedit/
+> Firefox(macOS)推奨

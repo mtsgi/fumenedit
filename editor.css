@@ -4,6 +4,15 @@ body{
   margin: 0;
   overscroll-behavior: none;
 }
+main{
+  position: fixed;
+  top: 0;
+  left: 0;
+  max-height: calc(100vh);
+  overflow: scroll;
+  width: calc(100% - 320px)
+}
+
 h3{
   background: #888;
   color: #fff;
@@ -212,6 +221,18 @@ input[type="button"]{
   top: 0px;
   color: #fff;
   font-size: 20px;
+}
+
+#preline{
+  position: absolute;
+  top: 0px;
+  height: 0px;
+  width: 100%;
+  background: transparent;
+  color: limegreen;
+  border-top: 4px solid limegreen;
+  transition: 1s all linear;
+  transform: rotate(180deg);
 }
 
 @keyframes addNotes{

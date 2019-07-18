@@ -6,6 +6,8 @@ var prev = {
 };
 var measureHeight = 200;
 var currentLevel = "easy"
+let preAudio = new Audio();
+let INTERVAL;
 
 $(document).ready( function(){
     $("#output").html( JSON.stringify(fumenObject, null, 4) );
@@ -285,6 +287,11 @@ function drawPreview(obj){
         let measureEl = $("#measure"+i);
         measureEl.addClass("measure").css("top", i*measureHeight);
     }
+
+    //プレビュー線の描画
+    $("#preview").append("<div id='preline'>プレビュー</div>");
+    clearInterval(INTERVAL);
+
     $(".measure").css("height", measureHeight + "px");
     $("#notesnum").text(notesnum+" notes");
     drawShadow();
@@ -353,4 +360,38 @@ function saveFile(){
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+}
+
+function previewStart(){
+    preAudio.pause();
+    preAudio = new Audio();
+    $("#preline").css("top", "0px");
+    $("#preline").css("transition", "none");
+    preAudio.src = $("#preview-file").val();
+    let _bpm = $("#preview-bpm").val();
+    let _beat = $("#preview-beat").val();
+    let _height = 0;
+    clearInterval(INTERVAL);
+    //1小節ずつ進行
+
+    _height += Number(measureHeight);
+    $("#preline").css("top", _height + "px");
+    $("#preline").css("transition", (60/_bpm*_beat)+"s all linear");
+    
+    INTERVAL = setInterval(() => {
+        _height += Number(measureHeight);
+        $("#preline").css("top", _height + "px");
+        $("#preline").css("transition", (60/_bpm*_beat)+"s all linear");
+    }, (60/_bpm*_beat)*1000 );
+    //音源オフセット分遅延再生
+    setTimeout(() => {
+        preAudio.play();
+    }, Number($("#preview-offset").val()) );
+}
+
+function previewStop(){
+    clearInterval(INTERVAL);
+    $("#preline").css("top", "0px");
+    $("#preline").css("transition", "none");
+    preAudio.pause();
 }
