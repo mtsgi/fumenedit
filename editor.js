@@ -371,10 +371,11 @@ function previewStart(){
     let _bpm = $("#preview-bpm").val();
     let _beat = $("#preview-beat").val();
     let _height = 0;
+    let _start = $("#preview-measure").val();
     clearInterval(INTERVAL);
-    //1小節ずつ進行
 
-    _height += Number(measureHeight);
+    //1小節ずつ進行
+    _height +=  Number(_start) * (Number(measureHeight));
     $("#preline").css("top", _height + "px");
     $("#preline").css("transition", (60/_bpm*_beat)+"s all linear");
     
@@ -385,7 +386,8 @@ function previewStart(){
     }, (60/_bpm*_beat)*1000 );
     //音源オフセット分遅延再生
     setTimeout(() => {
-        preAudio.play();
+        preAudio.currentTime = (60/_bpm*_beat)*Number(_start);
+        preAudio.play().catch( (err)=>console.warn(err) );
     }, Number($("#preview-offset").val()) );
 }
 
