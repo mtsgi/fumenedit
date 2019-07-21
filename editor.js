@@ -39,7 +39,7 @@ $(document).ready( function(){
             else if( type == 98 ) option[0] = "bpmchange";
             option[1] = Number($("#form-option").val());
         }
-        let end = new Array();
+        let end = [];
         if( type == 2 ){
             end = [
                 {
@@ -49,11 +49,33 @@ $(document).ready( function(){
                     "position": Number($("#endform-position").val()),
                     "split": Number($("#endform-split").val()),
                     "option": -1,
-                    "end": new Array()
+                    "end": []
                 }
             ]
         }
-        fumenObject[currentLevel].push({
+        // 音札ノーツは全難易度に挿入
+        if( type == 5 ){
+            let _otofudanotesobj = {
+                "type": type,
+                "measure": measure,
+                "lane": lane,
+                "position": position,
+                "split": split,
+                "option": option,
+                "end": end
+            }
+            try {
+                fumenObject.raku.push( _otofudanotesobj );
+                fumenObject.easy.push( _otofudanotesobj );
+                fumenObject.normal.push( _otofudanotesobj );
+                fumenObject.hard.push( _otofudanotesobj );
+                fumenObject.extra.push( _otofudanotesobj );
+                message("音札ノーツを全ての難易度の同一箇所に挿入しました");
+            } catch (error) {
+                message( error );
+            }
+        }
+        else fumenObject[currentLevel].push({
             "type": type,
             "measure": measure,
             "lane": lane,
@@ -277,6 +299,7 @@ function drawPreview(obj){
     //クリックしたノートを削除
     $("#preview span").click( function(){
         prev[currentLevel] = fumenObject[currentLevel];
+        if( fumenObject[currentLevel][this.getAttribute("data-n")].type == 5 ) message("[注意]音札ノーツを削除する場合は、全ての難易度で削除されているか確認してください");
         fumenObject[currentLevel].splice( this.getAttribute("data-n"),1 );
         drawPreview( fumenObject[currentLevel] );
     });
