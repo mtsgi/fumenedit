@@ -91,8 +91,10 @@ $(document).ready( function(){
 
     //小節の高さ
     if( localStorage.getItem("fumenedit-measure-height") ) measureHeight = Number( localStorage.getItem("fumenedit-measure-height") );
+    $("#measure-height-num").text(measureHeight);
     $("#measure-height").val(measureHeight).on("change", function(){
         measureHeight = this.value;
+        $("#measure-height-num").text(measureHeight);
         localStorage.setItem("fumenedit-measure-height", this.value);
         selectLevel(currentLevel);
     });
@@ -387,10 +389,10 @@ function saveFile(){
 
 function previewStart(){
     preAudio.pause();
-    preAudio = new Audio();
+    //preAudio = new Audio();
     $("#preline").css("top", "0px");
     $("#preline").css("transition", "none");
-    preAudio.src = $("#preview-file").val();
+    //preAudio.src = $("#preview-file").val();
     let _bpm = $("#preview-bpm").val();
     let _beat = $("#preview-beat").val();
     let _height = 0;
@@ -419,4 +421,9 @@ function previewStop(){
     $("#preline").css("top", "0px");
     $("#preline").css("transition", "none");
     preAudio.pause();
+}
+
+function selectPreaudio(files){
+    preAudio = new Audio();
+    preAudio.src = window.URL.createObjectURL(files[0]);
 }

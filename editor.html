@@ -14,7 +14,8 @@
 
             <h3>譜面エディタ [<span id="head-level">easy</span>]</h3>
             <form id="form" autocomplete="off">
-                小節の高さ(px) <input type="number" id="measure-height" value="200">
+                小節の高さ(<span id="measure-height-num"></span>px)
+                <input type="range" min="100" max="600" id="measure-height" value="200">
                 <div style="padding: 6px; background: #ddd; margin: 10px 0">
                     <input type="button" value="ファイルを開く" id="form-open" onclick="openFile()">
                     <input type="button" value="名前をつけて保存" id="form-save" onclick="saveFile()">
@@ -103,17 +104,17 @@
                 <input type="text" id="endform-option" value="-1" disabled>
             </form>
 
-            <h3>プレビュー <input type="button" onclick="previewStart()" value="再生"> <input type="button" onclick="previewStop()" value="停止"></h3>
+            <h3>
+                プレビュー ／ <input type="number" id="preview-measure" value="0">小節から <input type="button" onclick="previewStart()" value="再生"> <input type="button" onclick="previewStop()" value="停止">
+            </h3>
             <form>
-                BPM値 <input type="number" id="preview-bpm" value="180">
+                BPM値：<input type="number" id="preview-bpm" value="180">
                 <br>
-                拍子 <input type="number" id="preview-beat" value="4">
+                拍子：<input type="number" id="preview-beat" value="4">
                 <br>
-                音源ファイル <input type="text" id="preview-file" value="">
+                音源ファイル：<input type="file" name="" id="preview-file" accept="audio/*" onchange="selectPreaudio(this.files)">
                 <br>
-                オフセット(ms) <input type="number" id="preview-offset" value="0">
-                <br>
-                開始小節 <input type="number" id="preview-measure" value="0">
+                オフセット(ms)：<input type="number" id="preview-offset" value="0">
             </form>
         
             <h3>出力 <input type="button" id="copy2cb" value="コピー"></h3>
