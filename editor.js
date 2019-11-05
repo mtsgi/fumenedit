@@ -260,7 +260,7 @@ function drawPreview(obj){
         notesid++;
         if( i.type == 1 || i.type == 2 || i.type == 3 || i.type == 4 || i.type == 5 ) notesnum++;
         if( Number(i.measure) > maxMeasure ) maxMeasure = Number(i.measure);
-        $("#preview").append("<span id='note"+notesid+"' data-n='"+(notesid-1)+"'></span>");
+        $("#preview").append(`<span id='note${notesid}' data-n='${(notesid-1)}'><i class='noteinfo'>${i.position}/${i.split}</i></span>`);
         let noteEl = $("#note"+notesid);
         noteEl.addClass("type"+i.type).css("right", (Number(i.lane)-1)*60 ).css("top", (Number(i.measure)*measureHeight) + measureHeight*(Number(i.position)/Number(i.split)) );
         if( i.type == 98 ){
@@ -284,6 +284,7 @@ function drawPreview(obj){
                 }
             }
         }
+        // キャンバス描画用(使用なし)
         else if( i.type == 2 && false ){
             var ctx = document.getElementById("canvas").getContext("2d");
             for( let j in i.end ){

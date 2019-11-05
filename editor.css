@@ -102,6 +102,20 @@ input[type="button"]{
   z-index: 81;
 }
 
+.type5:hover .noteinfo,
+.type1:hover .noteinfo {
+  color: #f0f0f0;
+  text-shadow: 0 1px 4px black;
+}
+
+.type5 .noteinfo,
+.type1 .noteinfo{
+  color: transparent;
+  transform: rotate(180deg);
+  position: absolute;
+  font-style: normal;
+}
+
 .type2{
   position: absolute;
   height: 5px;
@@ -162,6 +176,18 @@ input[type="button"]{
   position: absolute;
   top: -11px;
   left: -9px;
+}
+.type3:hover .noteinfo,
+.type4:hover .noteinfo {
+  color: #f0f0f0;
+  text-shadow: 0 1px 4px black;
+}
+.type3 .noteinfo,
+.type4 .noteinfo{
+  color: transparent;
+  transform: rotate(180deg) scaleX(.5);
+  position: absolute;
+  font-style: normal;
 }
 .type97{
   transform: rotate(180deg);
