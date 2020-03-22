@@ -1,134 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>エディタ</title>
     <script src="jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mtsgi/kitstrap/d/kitstrap.css">
     <script src="editor.js"></script>
     <link rel="stylesheet" href="editor.css">
 </head>
+
 <body>
     <main>
-
-            <h3>譜面エディタ [<span id="head-level">easy</span>]</h3>
-            <form id="form" autocomplete="off">
-                小節の高さ(<span id="measure-height-num"></span>px)
-                <input type="range" min="100" max="600" id="measure-height" value="200">
-                <div style="padding: 6px; background: #ddd; margin: 10px 0">
-                    <input type="button" value="ファイルを開く" id="form-open" onclick="openFile()">
-                    <input type="button" value="名前をつけて保存" id="form-save" onclick="saveFile()">
-                </div>
-                <input type="button" value="RAKU" onclick="selectLevel('raku')">
-                <input type="button" value="EASY" onclick="selectLevel('easy')">
-                <input type="button" value="NORMAL" onclick="selectLevel('normal')">
-                <input type="button" value="HARD" onclick="selectLevel('hard')">
-                <input type="button" value="EXTRA" onclick="selectLevel('extra')">
-                <br>
-                <div style="padding: 6px; background: #ddd; margin: 10px 0">
-                    <!--
+        <h3>譜面エディタ <span id="head-level" class="kit-badge">easy</span></h3>
+        <form id="form" autocomplete="off">
+            小節の高さ(<span id="measure-height-num"></span>px)
+            <input type="range" min="100" max="600" id="measure-height" value="200">
+            <div style="padding: 6px; background: #ddd; margin: 10px 0">
+                <input type="button" value="ファイルを開く" id="form-open" onclick="openFile()" class="kit-button -flat">
+                <input type="button" value="名前をつけて保存" id="form-save" onclick="saveFile()" class="kit-button -flat">
+            </div>
+            <kit-formgroup class="m-l">
+                <input type="button" class="kit-button -flat -limegreen" value="RAKU" onclick="selectLevel('raku')">
+                <input type="button" class="kit-button -flat -limegreen" value="EASY" onclick="selectLevel('easy')">
+                <input type="button" class="kit-button -flat -limegreen" value="NORMAL" onclick="selectLevel('normal')">
+                <input type="button" class="kit-button -flat -limegreen" value="HARD" onclick="selectLevel('hard')">
+                <input type="button" class="kit-button -flat -limegreen" value="EXTRA" onclick="selectLevel('extra')">
+            </kit-formgroup>
+            <div style="padding: 6px; background: #ddd; margin: 10px 0">
+                <!--
                     <input type="button" value="Undo" id="form-undo">
                     <input type="button" value="Redo" id="form-redo">
                     <br>
                     -->
-                    <input type="button" value="◀" id="form-prev">
-                    <input type="number" id="form-measure" value="1"> 小節
-                    <input type="button" value="▶" id="form-next">
-                </div>
-                タイプ：
-                <select id="form-type">
-                        <option value="1">1 - 通常</option>
-                        <option value="2">2 - ロング</option>
-                        <option value="3">3 - 左フリック</option>
-                        <option value="4">4 - 右フリック</option>
-                        <option value="5">5 - 音札ノーツ</option>
-                        <option value="97">97 - 拍子変化</option>
-                        <option value="98">98 - BPM変化</option>
-                        <option value="99">99 - EOF</option>
-                </select>
-                <br>
-                レーン：
-                <label>
+                <input type="button" value="◀" id="form-prev" class="kit-button-alt -small -flat">
+                <input type="number" id="form-measure" value="1" class="kit-textbox"> 小節
+                <input type="button" value="▶" id="form-next" class="kit-button-alt -small -flat">
+            </div>
+
+            タイプ　
+            <select id="form-type">
+                <option value="1">1 - 通常</option>
+                <option value="2">2 - ロング</option>
+                <option value="3">3 - 左フリック</option>
+                <option value="4">4 - 右フリック</option>
+                <option value="5">5 - 音札ノーツ</option>
+                <option value="97">97 - 拍子変化</option>
+                <option value="98">98 - BPM変化</option>
+                <option value="99">99 - EOF</option>
+            </select>
+            <input type="button" id="form-add" value="この場所に追加" class="kit-button -flat -medium">
+
+            <kit-formgroup class="m-t m-b">
+                レーン　
+                <label class="kit-button -flat -silver">
                     <input type="radio" name="lane" value="1" checked>1
                 </label>
-                <label>
+                <label class="kit-button -flat -silver">
                     <input type="radio" name="lane" value="2">2
                 </label>
-                <label>
+                <label class="kit-button -flat -silver">
                     <input type="radio" name="lane" value="3">3
                 </label>
-                <label>
+                <label class="kit-button -flat -silver">
                     <input type="radio" name="lane" value="4">4
                 </label>
-                <label>
+                <label class="kit-button -flat -silver">
                     <input type="radio" name="lane" value="5">5
                 </label>
-                <br>
-                小節上の位置：
-                <input type="number" id="form-position" class="pos" placeholder="pos" value="0">
-                ／
-                <input type="number" id="form-split" class="pos" placeholder="spl" value="4">
-                <br>
-                オプション値(<span id="form-option-key">使用なし</span>)：
-                <input type="text" id="form-option" value="-1">
-                <input type="button" id="form-add" value="追加">
-            </form>
-        
-            <form id="endform" style="display: none" autocomplete="off">
-                <h4>ロング終点</h4>
-                小節数：
-                <input type="number" id="endform-measure" value="1">
-                <br>
-                タイプ：
-                <select id="endform-type">
-                        <option value="1">1 - 通常</option>
-                        <option value="2">2 - 中点(未対応)</option>
-                </select>
-                <br>
-                レーン：
-                <select id="endform-lane">
-                        <option value="1">1(左)</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5(右)</option>
-                </select>
-                <br>
-                小節上の位置：
-                <input type="number" id="endform-position" class="pos" placeholder="pos" value="0">
-                ／
-                <input type="number" id="endform-split" class="pos" placeholder="spl" value="4">
-                <br>
-                オプション値：
-                <input type="text" id="endform-option" value="-1" disabled>
-            </form>
+            </kit-formgroup>
+            小節上の位置　
+            <input type="number" id="form-position" class="pos kit-textbox kit-font-bold" placeholder="pos" value="0">
+            ／
+            <input type="number" id="form-split" class="pos kit-textbox" placeholder="spl" value="4">
+            <kit-space></kit-space>
+            オプション値(<span id="form-option-key">使用なし</span>)　
+            <input type="text" id="form-option" value="-1" class="kit-textbox">
+        </form>
 
-            <h3>
-                プレビュー ／ <input type="number" id="preview-measure" value="0">小節から <input type="button" onclick="previewStart()" value="再生"> <input type="button" onclick="previewStop()" value="停止">
-            </h3>
-            <form>
-                BPM値：<input type="number" id="preview-bpm" value="180">
-                <br>
-                拍子：<input type="number" id="preview-beat" value="4">
-                <br>
-                音源ファイル：<input type="file" name="" id="preview-file" accept="audio/*" onchange="selectPreaudio(this.files)">
-                <br>
-                オフセット(ms)：<input type="number" id="preview-offset" value="0">
-            </form>
-        
-            <h3>出力 <input type="button" id="copy2cb" value="コピー"></h3>
-            <textarea id="output" cols="30" rows="20" disabled></textarea>
-        
-            <div id="notesnum">- notes</div>
-            
-            <a style="color: blue" href="https://github.com/mtsgi/fumenedit/blob/master/format.md">譜面フォーマットについて</a>
-            <br>
-            <a style="color: blue" href="./sample.json">sample.json</a>
+        <form id="endform" style="display: none" autocomplete="off">
+            <blockquote>
+                <h4>ロング終点</h4>
+                小節数　
+                <input type="number" id="endform-measure" value="1" class="kit-textbox">
+                <kit-space></kit-space>
+                タイプ　
+                <select id="endform-type">
+                    <option value="1">1 - 通常</option>
+                    <option value="2">2 - 中点(未対応)</option>
+                </select>
+                <kit-space></kit-space>
+                レーン　
+                <select id="endform-lane">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <kit-space></kit-space>
+                小節上の位置　
+                <input type="number" id="endform-position" class="pos kit-textbox" placeholder="pos" value="0">
+                ／
+                <input type="number" id="endform-split" class="pos kit-textbox" placeholder="spl" value="4">
+                <kit-space></kit-space>
+                オプション値　
+                <input type="text" id="endform-option" value="-1" class="kit-textbox" disabled>
+            </blockquote>
+        </form>
+
+        <h3 class="m-t">
+            プレビュー ／ <input type="number" id="preview-measure" value="0" class="kit-textbox">小節から
+            <kit-formgroup class="kit-inline-flex">
+                <input type="button" class="kit-button -flat" onclick="previewStart()" value="再生">
+                <input type="button" class="kit-button -flat -crimson" onclick="previewStop()" value="停止">
+            </kit-formgroup>
+        </h3>
+        <form>
+            BPM値　
+            <input type="number" id="preview-bpm" value="180" class="kit-textbox">
+            <kit-space></kit-space>
+            拍子　
+            <input type="number" id="preview-beat" value="4" class="kit-textbox">
+            <kit-space></kit-space>
+            音源ファイル　
+            <input type="file" name="" id="preview-file" accept="audio/*" onchange="selectPreaudio(this.files)">
+            <kit-space></kit-space>
+            オフセット(ms)　
+            <input type="number" id="preview-offset" value="0" class="kit-textbox">
+        </form>
+
+        <h3 class="m-t">出力 <input type="button" id="copy2cb" value="コピー" class="kit-right kit-button -flat -small"></h3>
+        <textarea id="output" cols="30" rows="20" disabled></textarea>
+
+        <div id="notesnum">- notes</div>
+
+        <a style="color: blue" href="https://github.com/mtsgi/fumenedit/blob/master/format.md">譜面フォーマットについて</a>
+        <br>
+        <a style="color: blue" href="./sample.json">sample.json</a>
     </main>
 
     <div id="preview"></div>
-        
+
     <code id="debug"></code>
 </body>
+
 </html>
