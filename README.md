@@ -10,14 +10,11 @@ otofuda形式の譜面制作とプレビュー
 
 ### 試す
 
-- 譜面エディタ
-  https://mtsgi.github.io/fumenedit/editor.html
+- [譜面エディタ](https://mtsgi.github.io/fumenedit/editor.html)
 
-- 譜面フォーマットについて
-  https://github.com/mtsgi/fumenedit/blob/master/format.md
+- [譜面フォーマットについて](https://github.com/mtsgi/fumenedit/blob/master/format.md)
 
-- エディタの使い方
-  https://github.com/mtsgi/fumenedit/blob/master/usage.md
+- [エディタの使い方](https://github.com/mtsgi/fumenedit/blob/master/usage.md)
 
 旧エディタは[こちら](https://mtsgi.github.io/fumenedit/noteseditor.html)
 
