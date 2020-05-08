@@ -12,6 +12,11 @@ let INTERVAL;
 $(document).ready( function(){
     $("#output").html( JSON.stringify(fumenObject, null, 4) );
 
+    window.addEventListener('beforeunload', function (e) {
+        e.preventDefault();
+        e.returnValue = '移動してもよろしいですか？';
+    });
+
     //ノーツを追加
     $("#form-add").on("click", ()=>{
         prev[currentLevel] = fumenObject[currentLevel];
@@ -115,26 +120,28 @@ $(document).ready( function(){
         //Shift押しながら上下でノーツ(始点)移動
         else if( e.shiftKey ){
             if( e.which == 38 ){
-                $("#form-position").val( Number($("#form-position").val()) +1 );
+                $("#form-position").val( Number($("#form-position").val()) -1 );
+                $("#endform-position").val( Number($("#endform-position").val()) +1 );
             }
             else if( e.which == 40 ){
-                $("#form-position").val( Number($("#form-position").val()) -1 );
+                $("#form-position").val( Number($("#form-position").val()) +1 );
+                $("#endform-position").val( Number($("#endform-position").val()) -1 );
             }
-            let pos = Number($("#form-position").val());
-            let spl = Number($("#form-split").val());
+            let pos = Number($("#endform-position").val());
+            let spl = Number($("#endform-split").val());
             if( pos < 0 ){
-                $("#form-position").val(0);
+                $("#endform-position").val(0);
             };
             if( pos == spl ){
-                $("#form-position").val(0);
-                $("#form-next").click();
+                $("#endform-position").val(0);
+                $("#endform-measure").val( Number($("#endform-measure").val()) +1 );
             };
             if( pos == -1 ){
-                $("#form-position").val( spl-1 );
-                $("#form-prev").click();
+                $("#endform-position").val( spl-1 );
+                $("#endform-measure").val( Number($("#endform-measure").val()) -1 );
             };
             if( spl < 1 ){
-                $("#form-split").val(1);
+                $("#endform-split").val(1);
             };
         }
         //スペースキーでノーツタイプ変更
