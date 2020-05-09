@@ -262,10 +262,31 @@ $(document).ready(function() {
 function drawPreview(obj) {
   $("#preview").html("<canvas id='canvas' width='300'></canvas>");
   let notesnum = 0, notesid = 0, maxMeasure = 0;
+  let notes_tap = 0, notes_long = 0, notes_flick = 0, notes_otofuda = 0;
   //1ノートずつ処理
   for(let i of obj) {
     notesid++;
-    if(i.type == 1 || i.type == 2 || i.type == 3 || i.type == 4 || i.type == 5) notesnum++;
+    switch (i.type) {
+      case 1:
+        notes_tap++;
+        notesnum++;
+        break;
+      case 2:
+        notes_long++;
+        notesnum++;
+        break;
+      case 3:
+      case 4:
+        notes_flick++;
+        notesnum++;
+        break;
+      case 5:
+        notes_otofuda++;
+        notesnum++;
+        break;
+      default:
+        break;
+    }
     if(Number(i.measure) > maxMeasure) maxMeasure = Number(i.measure);
     $("#preview").append(`<span id='note${notesid}' data-n='${(notesid - 1)}'><i class='noteinfo'>${i.position}/${i.split}</i></span>`);
     let noteEl = $("#note" + notesid);
@@ -327,6 +348,11 @@ function drawPreview(obj) {
 
   $(".measure").css("height", measureHeight + "px");
   $("#notesnum").text(notesnum + " notes");
+  $("#notesinfo").html(`[内訳]<br>
+                        TAP ${notes_tap} (${Math.round(notes_tap/notesnum*1000)/10}%)<br>
+                        LONG ${notes_long} (${Math.round(notes_long/notesnum*1000)/10}%)<br>
+                        FLICK ${notes_flick} (${Math.round(notes_flick/notesnum*1000)/10}%)<br>
+                        OTOFUDA ${notes_otofuda} (${Math.round(notes_otofuda/notesnum*1000)/10}%)`);
   drawShadow();
 }
 
