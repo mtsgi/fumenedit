@@ -1,5 +1,5 @@
 body {
-  background: #f0f0f0;
+  background: #303030;
   padding: 0;
   margin: 0;
   overscroll-behavior: none;
@@ -12,6 +12,7 @@ main {
   max-height: calc(100vh);
   overflow: scroll;
   width: calc(100% - 320px);
+  background: #f0f0f0;
 }
 
 h3 {
@@ -71,10 +72,15 @@ input[type="button"] {
   top: 0px;
   right: 0px;
   box-sizing: border-box;
-  background: #303030;
   background-repeat: repeat-y;
   background-position: top;
   background-size: auto 200px;
+}
+
+#preview.playing {
+  overflow-y: visible;
+  overflow-x: visible;
+  margin-top: -20px;
 }
 
 #canvas {
@@ -271,15 +277,28 @@ input[type="button"] {
 }
 
 #preline {
-  position: absolute;
-  top: 0px;
-  height: 0px;
-  width: 100%;
+  display: none;
+  position: fixed;
+  bottom: 0px;
+  right: 0;
+  height: 20px;
+  width: 320px;
   background: transparent;
-  color: limegreen;
-  border-top: 4px solid limegreen;
+  color: red;
+  border-top: 2px solid red;
   transition: 1s all linear;
-  transform: rotate(180deg);
+  line-height: 1;
+  background: rgba(0, 0, 0, .5);
+}
+
+#sudden {
+  position: fixed;
+  top: -1px;
+  right: 0;
+  height: 0;
+  width: 320px;
+  background: #404040;
+  border-bottom: 1px solid #606060;
 }
 
 @keyframes addNotes {
