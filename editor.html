@@ -17,7 +17,7 @@
     <h3>譜面エディタ <span id="head-level" class="kit-badge">easy</span></h3>
     <form id="form" autocomplete="off">
       小節の高さ(<span id="measure-height-num"></span>px)
-      <input type="range" min="100" max="600" id="measure-height" value="200">
+      <input type="range" min="100" max="800" id="measure-height" value="200">
       <div style="padding: 6px; background: #ddd; margin: 10px 0">
         <input type="button" value="ファイルを開く" id="form-open" onclick="openFile()" class="kit-button -flat">
         <input type="button" value="名前をつけて保存" id="form-save" onclick="saveFile()" class="kit-button -flat">
@@ -117,6 +117,12 @@
         <input type="button" class="kit-button -flat" onclick="previewStart()" value="再生">
         <input type="button" class="kit-button -flat -crimson" onclick="previewStop()" value="停止">
       </kit-formgroup>
+      <form>
+        SUD+(px)
+        <input type="number" id="preview-sud" value="0" class="kit-textbox">
+        LIFT(px)
+        <input type="number" id="preview-lift" value="20" class="kit-textbox">
+      </form>
     </h3>
     <form>
       BPM値　
@@ -146,6 +152,10 @@
   </main>
 
   <div id="preview"></div>
+
+  <div id="preline">プレビュー</div>
+
+  <div id="sudden"></div>
 
   <code id="debug"></code>
 </body>

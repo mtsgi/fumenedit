@@ -6,6 +6,7 @@ var prev = {
 };
 var measureHeight = 200;
 var currentLevel = "easy"
+var liftValue = 20
 let preAudio = new Audio();
 let INTERVAL;
 
@@ -15,6 +16,11 @@ $(document).ready(function() {
   window.addEventListener('beforeunload', function(e) {
     e.preventDefault();
     e.returnValue = '移動してもよろしいですか？';
+  });
+
+  // SUD+調整機能
+  document.querySelector('#preview-sud').addEventListener('change', e =>{
+    document.querySelector('#sudden').style.height = `${e.target.value}px`;
   });
 
   //ノーツを追加
@@ -341,9 +347,6 @@ function drawPreview(obj) {
     let measureEl = $("#measure" + i);
     measureEl.addClass("measure").css("top", i * measureHeight);
   }
-
-  //プレビュー線の描画
-  $("#preview").append("<div id='preline'>プレビュー</div>");
   clearInterval(INTERVAL);
 
   $(".measure").css("height", measureHeight + "px");
@@ -424,24 +427,27 @@ function saveFile() {
 function previewStart() {
   preAudio.pause();
   //preAudio = new Audio();
-  $("#preline").css("top", "0px");
-  $("#preline").css("transition", "none");
   //preAudio.src = $("#preview-file").val();
   let _bpm = $("#preview-bpm").val();
   let _beat = $("#preview-beat").val();
   let _height = 0;
   let _start = $("#preview-measure").val();
+  let _lift = $("#preview-lift").val();
   clearInterval(INTERVAL);
+
+  $("#preview").addClass("playing").css("margin-top", `${-(_lift)}px`);
+  $("#preline").css("height", `${_lift}px`).show();
+  message("譜面プレビューを再生中です");
 
   //1小節ずつ進行
   _height += Number(_start) * (Number(measureHeight));
-  $("#preline").css("top", _height + "px");
-  $("#preline").css("transition", (60 / _bpm * _beat) + "s all linear");
+  $("#preview").css("top", _height + "px");
+  $("#preview").css("transition", (60 / _bpm * _beat) + "s all linear");
 
   INTERVAL = setInterval(() => {
     _height += Number(measureHeight);
-    $("#preline").css("top", _height + "px");
-    $("#preline").css("transition", (60 / _bpm * _beat) + "s all linear");
+    $("#preview").css("top", _height + "px");
+    $("#preview").css("transition", (60 / _bpm * _beat) + "s all linear");
   }, (60 / _bpm * _beat) * 1000);
   //音源オフセット分遅延再生
   setTimeout(() => {
@@ -451,10 +457,13 @@ function previewStart() {
 }
 
 function previewStop() {
+  message("停止しています…");
   clearInterval(INTERVAL);
-  $("#preline").css("top", "0px");
-  $("#preline").css("transition", "none");
+  $("#preline").hide();
   preAudio.pause();
+
+  $("#preview").removeClass("playing").css("margin-top", "0");
+  $("#preview").css("top", "0");
 }
 
 function selectPreaudio(files) {
