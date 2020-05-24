@@ -301,6 +301,18 @@ input[type="button"] {
   border-bottom: 1px solid #606060;
 }
 
+#moveline {
+  position: absolute;
+  top: 0px;
+  height: 0px;
+  width: 100%;
+  background: transparent;
+  color: limegreen;
+  border-top: 4px solid limegreen;
+  transition: 1s all linear;
+  transform: rotate(180deg);
+}
+
 @keyframes addNotes {
   from {
     box-shadow: 0 0 0 0 rgba(50, 200, 90, .5);

@@ -5,8 +5,8 @@ var prev = {
   "raku": null, "easy": null, "normal": null, "hard": null, "extra": null
 };
 var measureHeight = 200;
-var currentLevel = "easy"
-var liftValue = 20
+var currentLevel = "easy";
+let liftValue = 20;
 let preAudio = new Audio();
 let INTERVAL;
 
@@ -19,7 +19,7 @@ $(document).ready(function() {
   });
 
   // SUD+調整機能
-  document.querySelector('#preview-sud').addEventListener('change', e =>{
+  document.querySelector('#preview-sud').addEventListener('change', e => {
     document.querySelector('#sudden').style.height = `${e.target.value}px`;
   });
 
@@ -272,7 +272,7 @@ function drawPreview(obj) {
   //1ノートずつ処理
   for(let i of obj) {
     notesid++;
-    switch (i.type) {
+    switch(i.type) {
       case 1:
         notes_tap++;
         notesnum++;
@@ -352,10 +352,10 @@ function drawPreview(obj) {
   $(".measure").css("height", measureHeight + "px");
   $("#notesnum").text(notesnum + " notes");
   $("#notesinfo").html(`[内訳]<br>
-                        TAP ${notes_tap} (${Math.round(notes_tap/notesnum*1000)/10}%)<br>
-                        LONG ${notes_long} (${Math.round(notes_long/notesnum*1000)/10}%)<br>
-                        FLICK ${notes_flick} (${Math.round(notes_flick/notesnum*1000)/10}%)<br>
-                        OTOFUDA ${notes_otofuda} (${Math.round(notes_otofuda/notesnum*1000)/10}%)`);
+                        TAP ${notes_tap} (${Math.round(notes_tap / notesnum * 1000) / 10}%)<br>
+                        LONG ${notes_long} (${Math.round(notes_long / notesnum * 1000) / 10}%)<br>
+                        FLICK ${notes_flick} (${Math.round(notes_flick / notesnum * 1000) / 10}%)<br>
+                        OTOFUDA ${notes_otofuda} (${Math.round(notes_otofuda / notesnum * 1000) / 10}%)`);
   drawShadow();
 }
 
@@ -433,22 +433,39 @@ function previewStart() {
   let _height = 0;
   let _start = $("#preview-measure").val();
   let _lift = $("#preview-lift").val();
+  let _movelineMode = document.querySelector("#preview-line-mode").checked;
   clearInterval(INTERVAL);
 
-  $("#preview").addClass("playing").css("margin-top", `${-(_lift)}px`);
-  $("#preline").css("height", `${_lift}px`).show();
-  message("譜面プレビューを再生中です");
+  if(_movelineMode) {
+    document.querySelector('#preview').insertAdjacentHTML('beforeend', '<div id="moveline">プレビュー</div>');
+    //1小節ずつ進行
+    _height += Number(_start) * (Number(measureHeight));
+    $("#moveline").css("top", _height + "px");
+    $("#moveline").css("transition", (60 / _bpm * _beat) + "s all linear");
 
-  //1小節ずつ進行
-  _height += Number(_start) * (Number(measureHeight));
-  $("#preview").css("top", _height + "px");
-  $("#preview").css("transition", (60 / _bpm * _beat) + "s all linear");
+    INTERVAL = setInterval(() => {
+      _height += Number(measureHeight);
+      $("#moveline").css("top", _height + "px");
+      $("#moveline").css("transition", (60 / _bpm * _beat) + "s all linear");
+    }, (60 / _bpm * _beat) * 1000);
+  }
+  else {
+    $("#preview").addClass("playing").css("margin-top", `${-(_lift)}px`);
+    $("#preline").css("height", `${_lift}px`).show();
+    message("譜面プレビューを再生中です");
 
-  INTERVAL = setInterval(() => {
-    _height += Number(measureHeight);
+    //1小節ずつ進行
+    _height += Number(_start) * (Number(measureHeight));
     $("#preview").css("top", _height + "px");
     $("#preview").css("transition", (60 / _bpm * _beat) + "s all linear");
-  }, (60 / _bpm * _beat) * 1000);
+
+    INTERVAL = setInterval(() => {
+      _height += Number(measureHeight);
+      $("#preview").css("top", _height + "px");
+      $("#preview").css("transition", (60 / _bpm * _beat) + "s all linear");
+    }, (60 / _bpm * _beat) * 1000);
+  }
+
   //音源オフセット分遅延再生
   setTimeout(() => {
     preAudio.currentTime = (60 / _bpm * _beat) * Number(_start);
@@ -457,13 +474,15 @@ function previewStart() {
 }
 
 function previewStop() {
-  message("停止しています…");
+  if(document.querySelector('#moveline')) {
+    document.querySelector('#preview').removeChild(document.querySelector('#moveline'));
+  }
   clearInterval(INTERVAL);
   $("#preline").hide();
   preAudio.pause();
 
   $("#preview").removeClass("playing").css("margin-top", "0");
-  $("#preview").css("top", "0");
+  $("#preview").css("transition", "none").css("top", "0");
 }
 
 function selectPreaudio(files) {
