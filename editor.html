@@ -8,7 +8,7 @@
   <title>エディタ</title>
   <script src="./jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mtsgi/kitstrap@0.5/d/kitstrap.css">
-  <script src="./editor.js"></script>
+  <script src="./kaf.js"></script>
   <link rel="stylesheet" href="./editor.css">
 </head>
 
@@ -125,8 +125,25 @@
       </form>
     </h3>
     <form>
-      <input type="checkbox" name="プレビュー線描画モード" id="preview-line-mode" checked="false">
+      <input type="checkbox" name="プレビュー線描画モード" id="preview-line-mode">
       <label for="preview-line-mode">プレビュー線描画モード(プレビュー画面固定)</label>
+
+      <kit-space></kit-space>
+
+      <input type="checkbox" name="TAP音を再生する" id="preview-play-tap">
+      <label for="preview-play-tap">打鍵音を再生する(実験的な機能)</label>
+
+      <kit-space></kit-space>
+
+      プレビュー 楽曲の音量
+      <input type="range" min="0" max="1" kit:bind="preview_volume_music" value="1" step="0.05">
+      <code kit:observe="preview_volume_music">1.0</code>
+
+      <kit-space></kit-space>
+
+      プレビュー 打鍵音の音量
+      <input type="range" min="0" max="1" kit:bind="preview_volume_tap" value="1" step="0.05">
+      <code kit:observe="preview_volume_tap">1.0</code>
 
       <kit-space></kit-space>
 
@@ -161,6 +178,8 @@
     <textarea id="output" cols="30" rows="20" disabled></textarea>
 
     <br>
+    <a class="kit-hl" href="https://github.com/mtsgi/fumenedit/blob/master/usage.md">エディタの使い方</a>
+    <br>
     <a class="kit-hl" href="https://github.com/mtsgi/fumenedit/blob/master/format.md">譜面フォーマットについて</a>
     <br>
     <a class="kit-hl" href="./sample.json">sample.json</a>
@@ -173,6 +192,8 @@
   <div id="sudden"></div>
 
   <code id="debug"></code>
+
+  <script src="./editor.js"></script>
 </body>
 
 </html>
