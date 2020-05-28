@@ -1,3 +1,7 @@
+const kaf = new Kaf({
+  elem: 'body'
+});
+
 var fumenObject = {
   "raku": [], "easy": [], "normal": [], "hard": [], "extra": []
 };
@@ -9,6 +13,8 @@ var currentLevel = "easy";
 let liftValue = 20;
 let preAudio = new Audio();
 let INTERVAL;
+let one_measure;
+let tap_sounds = [];
 
 $(document).ready(function() {
   $("#output").html(JSON.stringify(fumenObject, null, 4));
@@ -293,10 +299,10 @@ function drawPreview(obj) {
       default:
         break;
     }
-    if(Number(i.measure) > maxMeasure) maxMeasure = Number(i.measure);
+    if(i.measure > maxMeasure) maxMeasure = i.measure;
     $("#preview").append(`<span id='note${notesid}' data-n='${(notesid - 1)}'><i class='noteinfo'>${i.position}/${i.split}</i></span>`);
     let noteEl = $("#note" + notesid);
-    noteEl.addClass("type" + i.type).css("right", (Number(i.lane) - 1) * 60).css("top", (Number(i.measure) * measureHeight) + measureHeight * (Number(i.position) / Number(i.split)));
+    noteEl.addClass("type" + i.type).css("right", (i.lane - 1) * 60).css("top", (i.measure * measureHeight) + measureHeight * (i.position / i.split));
     if(i.type == 98) {
       noteEl.text(i.option);
     }
@@ -428,18 +434,22 @@ function previewStart() {
   preAudio.pause();
   //preAudio = new Audio();
   //preAudio.src = $("#preview-file").val();
-  let _bpm = $("#preview-bpm").val();
-  let _beat = $("#preview-beat").val();
+  const _bpm = Number($("#preview-bpm").val());
+  const _beat = Number($("#preview-beat").val());
   let _height = 0;
-  let _start = $("#preview-measure").val();
+  const _start = Number($("#preview-measure").val());
+  const _offset = Number($("#preview-offset").val())
   let _lift = $("#preview-lift").val();
   let _movelineMode = document.querySelector("#preview-line-mode").checked;
   clearInterval(INTERVAL);
+  // タップ音の再生予約解除
+  for(const t of tap_sounds) clearInterval(t);
+  t = [];
 
   if(_movelineMode) {
     document.querySelector('#preview').insertAdjacentHTML('beforeend', '<div id="moveline">プレビュー</div>');
     //1小節ずつ進行
-    _height += Number(_start) * (Number(measureHeight));
+    _height += _start * (Number(measureHeight));
     $("#moveline").css("top", _height + "px");
     $("#moveline").css("transition", (60 / _bpm * _beat) + "s all linear");
 
@@ -454,32 +464,54 @@ function previewStart() {
     $("#preline").css("height", `${_lift}px`).show();
     message("譜面プレビューを再生中です");
 
+    // 1小節の長さ
+    one_measure = (60 / _bpm * _beat);
+
     //1小節ずつ進行
-    _height += Number(_start) * (Number(measureHeight));
+    _height += _start * (Number(measureHeight));
     $("#preview").css("top", _height + "px");
-    $("#preview").css("transition", (60 / _bpm * _beat) + "s all linear");
+    $("#preview").css("transition", one_measure + "s all linear");
 
     INTERVAL = setInterval(() => {
       _height += Number(measureHeight);
       $("#preview").css("top", _height + "px");
-      $("#preview").css("transition", (60 / _bpm * _beat) + "s all linear");
-    }, (60 / _bpm * _beat) * 1000);
+      $("#preview").css("transition", one_measure + "s all linear");
+    }, one_measure * 1000);
   }
 
   //音源オフセット分遅延再生
+  preAudio.currentTime = one_measure * _start;
+  preAudio.volume = Number(kaf.preview_volume_music);
   setTimeout(() => {
-    preAudio.currentTime = (60 / _bpm * _beat) * Number(_start);
     preAudio.play().catch((err) => console.warn(err));
-  }, Number($("#preview-offset").val()));
+  }, _offset);
+
+  // タップ音
+  if(document.querySelector("#preview-play-tap").checked){
+    for(const note of fumenObject[currentLevel]) {
+      const _measure = note.measure + 1 - _start;
+      const _timing = one_measure * _measure + one_measure * (note.position / note.split);
+      if(_timing > 0) tap_sounds.push(setTimeout(() => {
+        const _tap_audio = new Audio('./guide.mp3');
+        _tap_audio.currentTime = 0.08;
+        _tap_audio.volume = Number(kaf.preview_volume_tap);
+        _tap_audio.play().catch((err) => console.warn(err));
+      }, _timing * 1000));
+    }
+  }
 }
 
 function previewStop() {
+  // タップ音の再生予約解除
+  for(const t of tap_sounds) clearInterval(t);
+  t = [];
   if(document.querySelector('#moveline')) {
     document.querySelector('#preview').removeChild(document.querySelector('#moveline'));
   }
   clearInterval(INTERVAL);
   $("#preline").hide();
   preAudio.pause();
+  message("譜面プレビューを停止しました");
 
   $("#preview").removeClass("playing").css("margin-top", "0");
   $("#preview").css("transition", "none").css("top", "0");
