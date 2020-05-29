@@ -1,5 +1,20 @@
 const kaf = new Kaf({
-  elem: 'body'
+  elem: 'body',
+  events: {
+    loadSample() {
+      fetch('./otofuda.json')
+        .then(res => res.json())
+        .then(data => {
+          fumenObject = data;
+          prev = {
+            "raku": null, "easy": null, "normal": null, "hard": null, "extra": null
+          };
+          console.log('譜面データをロード', fumenObject);
+          $("#output").html(JSON.stringify(fumenObject, null, 4));
+          selectLevel(currentLevel);
+        });
+    }
+  }
 });
 
 var fumenObject = {
@@ -15,6 +30,7 @@ let preAudio = new Audio();
 let INTERVAL;
 let one_measure;
 let tap_sounds = [];
+let tap_timings = [];
 
 $(document).ready(function() {
   $("#output").html(JSON.stringify(fumenObject, null, 4));
@@ -409,9 +425,10 @@ function openFile() {
       prev = {
         "raku": null, "easy": null, "normal": null, "hard": null, "extra": null
       };
-      console.log(fumenObject);
+      console.log('譜面データをロード', fumenObject);
       $("#output").html(JSON.stringify(fumenObject, null, 4));
       selectLevel(currentLevel);
+      $("#form-loadsample").hide();
     };
 
     $('<input type="file" accept=".json, application/json">').on('change', function(event) {
@@ -444,7 +461,8 @@ function previewStart() {
   clearInterval(INTERVAL);
   // タップ音の再生予約解除
   for(const t of tap_sounds) clearInterval(t);
-  t = [];
+  tap_sounds = [];
+  tap_timings = [];
 
   if(_movelineMode) {
     document.querySelector('#preview').insertAdjacentHTML('beforeend', '<div id="moveline">プレビュー</div>');
@@ -486,17 +504,52 @@ function previewStart() {
     preAudio.play().catch((err) => console.warn(err));
   }, _offset);
 
-  // タップ音
-  if(document.querySelector("#preview-play-tap").checked){
+  let comboNum = 0;
+  const comboText = document.querySelector('#preline-combo-text');
+  comboText.textContent = 0;
+
+  const keybeamsElems = {
+    1: document.querySelector('#keybeam-1'),
+    2: document.querySelector('#keybeam-2'),
+    3: document.querySelector('#keybeam-3'),
+    4: document.querySelector('#keybeam-4'),
+    5: document.querySelector('#keybeam-5'),
+    otofuda: document.querySelector('#keybeam-otofuda')
+  }
+
+  const isTapsound = document.querySelector("#preview-play-tap").checked;
+  const isKeybeam = document.querySelector("#preview-show-keybeam").checked;
+
+  // タップ音とキービーム
+  if(isTapsound || isKeybeam) {
     for(const note of fumenObject[currentLevel]) {
       const _measure = note.measure + 1 - _start;
       const _timing = one_measure * _measure + one_measure * (note.position / note.split);
-      if(_timing > 0) tap_sounds.push(setTimeout(() => {
-        const _tap_audio = new Audio('./guide.mp3');
-        _tap_audio.currentTime = 0.08;
-        _tap_audio.volume = Number(kaf.preview_volume_tap);
-        _tap_audio.play().catch((err) => console.warn(err));
-      }, _timing * 1000));
+      if([1, 2, 3, 4, 5].includes(note.type)) {
+        if(_timing > _offset / 1000) tap_sounds.push(setTimeout(() => {
+          if(isKeybeam) {
+            let targetElem = keybeamsElems[note.lane];
+            if(note.type == 5) targetElem = keybeamsElems.otofuda; // 音札ノーツ用キービーム
+            targetElem.classList.remove('-on', '-left', '-right');
+            targetElem.classList.add('-on');
+            if(note.type == 3) setTimeout(() => targetElem.classList.add('-left'), 1);
+            if(note.type == 4) setTimeout(() => targetElem.classList.add('-right'), 1);
+            setTimeout(() => targetElem.classList.remove('-on'), 1);
+            comboNum++;
+            comboText.textContent = comboNum;
+          }
+          if(isTapsound && !tap_timings.includes(_timing)) {
+            const _tap_audio = new Audio('./guide.mp3');
+            _tap_audio.currentTime = 0.08;
+            _tap_audio.volume = Number(kaf.preview_volume_tap);
+            _tap_audio.play().catch((err) => console.warn(err));
+            tap_timings.push(_timing);
+          }
+        }, _timing * 1000));
+        else {
+          comboNum++;
+        }
+      }
     }
   }
 }
