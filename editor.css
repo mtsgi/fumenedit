@@ -186,6 +186,7 @@ input[type="button"] {
   position: absolute;
   top: -12px;
   right: -7px;
+  font-family: initial;
 }
 
 .type4:after {
@@ -196,6 +197,7 @@ input[type="button"] {
   position: absolute;
   top: -11px;
   left: -9px;
+  font-family: initial;
 }
 
 .type3:hover .noteinfo,
@@ -291,6 +293,62 @@ input[type="button"] {
   background: rgba(0, 0, 0, .5);
 }
 
+#preline-combo-text {
+  display: block;
+  width: calc(100% - 19px);
+  height: 100px;
+  text-align: center;
+  position: relative;
+  color: rgba(255, 255, 255, .3);
+  font-size: 50px;
+  top: -120px;
+}
+
+#preline-combo-text::after {
+  display: block;
+  content: "COMBO";
+  font-size: 20px;
+}
+
+.keybeams {
+  display: flex;
+  position: relative;
+}
+
+.keybeam {
+  display: block;
+  background : linear-gradient(#16D5F700 0%,#16D5F790 100%);
+  height: 100px;
+  width: 60px;
+  position: relative;
+  top: -218px;
+  opacity: 0;
+  left: 0px;
+  transition: .25s all linear;
+}
+
+#keybeam-otofuda {
+  position: absolute;
+  width: 300px;
+  background : linear-gradient(#f7d51600 0%,#f7d51690 100%);
+}
+
+.keybeam.-on {
+  opacity: 1;
+  transition: none;
+  /* animation: keybeam .3s linear 0 !important; */
+}
+
+.keybeam.-left {
+  left: -60px;
+  filter: blur(20px);
+}
+
+.keybeam.-right {
+  left: 60px;
+  filter: blur(20px);
+}
+
 #sudden {
   position: fixed;
   top: -1px;
@@ -320,5 +378,15 @@ input[type="button"] {
 
   to {
     box-shadow: 0 0 0px 20px rgba(50, 200, 90, 0);
+  }
+}
+
+@keyframes keybeam {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
   }
 }

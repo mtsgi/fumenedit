@@ -14,13 +14,17 @@
 
 <body>
   <main>
-    <h3>譜面エディタ <span id="head-level" class="kit-badge">easy</span></h3>
+    <h3>
+      譜面エディタ
+      <span id="head-level" class="kit-badge">easy</span>
+    </h3>
     <form id="form" autocomplete="off">
       小節の高さ(<span id="measure-height-num"></span>px)
       <input type="range" min="100" max="800" id="measure-height" value="200">
       <div style="padding: 6px; background: #ddd; margin: 10px 0">
         <input type="button" value="ファイルを開く" id="form-open" onclick="openFile()" class="kit-button -flat">
         <input type="button" value="名前をつけて保存" id="form-save" onclick="saveFile()" class="kit-button -flat">
+        <a class="kit-button -flat -black" kit-e="loadSample" id="form-loadsample">サンプル譜面を読み込む</a>
       </div>
       <kit-formgroup class="m-l">
         <input type="button" class="kit-button -flat -limegreen" value="RAKU" onclick="selectLevel('raku')">
@@ -135,6 +139,11 @@
 
       <kit-space></kit-space>
 
+      <input type="checkbox" name="キービームを表示する" id="preview-show-keybeam" checked>
+      <label for="preview-show-keybeam">キービーム・コンボ数をプレビューする</label>
+
+      <kit-space></kit-space>
+
       プレビュー 楽曲の音量
       <input type="range" min="0" max="1" kit:bind="preview_volume_music" value="1" step="0.05">
       <code kit:observe="preview_volume_music">1.0</code>
@@ -187,7 +196,18 @@
 
   <div id="preview"></div>
 
-  <div id="preline">プレビュー</div>
+  <div id="preline">
+    プレビュー
+    <span id="preline-combo-text">0</span>
+    <div class="keybeams">
+      <div class="keybeam" id="keybeam-1"></div>
+      <div class="keybeam" id="keybeam-2"></div>
+      <div class="keybeam" id="keybeam-3"></div>
+      <div class="keybeam" id="keybeam-4"></div>
+      <div class="keybeam" id="keybeam-5"></div>
+      <div class="keybeam" id="keybeam-otofuda"></div>
+    </div>
+  </div>
 
   <div id="sudden"></div>
 
