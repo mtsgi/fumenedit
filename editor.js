@@ -534,9 +534,9 @@ function previewStart() {
             if(note.type == 5) targetElem = keybeamsElems.otofuda; // 音札ノーツ用キービーム
             targetElem.classList.remove('-on', '-left', '-right');
             targetElem.classList.add('-on');
-            if(note.type == 3) setTimeout(() => targetElem.classList.add('-left'), 4);
-            if(note.type == 4) setTimeout(() => targetElem.classList.add('-right'), 4);
-            setTimeout(() => targetElem.classList.remove('-on'), 4);
+            if(note.type == 3) setTimeout(() => targetElem.classList.add('-left'), 50);
+            if(note.type == 4) setTimeout(() => targetElem.classList.add('-right'), 50);
+            setTimeout(() => targetElem.classList.remove('-on'), 50);
             comboNum++;
             comboText.textContent = comboNum;
           }
@@ -558,7 +558,7 @@ function previewStart() {
 function previewStop() {
   // タップ音の再生予約解除
   for(const t of tap_sounds) clearInterval(t);
-  t = [];
+  tap_sounds = [];
   if(document.querySelector('#moveline')) {
     document.querySelector('#preview').removeChild(document.querySelector('#moveline'));
   }
