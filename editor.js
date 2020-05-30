@@ -451,8 +451,6 @@ function saveFile() {
 
 function previewStart() {
   preAudio.pause();
-  //preAudio = new Audio();
-  //preAudio.src = $("#preview-file").val();
   const _bpm = Number($("#preview-bpm").val());
   const _beat = Number($("#preview-beat").val());
   let _height = 0;
@@ -465,6 +463,8 @@ function previewStart() {
   for(const t of tap_sounds) clearInterval(t);
   tap_sounds = [];
   tap_timings = [];
+
+  const playDelay = 100; // 処理待ち遅延(ms)
 
   if(_movelineMode) {
     document.querySelector('#preview').insertAdjacentHTML('beforeend', '<div id="moveline">プレビュー</div>');
@@ -487,16 +487,18 @@ function previewStart() {
     // 1小節の長さ
     one_measure = (60 / _bpm * _beat);
 
-    //1小節ずつ進行
-    _height += _start * (Number(measureHeight));
-    $("#preview").css("top", _height + "px");
-    $("#preview").css("transition", one_measure + "s all linear");
-
-    INTERVAL = setInterval(() => {
-      _height += Number(measureHeight);
+    setTimeout(() => {
+      //1小節ずつ進行
+      _height += _start * (Number(measureHeight));
       $("#preview").css("top", _height + "px");
       $("#preview").css("transition", one_measure + "s all linear");
-    }, one_measure * 1000);
+
+      INTERVAL = setInterval(() => {
+        _height += Number(measureHeight);
+        $("#preview").css("top", _height + "px");
+        $("#preview").css("transition", one_measure + "s all linear");
+      }, one_measure * 1000);
+    }, playDelay);
   }
 
   //音源オフセット分遅延再生
@@ -504,7 +506,7 @@ function previewStart() {
   preAudio.volume = Number(kaf.preview_volume_music);
   setTimeout(() => {
     preAudio.play().catch((err) => console.warn(err));
-  }, _offset);
+  }, _offset + playDelay);
 
   let comboNum = 0;
   const comboText = document.querySelector('#preline-combo-text');
@@ -523,36 +525,44 @@ function previewStart() {
   const isKeybeam = document.querySelector("#preview-show-keybeam").checked;
 
   // タップ音とキービーム
-  if(isTapsound || isKeybeam) {
-    for(const note of fumenObject[currentLevel]) {
-      const _measure = note.measure + 1 - _start;
-      const _timing = one_measure * _measure + one_measure * (note.position / note.split);
-      if([1, 2, 3, 4, 5].includes(note.type)) {
-        if(_timing > _offset / 1000) tap_sounds.push(setTimeout(() => {
-          if(isKeybeam) {
-            let targetElem = keybeamsElems[note.lane];
-            if(note.type == 5) targetElem = keybeamsElems.otofuda; // 音札ノーツ用キービーム
-            targetElem.classList.remove('-on', '-left', '-right');
-            targetElem.classList.add('-on');
-            if(note.type == 3) setTimeout(() => targetElem.classList.add('-left'), 50);
-            if(note.type == 4) setTimeout(() => targetElem.classList.add('-right'), 50);
-            setTimeout(() => targetElem.classList.remove('-on'), 50);
+  setTimeout(() => {
+    if(isTapsound || isKeybeam) {
+      for(const note of fumenObject[currentLevel]) {
+        const _measure = note.measure + 1 - _start;
+        const _timing = one_measure * _measure + one_measure * (note.position / note.split);
+        if([1, 2, 3, 4, 5].includes(note.type)) {
+          if(_timing > _offset / 1000) tap_sounds.push(setTimeout(() => {
+            if(isKeybeam) {
+              let targetElem = keybeamsElems[note.lane];
+              if(note.type == 5) targetElem = keybeamsElems.otofuda; // 音札ノーツ用キービーム
+              targetElem.classList.remove('-on', '-left', '-right');
+              targetElem.classList.add('-on');
+              if(note.type == 3) setTimeout(() => targetElem.classList.add('-left'), 50);
+              if(note.type == 4) setTimeout(() => targetElem.classList.add('-right'), 50);
+              if(note.type == 2) {
+                const end = note.end[0];
+                const end_timing = one_measure * (end.measure + 1 - _start) + one_measure * (end.position / end.split);
+                const end_delay = (end_timing - _timing) * 1000 + 50;
+                setTimeout(() => targetElem.classList.remove('-on'), end_delay);
+              }
+              else setTimeout(() => targetElem.classList.remove('-on'), 50);
+              comboNum++;
+              comboText.textContent = comboNum;
+            }
+            if(isTapsound && !tap_timings.includes(_timing)) {
+              const _tap_audio = new Audio('./guide.mp3');
+              _tap_audio.volume = Number(kaf.preview_volume_tap);
+              _tap_audio.play().catch((err) => console.warn(err));
+              tap_timings.push(_timing);
+            }
+          }, _timing * 1000));
+          else {
             comboNum++;
-            comboText.textContent = comboNum;
           }
-          if(isTapsound && !tap_timings.includes(_timing)) {
-            const _tap_audio = new Audio('./guide.mp3');
-            _tap_audio.volume = Number(kaf.preview_volume_tap);
-            _tap_audio.play().catch((err) => console.warn(err));
-            tap_timings.push(_timing);
-          }
-        }, _timing * 1000));
-        else {
-          comboNum++;
         }
       }
     }
-  }
+  }, playDelay);
 }
 
 function previewStop() {
