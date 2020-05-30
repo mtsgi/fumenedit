@@ -1,3 +1,5 @@
+"use strict";
+
 const kaf = new Kaf({
   elem: 'body',
   events: {
@@ -532,15 +534,14 @@ function previewStart() {
             if(note.type == 5) targetElem = keybeamsElems.otofuda; // 音札ノーツ用キービーム
             targetElem.classList.remove('-on', '-left', '-right');
             targetElem.classList.add('-on');
-            if(note.type == 3) setTimeout(() => targetElem.classList.add('-left'), 1);
-            if(note.type == 4) setTimeout(() => targetElem.classList.add('-right'), 1);
-            setTimeout(() => targetElem.classList.remove('-on'), 1);
+            if(note.type == 3) setTimeout(() => targetElem.classList.add('-left'), 4);
+            if(note.type == 4) setTimeout(() => targetElem.classList.add('-right'), 4);
+            setTimeout(() => targetElem.classList.remove('-on'), 4);
             comboNum++;
             comboText.textContent = comboNum;
           }
           if(isTapsound && !tap_timings.includes(_timing)) {
             const _tap_audio = new Audio('./guide.mp3');
-            _tap_audio.currentTime = 0.08;
             _tap_audio.volume = Number(kaf.preview_volume_tap);
             _tap_audio.play().catch((err) => console.warn(err));
             tap_timings.push(_timing);
