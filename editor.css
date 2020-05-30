@@ -324,7 +324,7 @@ input[type="button"] {
   top: -218px;
   opacity: 0;
   left: 0px;
-  transition: .25s all linear;
+  transition: .125s all linear;
 }
 
 #keybeam-otofuda {
