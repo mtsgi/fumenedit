@@ -2,6 +2,9 @@
 
 const kaf = new Kaf({
   elem: 'body',
+  data: {
+    maxMeasure: 0
+  },
   events: {
     loadSample() {
       fetch('./otofuda.json')
@@ -59,10 +62,10 @@ $(document).ready(function() {
     }
     else if(type == 3 || type == 4) {
       lane = Number($("#form")[0].lane.value);
-      if(lane == 1 || lane == 5) {
-        message("そのレーン位置にフリックノーツを配置することはできません。");
-        return;
-      }
+      // if(lane == 1 || lane == 5) {
+      //   message("そのレーン位置にフリックノーツを配置することはできません。");
+      //   return;
+      // }
     }
     else if(type == 5) lane = 3;
 
@@ -73,6 +76,9 @@ $(document).ready(function() {
       if(type == 97) option[0] = "beatchange";
       else if(type == 98) option[0] = "bpmchange";
       option[1] = Number($("#form-option").val());
+    }
+    if(type == 3 || type == 4) {
+      option[0] = Number($("#form-option").val());
     }
     let end = [];
     if(type == 2) {
@@ -319,8 +325,12 @@ function drawPreview(obj) {
     }
     if(i.measure > maxMeasure) maxMeasure = i.measure;
     $("#preview").append(`<span id='note${notesid}' data-n='${(notesid - 1)}'><i class='noteinfo'>${i.position}/${i.split}</i></span>`);
-    let noteEl = $("#note" + notesid);
-    noteEl.addClass("type" + i.type).css("right", (i.lane - 1) * 60).css("top", (i.measure * measureHeight) + measureHeight * (i.position / i.split));
+    let noteEl = $(`#note${notesid}`);
+    noteEl
+      .addClass(`type${i.type}`)
+      .addClass(`option${i.option}`)
+      .css("right", (i.lane - 1) * 60)
+      .css("top", (i.measure * measureHeight) + measureHeight * (i.position / i.split));
     if(i.type == 98) {
       noteEl.text(i.option);
     }
@@ -371,6 +381,7 @@ function drawPreview(obj) {
     let measureEl = $("#measure" + i);
     measureEl.addClass("measure").css("top", i * measureHeight);
   }
+  kaf.maxMeasure = maxMeasure;
   clearInterval(INTERVAL);
 
   $(".measure").css("height", measureHeight + "px");
@@ -388,11 +399,21 @@ function message(text) {
 }
 
 function drawShadow() {
-  let _type = $("#form-type").val();
+  const _type = $("#form-type").val();
+  const _option = $("#form-option").val();
+
+  const _lane = Number($("#form")[0].lane.value);
+  const _measure = Number($("#form-measure").val());
+  const _pos = Number($("#form-position").val());
+  const _spl = Number($("#form-split").val());
 
   $("#noteShadow, #noteShadowEnd, #long-shadow").remove();
   $("#preview").append("<span id='noteShadow'></span>");
-  $("#noteShadow").addClass("type" + _type).css("right", (Number($("#form")[0].lane.value) - 1) * 60).css("top", (Number($("#form-measure").val()) * measureHeight) + measureHeight * (Number($("#form-position").val()) / Number($("#form-split").val())));
+  $("#noteShadow")
+    .addClass(`type${_type}`)
+    .addClass(`option${_option}`)
+    .css("right", (_lane - 1) * 60)
+    .css("top", (_measure * measureHeight) + measureHeight * (_pos / _spl));
 
   //シャドー終点の描画
   if(_type == 2) {
@@ -400,9 +421,11 @@ function drawShadow() {
     $("#preview").append("<span id='noteShadowEnd'>n</span>");
     $("#noteShadowEnd").addClass("type" + $("#endform-type").val()).css("right", (Number($("#endform-lane").val()) - 1) * 60).css("top", (Number($("#endform-measure").val()) * measureHeight) + measureHeight * (Number($("#endform-position").val()) / Number($("#endform-split").val())));
     $("#preview").append("<i id='long-shadow'></i>");
-    $("#long-shadow").addClass("long").css("right", (Number($("#endform-lane").val()) - 1) * 60)
+    $("#long-shadow")
+      .addClass("long")
+      .css("right", (Number($("#endform-lane").val()) - 1) * 60)
       .css("top", Number($("#form-measure").val()) * measureHeight + measureHeight * (Number($("#form-position").val()) / Number($("#form-split").val())))
-      .css("height", Math.abs((Number($("#form-measure").val()) * measureHeight) + measureHeight * (Number($("#form-position").val()) / Number($("#form-split").val())) - ((Number($("#endform-measure").val()) * measureHeight) + measureHeight * (Number($("#endform-position").val()) / Number($("#endform-split").val())))));
+      .css("height", Math.abs((_measure * measureHeight) + measureHeight * (_pos / _spl) - ((Number($("#endform-measure").val()) * measureHeight) + measureHeight * (Number($("#endform-position").val()) / Number($("#endform-split").val())))));
   }
 }
 
@@ -465,6 +488,11 @@ function previewStart() {
   tap_timings = [];
 
   const playDelay = 100; // 処理待ち遅延(ms)
+
+  if(_start > kaf.maxMeasure) {
+    message(`${_start}小節がありません`);
+    return false;
+  }
 
   if(_movelineMode) {
     document.querySelector('#preview').insertAdjacentHTML('beforeend', '<div id="moveline">プレビュー</div>');
@@ -543,11 +571,19 @@ function previewStart() {
                 const end = note.end[0];
                 const end_timing = one_measure * (end.measure + 1 - _start) + one_measure * (end.position / end.split);
                 const end_delay = (end_timing - _timing) * 1000 + 50;
-                setTimeout(() => targetElem.classList.remove('-on'), end_delay);
+                setTimeout(() => {
+                  targetElem.classList.remove('-on');
+                  comboNum++;
+                  comboText.textContent = comboNum;
+                }, end_delay);
               }
-              else setTimeout(() => targetElem.classList.remove('-on'), 50);
-              comboNum++;
-              comboText.textContent = comboNum;
+              else {
+                setTimeout(() => {
+                  targetElem.classList.remove('-on');
+                  comboNum++;
+                  comboText.textContent = comboNum;
+                }, 30);
+              }
             }
             if(isTapsound && !tap_timings.includes(_timing)) {
               const _tap_audio = new Audio('./guide.mp3');
@@ -563,6 +599,9 @@ function previewStart() {
       }
     }
   }, playDelay);
+
+  // 最終小節で停止
+  // setTimeout(previewStop, one_measure * (kaf.maxMeasure - _start + 1) * 1000 + _offset);
 }
 
 function previewStop() {
