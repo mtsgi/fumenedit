@@ -214,6 +214,36 @@ input[type="button"] {
   font-style: normal;
 }
 
+.type3.option1,
+.type4.option1 {
+  transform: scaleX(1);
+}
+
+.type3.option1::after,
+.type4.option1::after {
+  transform: scaleX(1.5);
+}
+
+.type3.option2,
+.type4.option2 {
+  transform: scaleX(2);
+}
+
+.type3.option2::after,
+.type4.option2::after {
+  transform: scaleX(0.75);
+}
+
+.type3.option4,
+.type4.option4 {
+  transform: scaleX(4);
+}
+
+.type3.option5,
+.type4.option5 {
+  transform: scaleX(5);
+}
+
 .type97 {
   transform: rotate(180deg);
   color: #f0f0f0;
@@ -324,7 +354,7 @@ input[type="button"] {
   top: -218px;
   opacity: 0;
   left: 0px;
-  transition: .125s all linear;
+  transition: .175s all linear;
 }
 
 #keybeam-otofuda {
