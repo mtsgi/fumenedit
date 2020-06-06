@@ -18,6 +18,42 @@ const kaf = new Kaf({
           $("#output").html(JSON.stringify(fumenObject, null, 4));
           selectLevel(currentLevel);
         });
+    },
+    copy_measure() {
+      const target_notes = fumenObject[currentLevel].filter(note => note.measure == this.copy_measure_from);
+      if(window.confirm(`${target_notes.length}ノーツを${this.copy_measure_level}の${this.copy_measure_to}小節にコピーします。よろしいですか？`)) {
+        const converted_notes = target_notes.map(note => {
+          let new_obj = Object.assign({}, note, { measure: Number(this.copy_measure_to) });
+          if(note.type == 2) {
+            new_obj.end = new_obj.end.map(end => Object.assign({}, end, { measure: this.copy_measure_to }));
+          }
+          return new_obj;
+        });
+        fumenObject[this.copy_measure_level].push(...converted_notes);
+        drawPreview(fumenObject[currentLevel]);
+        message('コピーが完了しました。');
+      }
+    },
+    flip() {
+      const flipped_notes = fumenObject[currentLevel].map(note => {
+        if(note.measure == this.flip_measure) {
+          const new_lane = 6 - note.lane;
+          let new_obj = Object.assign(note, { lane: new_lane });
+          if(note.type == 2) {
+            new_obj.end = new_obj.end.map(end => Object.assign(end, { lane: 6 - end.lane }));
+          }
+          else if(note.type == 3) new_obj.type = 4;
+          else if(note.type == 4) new_obj.type = 3;
+          return new_obj;
+        }
+        else return note;
+      });
+      fumenObject[currentLevel] = flipped_notes;
+      drawPreview(fumenObject[currentLevel]);
+      message('左右反転しました。');
+    },
+    alldisp() {
+      document.querySelectorAll('#preview > span:not(.measure)').forEach(el => el.classList.add('-alldisp'));
     }
   }
 });
@@ -342,13 +378,23 @@ function drawPreview(obj) {
     }
     else if(i.type == 2) {
       for(let j in i.end) {
-        noteEl.text(notesid);
+        // noteEl.text(notesid);
         if(Number(i.end[j].measure) > maxMeasure) maxMeasure = Number(i.end[j].measure);
-        $("#preview").append("<span id='end" + notesid + "-" + j + "' data-n='" + (notesid - 1) + "'>" + notesid + "</span>");
-        $("#end" + notesid + "-" + j).addClass("type" + i.end[j].type).css("right", (Number(i.end[j].lane) - 1) * 60).css("top", (Number(i.end[j].measure) * measureHeight) + measureHeight * (Number(i.end[j].position) / Number(i.end[j].split)));
+        $("#preview").append(`
+          <span id="end${notesid}-${j}" data-n="${(notesid - 1)}">
+            <i class='noteinfo'>${i.end[j].position}/${i.end[j].split}</i>
+          </span>`);
+        $(`#end${notesid}-${j}`)
+          .addClass("type" + i.end[j].type)
+          .css("right", (Number(i.end[j].lane) - 1) * 60)
+          .css("top", (Number(i.end[j].measure) * measureHeight) + measureHeight * (Number(i.end[j].position) / Number(i.end[j].split)));
         if(i.lane == i.end[j].lane) {
-          $("#preview").append("<i id='long" + notesid + "-" + j + "' data-n='" + (notesid - 1) + "'></i>");
-          $("#long" + notesid + "-" + j).addClass("long").css("right", (Number(i.lane) - 1) * 60).css("top", (Number(i.measure) * measureHeight) + measureHeight * (Number(i.position) / Number(i.split))).css("height", Math.abs(((Number(i.measure) * measureHeight) + measureHeight * (Number(i.position) / Number(i.split))) - ((Number(i.end[j].measure) * measureHeight) + measureHeight * (Number(i.end[j].position) / Number(i.end[j].split)))));
+          $("#preview").append(`<i id="long${notesid}-${j}" data-n="${(notesid - 1)}"></i>`);
+          $(`#long${notesid}-${j}`)
+            .addClass("long")
+            .css("right", (Number(i.lane) - 1) * 60)
+            .css("top", (Number(i.measure) * measureHeight) + measureHeight * (Number(i.position) / Number(i.split)))
+            .css("height", Math.abs(((Number(i.measure) * measureHeight) + measureHeight * (Number(i.position) / Number(i.split))) - ((Number(i.end[j].measure) * measureHeight) + measureHeight * (Number(i.end[j].position) / Number(i.end[j].split)))));
         }
       }
     }

@@ -180,6 +180,26 @@
     <div id="notesnum">- notes</div>
     <div id="notesinfo">[内訳]</div>
 
+    <h3 class="m-t">特殊操作</h3>
+    <input class="kit-textbox" type="number" kit:bind="copy_measure_from" value="0">小節のノーツを
+    <select kit:bind="copy_measure_level">
+      <option value="raku">RAKU</option>
+      <option value="easy">EASY</option>
+      <option value="normal">NORMAL</option>
+      <option value="hard" selected>HARD</option>
+      <option value="extra">EXTRA</option>
+    </select>
+    <input class="kit-textbox" type="number" kit:bind="copy_measure_to" value="0">小節へ
+    <button class="kit-button -flat -medium" kit-e="copy_measure">コピー</button>
+    <br>
+
+    <input class="kit-textbox" type="number" kit:bind="flip_measure" value="0">小節のノーツを
+    <button class="kit-button -flat -medium" kit-e="flip">左右反転</button>
+    <br>
+
+    情報表示
+    <button class="kit-button -flat -medium" kit-e="alldisp">一時的に全表示する</button>
+
     <h3 class="m-t">
       出力 <input type="button" id="copy2cb" value="コピー" class="kit-right kit-button -flat -small">
     </h3>
