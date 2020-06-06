@@ -72,6 +72,7 @@ let INTERVAL;
 let one_measure;
 let tap_sounds = [];
 let tap_timings = [];
+let preview_timings = [];
 
 $(document).ready(function() {
   $("#output").html(JSON.stringify(fumenObject, null, 4));
@@ -361,12 +362,15 @@ function drawPreview(obj) {
     }
     if(i.measure > maxMeasure) maxMeasure = i.measure;
     $("#preview").append(`<span id='note${notesid}' data-n='${(notesid - 1)}'><i class='noteinfo'>${i.position}/${i.split}</i></span>`);
-    let noteEl = $(`#note${notesid}`);
+    const noteEl = $(`#note${notesid}`);
     noteEl
       .addClass(`type${i.type}`)
       .addClass(`option${i.option}`)
       .css("right", (i.lane - 1) * 60)
       .css("top", (i.measure * measureHeight) + measureHeight * (i.position / i.split));
+    if(i.position < 0 || i.position >= i.split) {
+      noteEl.addClass('-error')
+    }
     if(i.type == 98) {
       noteEl.text(i.option);
     }
@@ -379,22 +383,26 @@ function drawPreview(obj) {
     else if(i.type == 2) {
       for(let j in i.end) {
         // noteEl.text(notesid);
-        if(Number(i.end[j].measure) > maxMeasure) maxMeasure = Number(i.end[j].measure);
+        const _end = i.end[j];
+        if(Number(_end.measure) > maxMeasure) maxMeasure = Number(_end.measure);
         $("#preview").append(`
           <span id="end${notesid}-${j}" data-n="${(notesid - 1)}">
-            <i class='noteinfo'>${i.end[j].position}/${i.end[j].split}</i>
+            <i class='noteinfo'>${_end.position}/${_end.split}</i>
           </span>`);
         $(`#end${notesid}-${j}`)
-          .addClass("type" + i.end[j].type)
-          .css("right", (Number(i.end[j].lane) - 1) * 60)
-          .css("top", (Number(i.end[j].measure) * measureHeight) + measureHeight * (Number(i.end[j].position) / Number(i.end[j].split)));
-        if(i.lane == i.end[j].lane) {
+          .addClass("type" + _end.type)
+          .css("right", (Number(_end.lane) - 1) * 60)
+          .css("top", (Number(_end.measure) * measureHeight) + measureHeight * (Number(_end.position) / Number(_end.split)));
+        if(_end.position < 0 || _end.position >= _end.split) {
+          $(`#end${notesid}-${j}`).addClass('-error')
+        }
+        if(i.lane == _end.lane) {
           $("#preview").append(`<i id="long${notesid}-${j}" data-n="${(notesid - 1)}"></i>`);
           $(`#long${notesid}-${j}`)
             .addClass("long")
             .css("right", (Number(i.lane) - 1) * 60)
             .css("top", (Number(i.measure) * measureHeight) + measureHeight * (Number(i.position) / Number(i.split)))
-            .css("height", Math.abs(((Number(i.measure) * measureHeight) + measureHeight * (Number(i.position) / Number(i.split))) - ((Number(i.end[j].measure) * measureHeight) + measureHeight * (Number(i.end[j].position) / Number(i.end[j].split)))));
+            .css("height", Math.abs(((Number(i.measure) * measureHeight) + measureHeight * (Number(i.position) / Number(i.split))) - ((Number(_end.measure) * measureHeight) + measureHeight * (Number(_end.position) / Number(_end.split)))));
         }
       }
     }
@@ -423,9 +431,11 @@ function drawPreview(obj) {
 
   //小節線の描画
   for(let i = 0; i <= maxMeasure; i++) {
-    $("#preview").append("<span id='measure" + i + "'>" + i + "</span>");
-    let measureEl = $("#measure" + i);
-    measureEl.addClass("measure").css("top", i * measureHeight);
+    $("#preview").append(`<span id="measure${i}">${i}</span>`);
+    $("#measure" + i)
+      .addClass("measure")
+      .css("top", i * measureHeight)
+      .css("line-height", `${2 * measureHeight - 32}px`);
   }
   kaf.maxMeasure = maxMeasure;
   clearInterval(INTERVAL);
@@ -530,7 +540,9 @@ function previewStart() {
   clearInterval(INTERVAL);
   // タップ音の再生予約解除
   for(const t of tap_sounds) clearInterval(t);
+  for(const t of preview_timings) clearInterval(t);
   tap_sounds = [];
+  preview_timings = [];
   tap_timings = [];
 
   const playDelay = 100; // 処理待ち遅延(ms)
@@ -567,10 +579,16 @@ function previewStart() {
       $("#preview").css("top", _height + "px");
       $("#preview").css("transition", one_measure + "s all linear");
 
+      for(let i = _start; i <= kaf.maxMeasure; i++) {
+        const diff = i - _start;
+        preview_timings.push(setTimeout(() => {
+          $("#preview").css("top", i * (Number(measureHeight)) + "px");
+          $("#preview").css("transition", one_measure + "s all linear");
+        }, diff * one_measure * 1000));
+      }
+
       INTERVAL = setInterval(() => {
         _height += Number(measureHeight);
-        $("#preview").css("top", _height + "px");
-        $("#preview").css("transition", one_measure + "s all linear");
       }, one_measure * 1000);
     }, playDelay);
   }
@@ -653,6 +671,8 @@ function previewStart() {
 function previewStop() {
   // タップ音の再生予約解除
   for(const t of tap_sounds) clearInterval(t);
+  for(const t of preview_timings) clearInterval(t);
+  preview_timings = [];
   tap_sounds = [];
   if(document.querySelector('#moveline')) {
     document.querySelector('#preview').removeChild(document.querySelector('#moveline'));

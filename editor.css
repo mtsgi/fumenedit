@@ -153,6 +153,26 @@ input[type="button"] {
   box-shadow: 0 0 0 3px red;
 }
 
+.type1.-error::after,
+.type2.-error::after,
+.type3.-error::after,
+.type4.-error::after,
+.type5.-error::after {
+  content: "!";
+  background: red;
+  color: #ffffff;
+  display: inline-block;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-weight: 900;
+  transform: rotate(180deg);
+  position: relative;
+  left: -18px;
+  top: -6px;
+}
+
 .type5 {
   position: absolute;
   height: 6px;
@@ -301,7 +321,7 @@ input[type="button"] {
   border-top: 1px solid #909090;
   border-right: 1px solid #909090;
   text-align: right;
-  line-height: 30px;
+  line-height: 0px;
   height: 200px;
   width: 300px;
   right: 0px;
