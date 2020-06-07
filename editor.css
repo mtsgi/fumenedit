@@ -39,7 +39,7 @@ form .pos {
   width: 50px;
 }
 
-form select {
+select {
   font-size: 16px;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
@@ -109,19 +109,28 @@ input[type="button"] {
   color: red;
 }
 
+.type1:hover .noteinfo,
+.type2:hover .noteinfo,
+.type3:hover .noteinfo,
+.type4:hover .noteinfo,
 .type5:hover .noteinfo,
-.type1:hover .noteinfo {
+.type1.-alldisp .noteinfo,
+.type2.-alldisp .noteinfo,
+.type3.-alldisp .noteinfo,
+.type4.-alldisp .noteinfo,
+.type5.-alldisp .noteinfo {
   color: #f0f0f0;
   text-shadow: 0 1px 3px black;
 }
 
-.type5 .noteinfo,
-.type1 .noteinfo {
+.type1 .noteinfo,
+.type2 .noteinfo,
+.type5 .noteinfo {
   color: transparent;
   transform: rotate(180deg);
   position: absolute;
   font-style: normal;
-  padding-bottom: 8px;
+  padding-bottom: 4px;
 }
 
 .type2 {
@@ -134,7 +143,6 @@ input[type="button"] {
   border-right: 3px solid #303030;
   animation: addNotes .6s ease-out;
   z-index: 81;
-  color: red;
 }
 
 .type1:hover,
@@ -143,6 +151,26 @@ input[type="button"] {
 .type4:hover,
 .type5:hover {
   box-shadow: 0 0 0 3px red;
+}
+
+.type1.-error::after,
+.type2.-error::after,
+.type3.-error::after,
+.type4.-error::after,
+.type5.-error::after {
+  content: "!";
+  background: red;
+  color: #ffffff;
+  display: inline-block;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-weight: 900;
+  transform: rotate(180deg);
+  position: relative;
+  left: -18px;
+  top: -6px;
 }
 
 .type5 {
@@ -200,16 +228,10 @@ input[type="button"] {
   font-family: initial;
 }
 
-.type3:hover .noteinfo,
-.type4:hover .noteinfo {
-  color: #f0f0f0;
-  text-shadow: 0 1px 4px black;
-}
-
 .type3 .noteinfo,
 .type4 .noteinfo {
   color: transparent;
-  transform: rotate(180deg) scaleX(.5);
+  transform: rotate(180deg) scaleX(.4);
   position: absolute;
   font-style: normal;
 }
@@ -299,13 +321,13 @@ input[type="button"] {
   border-top: 1px solid #909090;
   border-right: 1px solid #909090;
   text-align: right;
-  line-height: 20px;
+  line-height: 0px;
   height: 200px;
   width: 300px;
   right: 0px;
   top: 0px;
-  color: #fff;
-  font-size: 20px;
+  color: #707070;
+  font-size: 32px;
 }
 
 #preline {
