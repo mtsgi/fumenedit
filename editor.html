@@ -157,12 +157,12 @@
       <kit-space></kit-space>
 
       BPM値　
-      <input type="number" id="preview-bpm" value="180" class="kit-textbox">
+      <input type="number" id="preview-bpm" value="180" class="kit-textbox" kit:bind="info_bpm">
 
       <kit-space></kit-space>
 
       拍子　
-      <input type="number" id="preview-beat" value="4" class="kit-textbox">
+      <input type="number" id="preview-beat" value="4" class="kit-textbox" kit:bind="info_beat">
 
       <kit-space></kit-space>
 
@@ -172,7 +172,7 @@
       <kit-space></kit-space>
 
       オフセット(ms)　
-      <input type="number" id="preview-offset" value="0" class="kit-textbox">
+      <input type="number" id="preview-offset" value="0" class="kit-textbox" kit:bind="info_offset">
     </form>
 
     <h3 class="m-t">譜面情報</h3>
