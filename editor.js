@@ -59,7 +59,12 @@ const kaf = new Kaf({
 });
 
 var fumenObject = {
-  "raku": [], "easy": [], "normal": [], "hard": [], "extra": []
+  raku: [],
+  easy: [],
+  normal: [],
+  hard: [],
+  extra: [],
+  info: {}
 };
 var prev = {
   "raku": null, "easy": null, "normal": null, "hard": null, "extra": null
@@ -394,7 +399,7 @@ function drawPreview(obj) {
           .css("right", (Number(_end.lane) - 1) * 60)
           .css("top", (Number(_end.measure) * measureHeight) + measureHeight * (Number(_end.position) / Number(_end.split)));
         if(_end.position < 0 || _end.position >= _end.split) {
-          $(`#end${notesid}-${j}`).addClass('-error')
+          $(`#end${notesid}-${j}`).addClass('-error');
         }
         if(i.lane == _end.lane) {
           $("#preview").append(`<i id="long${notesid}-${j}" data-n="${(notesid - 1)}"></i>`);
@@ -508,6 +513,12 @@ function openFile() {
       };
       console.log('譜面データをロード', fumenObject);
       $("#output").html(JSON.stringify(fumenObject, null, 4));
+      kaf.info_bpm = fumenObject.info.bpm;
+      kaf.info_beat = fumenObject.info.beat;
+      kaf.info_offset = fumenObject.info.offset;
+      document.querySelector('#preview-bpm').value = kaf.info_bpm;
+      document.querySelector('#preview-beat').value = kaf.info_beat;
+      document.querySelector('#preview-offset').value = kaf.info_offset;
       selectLevel(currentLevel);
       $("#form-loadsample").hide();
     };
@@ -519,6 +530,12 @@ function openFile() {
 }
 
 function saveFile() {
+  // 譜面情報を格納
+  fumenObject.info = {
+    bpm: kaf.info_bpm,
+    beat: kaf.info_beat,
+    offset: kaf.info_offset
+  }
   let blob = new Blob([JSON.stringify(fumenObject, null, 4)], { type: "application/json" });
   let a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
