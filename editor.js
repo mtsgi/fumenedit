@@ -54,6 +54,55 @@ const kaf = new Kaf({
     },
     alldisp() {
       document.querySelectorAll('#preview > span:not(.measure)').forEach(el => el.classList.add('-alldisp'));
+    },
+    validate() {
+      // 音札ノーツの検査
+      let results = ['・各難易度のtype5(音札ノーツ)位置'];
+      const raku = fumenObject.raku
+        .filter(n => n.type === 5)
+        .map(note => `${note.measure} ${note.position}/${note.split}`)
+        .sort((a, b) => a - b);
+      results.push(JSON.stringify(raku));
+
+      const easy = fumenObject.easy
+        .filter(n => n.type === 5)
+        .map(note => `${note.measure} ${note.position}/${note.split}`)
+        .sort((a, b) => a - b);
+      results.push(JSON.stringify(easy));
+
+      const normal = fumenObject.normal
+        .filter(n => n.type === 5)
+        .map(note => `${note.measure} ${note.position}/${note.split}`)
+        .sort((a, b) => a - b);
+      results.push(JSON.stringify(normal));
+
+      const hard = fumenObject.hard
+        .filter(n => n.type === 5)
+        .map(note => `${note.measure} ${note.position}/${note.split}`)
+        .sort((a, b) => a - b);
+      results.push(JSON.stringify(hard));
+
+      const extra = fumenObject.extra
+        .filter(n => n.type === 5)
+        .map(note => `${note.measure} ${note.position}/${note.split}`)
+        .sort((a, b) => a - b);
+      results.push(JSON.stringify(extra));
+
+      // 重複ノーツの検査
+      results.push(`・${currentLevel}の重複ノーツ検査`);
+      for(const i in fumenObject[currentLevel]) {
+        const self = fumenObject[currentLevel][i];
+        const self_timing = self.measure + (self.position / self.split);
+        for(const k in fumenObject[currentLevel]) {
+          const note = fumenObject[currentLevel][k];
+          const note_timing = note.measure + (note.position / note.split);
+          if(i !== k && self_timing === note_timing && self.lane === note.lane && self.type === note.type) {
+            results.push("(！)重複ノーツがあります：", JSON.stringify(self));
+          }
+        }
+      }
+      results.push(`--- 重複検査END ---`);
+      message(...results);
     }
   }
 });
@@ -136,6 +185,16 @@ $(document).ready(function() {
         }
       ]
     }
+    one_measure = 60 / Number(kaf.info_bpm) * Number(kaf.info_beat);
+    const self_timing = one_measure * measure + one_measure * (position / split);
+    // 重複チェック
+    for(const note of fumenObject[currentLevel]) {
+      const note_timing = one_measure * note.measure + one_measure * (note.position / note.split);
+      if(self_timing === note_timing && lane === note.lane && type === note.type) {
+        message("その場所にはすでにノートが配置されています。", JSON.stringify(note));
+        return;
+      }
+    }
     // 音札ノーツは全難易度に挿入
     if(type == 5) {
       let _otofudanotesobj = {
@@ -168,6 +227,7 @@ $(document).ready(function() {
       "end": end
     });
     $("#output").html(JSON.stringify(fumenObject, null, 4));
+    message(`${measure}小節にノートを配置しました。`);
 
     drawPreview(fumenObject[currentLevel]);
   });
@@ -341,6 +401,7 @@ function drawPreview(obj) {
   $("#preview").html("<canvas id='canvas' width='300'></canvas>");
   let notesnum = 0, notesid = 0, maxMeasure = 0;
   let notes_tap = 0, notes_long = 0, notes_flick = 0, notes_otofuda = 0;
+  let notes_1 = 0, notes_2 = 0, notes_3 = 0, notes_4 = 0, notes_5 = 0;
   //1ノートずつ処理
   for(let i of obj) {
     notesid++;
@@ -361,6 +422,25 @@ function drawPreview(obj) {
       case 5:
         notes_otofuda++;
         notesnum++;
+        break;
+      default:
+        break;
+    }
+    switch(i.lane) {
+      case 1:
+        notes_1++;
+        break;
+      case 2:
+        notes_2++;
+        break;
+      case 3:
+        notes_3++;
+        break;
+      case 4:
+        notes_4++;
+        break;
+      case 5:
+        notes_5++;
         break;
       default:
         break;
@@ -451,12 +531,18 @@ function drawPreview(obj) {
                         TAP ${notes_tap} (${Math.round(notes_tap / notesnum * 1000) / 10}%)<br>
                         LONG ${notes_long} (${Math.round(notes_long / notesnum * 1000) / 10}%)<br>
                         FLICK ${notes_flick} (${Math.round(notes_flick / notesnum * 1000) / 10}%)<br>
-                        OTOFUDA ${notes_otofuda} (${Math.round(notes_otofuda / notesnum * 1000) / 10}%)`);
+                        OTOFUDA ${notes_otofuda} (${Math.round(notes_otofuda / notesnum * 1000) / 10}%)<br>
+                        [レーン別]<br>
+                        壱: ${notes_1}　弐: ${notes_2}　参: ${notes_3}　肆: ${notes_4}　伍: ${notes_5}`);
   drawShadow();
 }
 
-function message(text) {
-  $("#debug").show().text(text).on("click", () => $("#debug").hide());
+function message(...text) {
+  $("#debug").text('').show();
+  for(const t of text) {
+    $("#debug").append(`<div>${t}</div>`)
+  }
+  $("#debug").on("click", () => $("#debug").hide());
 }
 
 function drawShadow() {
@@ -513,12 +599,14 @@ function openFile() {
       };
       console.log('譜面データをロード', fumenObject);
       $("#output").html(JSON.stringify(fumenObject, null, 4));
-      kaf.info_bpm = fumenObject.info.bpm;
-      kaf.info_beat = fumenObject.info.beat;
-      kaf.info_offset = fumenObject.info.offset;
-      document.querySelector('#preview-bpm').value = kaf.info_bpm;
-      document.querySelector('#preview-beat').value = kaf.info_beat;
-      document.querySelector('#preview-offset').value = kaf.info_offset;
+      if(fumenObject.info) {
+        kaf.info_bpm = fumenObject.info.bpm;
+        kaf.info_beat = fumenObject.info.beat;
+        kaf.info_offset = fumenObject.info.offset;
+        document.querySelector('#preview-bpm').value = kaf.info_bpm;
+        document.querySelector('#preview-beat').value = kaf.info_beat;
+        document.querySelector('#preview-offset').value = kaf.info_offset;
+      }
       selectLevel(currentLevel);
       $("#form-loadsample").hide();
     };
