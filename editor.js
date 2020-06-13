@@ -227,7 +227,7 @@ $(document).ready(function() {
       "end": end
     });
     $("#output").html(JSON.stringify(fumenObject, null, 4));
-    message(`${measure}小節にノートを配置しました。`);
+    if(type != 5) message(`${measure}小節にノートを配置しました。`);
 
     drawPreview(fumenObject[currentLevel]);
   });
@@ -620,9 +620,9 @@ function openFile() {
 function saveFile() {
   // 譜面情報を格納
   fumenObject.info = {
-    bpm: kaf.info_bpm,
-    beat: kaf.info_beat,
-    offset: kaf.info_offset
+    bpm: Number(kaf.info_bpm),
+    beat: Number(kaf.info_beat),
+    offset: Number(kaf.info_offset)
   }
   let blob = new Blob([JSON.stringify(fumenObject, null, 4)], { type: "application/json" });
   let a = document.createElement('a');
