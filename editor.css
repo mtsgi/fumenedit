@@ -114,11 +114,11 @@ input[type="button"] {
 .type3:hover .noteinfo,
 .type4:hover .noteinfo,
 .type5:hover .noteinfo,
-.type1.-alldisp .noteinfo,
-.type2.-alldisp .noteinfo,
-.type3.-alldisp .noteinfo,
-.type4.-alldisp .noteinfo,
-.type5.-alldisp .noteinfo {
+.-alldisp .type1 .noteinfo,
+.-alldisp .type2 .noteinfo,
+.-alldisp .type3 .noteinfo,
+.-alldisp .type4 .noteinfo,
+.-alldisp .type5 .noteinfo {
   color: #f0f0f0;
   text-shadow: 0 1px 3px black;
 }
@@ -212,7 +212,7 @@ input[type="button"] {
   content: "▶";
   color: lightskyblue;
   position: absolute;
-  top: -12px;
+  line-height: .5em;
   right: -7px;
   font-family: initial;
 }
@@ -223,7 +223,7 @@ input[type="button"] {
   content: "◀";
   color: lightseagreen;
   position: absolute;
-  top: -11px;
+  line-height: .5em;
   left: -9px;
   font-family: initial;
 }
