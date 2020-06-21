@@ -3,7 +3,8 @@
 const kaf = new Kaf({
   elem: 'body',
   data: {
-    maxMeasure: 0
+    maxMeasure: 0,
+    infoDisp: false
   },
   events: {
     loadSample() {
@@ -53,7 +54,15 @@ const kaf = new Kaf({
       message('左右反転しました。');
     },
     alldisp() {
-      document.querySelectorAll('#preview > span:not(.measure)').forEach(el => el.classList.add('-alldisp'));
+      if(this.infoDisp) {
+        this.infoDisp = false;
+        document.querySelector('#preview').classList.remove('-alldisp');
+      }
+      else {
+        this.infoDisp = true;
+        document.querySelector('#preview').classList.add('-alldisp');
+      }
+      // document.querySelectorAll('#preview > span:not(.measure)').forEach(el => el.classList.add('-alldisp'));
     },
     validate() {
       // 音札ノーツの検査
