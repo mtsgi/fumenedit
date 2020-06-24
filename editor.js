@@ -749,6 +749,14 @@ function previewStart() {
                 const end = note.end[0];
                 const end_timing = one_measure * (end.measure + 1 - _start) + one_measure * (end.position / end.split);
                 const end_delay = (end_timing - _timing) * 1000 + 50;
+                if(isTapsound && !tap_timings.includes(end_timing)) {
+                  tap_timings.push(end_timing);
+                  setTimeout(() => {
+                    const _tap_audio = new Audio('./guide.mp3');
+                    _tap_audio.volume = Number(kaf.preview_volume_tap);
+                    _tap_audio.play().catch(err => console.warn(err));
+                  }, end_delay - 50);
+                }
                 setTimeout(() => {
                   targetElem.classList.remove('-on');
                   comboNum++;
