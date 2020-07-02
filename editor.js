@@ -21,13 +21,10 @@ const kaf = new Kaf({
         });
     },
     copy_measure() {
-      const target_notes = fumenObject[currentLevel].filter(note => note.measure == this.copy_measure_from);
-      if(window.confirm(`${target_notes.length}ノーツを${this.copy_measure_level}の${this.copy_measure_to}小節にコピーします。よろしいですか？`)) {
+      const target_notes = fumenObject[currentLevel].filter(note => note.measure == this.copy_measure_from).filter(note => note.type != 2);
+      if(window.confirm(`${target_notes.length}ノーツを${this.copy_measure_level}の${this.copy_measure_to}小節にコピーします(ロングノーツはコピーしません)。よろしいですか？`)) {
         const converted_notes = target_notes.map(note => {
           let new_obj = Object.assign({}, note, { measure: Number(this.copy_measure_to) });
-          if(note.type == 2) {
-            new_obj.end = new_obj.end.map(end => Object.assign({}, end, { measure: this.copy_measure_to }));
-          }
           return new_obj;
         });
         fumenObject[this.copy_measure_level].push(...converted_notes);
