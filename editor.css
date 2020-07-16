@@ -150,7 +150,8 @@ input[type="button"] {
 .type3:hover,
 .type4:hover,
 .type5:hover {
-  box-shadow: 0 0 0 3px red;
+  box-shadow: 0 0 0 3px yellow;
+  background: transparent;
 }
 
 .type1.-error::after,
@@ -203,7 +204,7 @@ input[type="button"] {
 }
 
 .type4 {
-  background: lightseagreen;
+  background: lightcoral;
 }
 
 .type3:after {
@@ -221,7 +222,7 @@ input[type="button"] {
   transform: scaleX(.5);
   font-size: 24px;
   content: "◀";
-  color: lightseagreen;
+  color: lightcoral;
   position: absolute;
   line-height: .5em;
   left: -9px;
