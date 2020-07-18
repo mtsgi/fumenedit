@@ -392,11 +392,11 @@ $(document).ready(function() {
     if(this.value == 2) $("#endform").show();
     else $("#endform").hide();
 
-    if(this.value == 97 || this.value == 98) {
+    if(this.value == 97 || this.value == 98 || this.value == 3 || this.value == 4) {
       $("#form-option").css("background", "yellow");
     }
     else {
-      $("#form-option").css("background", "");
+      $("#form-option").val('-1').css("background", "");
     }
   });
 

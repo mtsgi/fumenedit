@@ -120,7 +120,9 @@ input[type="button"] {
 .-alldisp .type4 .noteinfo,
 .-alldisp .type5 .noteinfo {
   color: #f0f0f0;
-  text-shadow: 0 1px 3px black;
+  text-shadow: 0 1px 1px black;
+  z-index: 2;
+  opacity: 0.5;
 }
 
 .type1 .noteinfo,
@@ -141,17 +143,18 @@ input[type="button"] {
   box-sizing: border-box;
   border-left: 3px solid #303030;
   border-right: 3px solid #303030;
-  animation: addNotes .6s ease-out;
+  /* animation: addNotes .6s ease-out; */
   z-index: 81;
 }
 
-.type1:hover,
-.type2:hover,
-.type3:hover,
-.type4:hover,
-.type5:hover {
+.type1:hover:not(#noteShadow),
+.type2:hover:not(#noteShadow),
+.type3:hover:not(#noteShadow),
+.type4:hover:not(#noteShadow),
+.type5:hover:not(#noteShadow) {
   box-shadow: 0 0 0 3px yellow;
   background: transparent;
+  animation: none;
 }
 
 .type1.-error::after,
@@ -176,63 +179,65 @@ input[type="button"] {
 
 .type5 {
   position: absolute;
-  height: 6px;
+  height: 10px;
   width: 300px;
   left: 20px;
-  background: gold;
+  background-color: gold;
+  background: linear-gradient(to right, gold, #FDE08D, gold);
   box-sizing: border-box;
   box-shadow: 0 -4px 3px -2px white;
-  border-left: 3px solid #303030;
-  border-right: 3px solid #303030;
-  animation: addNotes .6s ease-out;
+  animation: type5 1s infinite ease-out;
   z-index: 75;
 }
 
 .type3,
 .type4 {
   position: absolute;
-  height: 5px;
+  height: 8px;
+  margin-top: -2px;
   width: 60px;
   box-sizing: border-box;
-  animation: addNotes .6s ease-out;
+  /* animation: addNotes .6s ease-out; */
   z-index: 83;
   transform: scaleX(3);
 }
 
 .type3 {
   background: lightskyblue;
+  border-right: 4px solid #303030;
 }
 
 .type4 {
   background: lightcoral;
+  border-left: 4px solid #303030;
 }
 
 .type3:after {
   transform: scaleX(.5);
-  font-size: 24px;
+  font-size: 25px;
   content: "▶";
   color: lightskyblue;
   position: absolute;
-  line-height: .5em;
-  right: -7px;
+  line-height: .6em;
+  right: -11px;
   font-family: initial;
 }
 
 .type4:after {
   transform: scaleX(.5);
-  font-size: 24px;
+  font-size: 25px;
   content: "◀";
   color: lightcoral;
   position: absolute;
-  line-height: .5em;
-  left: -9px;
+  line-height: .6em;
+  left: -12px;
   font-family: initial;
 }
 
 .type3 .noteinfo,
 .type4 .noteinfo {
   color: transparent;
-  transform: rotate(180deg) scaleX(.4);
+  transform: rotate(180deg) scaleX(.35);
   position: absolute;
   font-style: normal;
 }
@@ -247,6 +252,11 @@ input[type="button"] {
   transform: scaleX(1.5);
 }
 
+.type3.option1 .noteinfo,
+.type4.option1 .noteinfo {
+  transform: rotate(180deg) scaleX(1);
+}
+
 .type3.option2,
 .type4.option2 {
   transform: scaleX(2);
@@ -257,14 +267,29 @@ input[type="button"] {
   transform: scaleX(0.75);
 }
 
+.type3.option2 .noteinfo,
+.type4.option2 .noteinfo {
+  transform: rotate(180deg) scaleX(0.5);
+}
+
 .type3.option4,
 .type4.option4 {
   transform: scaleX(4);
 }
 
+.type3.option4 .noteinfo,
+.type4.option4 .noteinfo {
+  transform: rotate(180deg) scaleX(0.25);
+}
+
 .type3.option5,
 .type4.option5 {
   transform: scaleX(5);
+}
+
+.type3.option5 .noteinfo,
+.type4.option5 .noteinfo {
+  transform: rotate(180deg) scaleX(0.20);
 }
 
 .type97 {
@@ -297,21 +322,23 @@ input[type="button"] {
   transform: rotate(180deg);
   color: #f0f0f0;
   position: absolute;
-  background: yellow;
-  height: 3px;
+  background: transparent;
+  height: 0px;
   width: 300px;
   left: 20px;
-  animation: addNotes .6s ease-out;
   z-index: 98;
+  border-top: 3px dashed red;
 }
 
 .long {
   position: absolute;
-  background: whitesmoke;
+  background: #ffffec;
   opacity: .9;
   width: 27px;
-  margin: 0 15px;
+  margin: 0 12px;
   z-index: 80;
+  border-left: 4px solid #6ecc6e;
+  border-right: 4px solid #6ecc6e;
 }
 
 .measure {
@@ -354,7 +381,7 @@ input[type="button"] {
   position: relative;
   color: rgba(255, 255, 255, .3);
   font-size: 50px;
-  top: -120px;
+  top: -110px;
 }
 
 #preline-combo-text::after {
@@ -374,7 +401,7 @@ input[type="button"] {
   height: 100px;
   width: 60px;
   position: relative;
-  top: -218px;
+  top: -202px;
   opacity: 0;
   left: 0px;
   transition: .175s all linear;
@@ -431,6 +458,20 @@ input[type="button"] {
 
   to {
     box-shadow: 0 0 0px 20px rgba(50, 200, 90, 0);
+  }
+}
+
+@keyframes type5 {
+  from {
+    box-shadow: 0 0 8px 0 gold;
+  }
+  
+  50% {
+    box-shadow: 0 0 14px 0 gold;    
+  }
+
+  to {
+    box-shadow: 0 0 8px 0 gold;
   }
 }
 
