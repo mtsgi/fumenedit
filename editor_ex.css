@@ -1,0 +1,9 @@
+.type3:after,
+.type4:after {
+  margin-right: -2px;
+  line-height: 5px !important;
+}
+
+main {
+  background: #ddd;
+}

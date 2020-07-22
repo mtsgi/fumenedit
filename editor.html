@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mtsgi/kitstrap@0.5/d/kitstrap.css">
   <script src="./kaf.js"></script>
   <link rel="stylesheet" href="./editor.css">
+  <link rel="stylesheet" href="./editor_ex.css" id="ex-css" disabled>
 </head>
 
 <body>
@@ -20,7 +21,7 @@
     </h3>
     <form id="form" autocomplete="off">
       小節の高さ(<span id="measure-height-num"></span>px)
-      <input type="range" min="100" max="800" id="measure-height" value="200" step="10">
+      <input type="range" min="100" max="1000" id="measure-height" value="200" step="50">
       <div style="padding: 6px; background: #ddd; margin: 10px 0">
         <input type="button" value="ファイルを開く" id="form-open" onclick="openFile()" class="kit-button -flat">
         <input type="button" value="名前をつけて保存" id="form-save" onclick="saveFile()" class="kit-button -flat">
@@ -33,7 +34,7 @@
         <input type="button" class="kit-button -flat -limegreen" value="HARD" onclick="selectLevel('hard')">
         <input type="button" class="kit-button -flat -limegreen" value="EXTRA" onclick="selectLevel('extra')">
       </kit-formgroup>
-      <div style="padding: 6px; background: #ddd; margin: 10px 0">
+      <div style="padding: 6px; background: #ddd; margin: 10px 0" class="remove-on-capture">
         <!--
           <input type="button" value="Undo" id="form-undo">
           <input type="button" value="Redo" id="form-redo">
@@ -44,47 +45,49 @@
         <input type="button" value="▶" id="form-next" class="kit-button-alt -small -flat">
       </div>
 
-      タイプ　
-      <select id="form-type">
-        <option value="1">1 - 通常</option>
-        <option value="2">2 - ロング</option>
-        <option value="3">3 - 左フリック</option>
-        <option value="4">4 - 右フリック</option>
-        <option value="5">5 - 音札ノーツ</option>
-        <option value="97">97 - 拍子変化</option>
-        <option value="98">98 - BPM変化</option>
-        <option value="99">99 - EOF</option>
-      </select>
-      <input type="button" id="form-add" value="この場所に追加" class="kit-button -flat -medium">
+      <section class="remove-on-capture">
+        タイプ　
+        <select id="form-type">
+          <option value="1">1 - 通常</option>
+          <option value="2">2 - ロング</option>
+          <option value="3">3 - 左フリック</option>
+          <option value="4">4 - 右フリック</option>
+          <option value="5">5 - 音札ノーツ</option>
+          <option value="97">97 - 拍子変化</option>
+          <option value="98">98 - BPM変化</option>
+          <option value="99">99 - EOF</option>
+        </select>
+        <input type="button" id="form-add" value="この場所に追加" class="kit-button -flat -medium">
 
-      <kit-formgroup class="m-t m-b">
-        レーン　
-        <label class="kit-button -flat -silver">
-          <input type="radio" name="lane" value="1" checked>1
-        </label>
-        <label class="kit-button -flat -silver">
-          <input type="radio" name="lane" value="2">2
-        </label>
-        <label class="kit-button -flat -silver">
-          <input type="radio" name="lane" value="3">3
-        </label>
-        <label class="kit-button -flat -silver">
-          <input type="radio" name="lane" value="4">4
-        </label>
-        <label class="kit-button -flat -silver">
-          <input type="radio" name="lane" value="5">5
-        </label>
-      </kit-formgroup>
-      小節上の位置　
-      <input type="number" id="form-position" class="pos kit-textbox kit-font-bold" placeholder="pos" value="0">
-      ／
-      <input type="number" id="form-split" class="pos kit-textbox" placeholder="spl" value="4">
-      <kit-space></kit-space>
-      オプション値(<span id="form-option-key">使用なし</span>)　
-      <input type="text" id="form-option" value="-1" class="kit-textbox">
+        <kit-formgroup class="m-t m-b">
+          レーン　
+          <label class="kit-button -flat -silver">
+            <input type="radio" name="lane" value="1" checked>1
+          </label>
+          <label class="kit-button -flat -silver">
+            <input type="radio" name="lane" value="2">2
+          </label>
+          <label class="kit-button -flat -silver">
+            <input type="radio" name="lane" value="3">3
+          </label>
+          <label class="kit-button -flat -silver">
+            <input type="radio" name="lane" value="4">4
+          </label>
+          <label class="kit-button -flat -silver">
+            <input type="radio" name="lane" value="5">5
+          </label>
+        </kit-formgroup>
+        小節上の位置　
+        <input type="number" id="form-position" class="pos kit-textbox kit-font-bold" placeholder="pos" value="0">
+        ／
+        <input type="number" id="form-split" class="pos kit-textbox" placeholder="spl" value="4">
+        <kit-space></kit-space>
+        オプション値(<span id="form-option-key">使用なし</span>)　
+        <input type="text" id="form-option" value="-1" class="kit-textbox">
+      </section>
     </form>
 
-    <form id="endform" style="display: none" autocomplete="off">
+    <form id="endform" style="display: none" autocomplete="off" class="remove-on-capture">
       <blockquote>
         <h4>ロング終点</h4>
         小節数　
@@ -180,43 +183,47 @@
     <div id="notesnum">- notes</div>
     <div id="notesinfo">[内訳]</div>
 
-    <h3 class="m-t">特殊操作</h3>
-    <input class="kit-textbox" type="number" kit:bind="copy_measure_from" value="0">小節のノーツを
-    <select kit:bind="copy_measure_level">
-      <option value="raku">RAKU</option>
-      <option value="easy">EASY</option>
-      <option value="normal">NORMAL</option>
-      <option value="hard" selected>HARD</option>
-      <option value="extra">EXTRA</option>
-    </select>
-    <input class="kit-textbox" type="number" kit:bind="copy_measure_to" value="0">小節へ
-    <button class="kit-button -flat -medium" kit-e="copy_measure">コピー</button>
-
-    <kit-space></kit-space>
-
-    <input class="kit-textbox" type="number" kit:bind="flip_measure" value="0">小節のノーツを
-    <button class="kit-button -flat -medium" kit-e="flip">左右反転</button>
-
-    <kit-space></kit-space>
-
-    情報表示：
-    <button class="kit-button -flat -medium" kit-e="alldisp">表示切り替え</button>
-
-    ノーツ検査：
-    <button class="kit-button -flat -medium" kit-e="validate">実行する</button>
+    <h3 class="m-t remove-on-capture">特殊操作</h3>
+    <section class="remove-on-capture">
+      <input class="kit-textbox" type="number" kit:bind="copy_measure_from" value="0">小節のノーツを
+      <select kit:bind="copy_measure_level">
+        <option value="raku">RAKU</option>
+        <option value="easy">EASY</option>
+        <option value="normal">NORMAL</option>
+        <option value="hard" selected>HARD</option>
+        <option value="extra">EXTRA</option>
+      </select>
+      <input class="kit-textbox" type="number" kit:bind="copy_measure_to" value="0">小節へ
+      <button class="kit-button -flat -medium" kit-e="copy_measure">コピー</button>
+  
+      <kit-space></kit-space>
+  
+      <input class="kit-textbox" type="number" kit:bind="flip_measure" value="0">小節のノーツを
+      <button class="kit-button -flat -medium" kit-e="flip">左右反転</button>
+  
+      <kit-space></kit-space>
+  
+      情報表示：
+      <button class="kit-button -flat -medium" kit-e="alldisp">表示切り替え</button>
+  
+      ノーツ検査：
+      <button class="kit-button -flat -medium" kit-e="validate">実行する</button>
+    </section>
 
     <h3 class="m-t">
-      出力 <input type="button" id="copy2cb" value="コピー" class="kit-right kit-button -flat -small">
+      出力
+      <input type="button" kit-e="output" value="出力を見る" class="kit-right kit-button -flat -small">
     </h3>
 
-    <textarea id="output" cols="30" rows="20" disabled></textarea>
-
-    <br>
-    <a class="kit-hl" href="https://github.com/mtsgi/fumenedit/blob/master/usage.md">エディタの使い方</a>
-    <br>
-    <a class="kit-hl" href="https://github.com/mtsgi/fumenedit/blob/master/format.md">譜面フォーマットについて</a>
-    <br>
-    <a class="kit-hl" href="./sample.json">sample.json</a>
+    <section class="remove-on-capture">
+      <a class="kit-hl" kit-e="capture">⏺ キャプチャモード</a>
+      <br>
+      <a class="kit-hl" href="https://github.com/mtsgi/fumenedit/blob/master/usage.md">ℹ️ エディタの使い方</a>
+      <br>
+      <a class="kit-hl" href="https://github.com/mtsgi/fumenedit/blob/master/format.md">🗒 譜面フォーマットについて</a>
+      <br>
+      <a class="kit-hl" href="./sample.json">🗂 sample.json</a>
+    </section>
   </main>
 
   <div id="preview"></div>

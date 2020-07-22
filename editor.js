@@ -16,7 +16,6 @@ const kaf = new Kaf({
             "raku": null, "easy": null, "normal": null, "hard": null, "extra": null
           };
           console.log('譜面データをロード', fumenObject);
-          $("#output").html(JSON.stringify(fumenObject, null, 4));
           selectLevel(currentLevel);
         });
     },
@@ -109,6 +108,30 @@ const kaf = new Kaf({
       }
       results.push(`--- 重複検査END ---`);
       message(...results);
+    },
+    output() {
+      window.open(`data:,${JSON.stringify({
+        ...fumenObject,
+        info: {
+          bpm: Number(kaf.info_bpm),
+          beat: Number(kaf.info_beat),
+          offset: Number(kaf.info_offset)
+        }
+      }, null, 4).replace(/\n|\r\n|\r/gi, '%0D')}`);
+    },
+    capture() {
+      const result = window.confirm("本当にキャプチャモードを開始しますか？(一度開始すると、元の画面には戻れません)");
+      if(result) {
+        this.infoDisp = true;
+        document.querySelector('#preview').classList.add('-alldisp');
+        const loadCss = window.confirm("調整用CSSを読み込みますか？");
+        if (loadCss) {
+          document.querySelector('#ex-css').disabled = false;
+        }
+        document.querySelectorAll('.remove-on-capture').forEach(el => {
+          el.parentNode.removeChild(el);
+        });
+      }
     }
   }
 });
@@ -135,8 +158,6 @@ let tap_timings = [];
 let preview_timings = [];
 
 $(document).ready(function() {
-  $("#output").html(JSON.stringify(fumenObject, null, 4));
-
   window.addEventListener('beforeunload', function(e) {
     e.preventDefault();
     e.returnValue = '移動してもよろしいですか？';
@@ -232,7 +253,6 @@ $(document).ready(function() {
       "option": option,
       "end": end
     });
-    $("#output").html(JSON.stringify(fumenObject, null, 4));
     if(type != 5) message(`${measure}小節にノートを配置しました。`);
 
     drawPreview(fumenObject[currentLevel]);
@@ -310,7 +330,6 @@ $(document).ready(function() {
       prev[currentLevel] = null;
     }
     else message("Undoできません");
-    $("#output").html(JSON.stringify(fumenObject, null, 4));
     drawPreview(fumenObject[currentLevel]);
   });
 
@@ -321,7 +340,6 @@ $(document).ready(function() {
     };
     fumenObject[currentLevel].push(prev[currentLevel]);
     prev[currentLevel] = null;
-    $("#output").html(JSON.stringify(fumenObject, null, 4));
     message("Redoしました");
     drawPreview(fumenObject[currentLevel]);
   });
@@ -362,18 +380,6 @@ $(document).ready(function() {
     if(spl < 1) {
       $("#endform-split").val(1);
     };
-  });
-
-  //クリップボードにコピー
-  $("#copy2cb").on("click", function() {
-    let _range = document.createRange();
-    _range.selectNode($("#output")[0]);
-    let _selection = getSelection();
-    _selection.removeAllRanges();
-    _selection.addRange(_range);
-    document.execCommand("copy");
-    _selection.removeAllRanges();
-    $("#debug").text("クリップボードにコピーしました。");
   });
 
   //シャドーノーツ(置く場所の目印)を表示
@@ -589,7 +595,6 @@ function selectLevel(level) {
   else {
     currentLevel = level;
     message(level + "をロードしました");
-    $("#output").html(JSON.stringify(fumenObject, null, 4));
     drawPreview(fumenObject[currentLevel]);
     $("#head-level").text(level);
   }
@@ -604,7 +609,6 @@ function openFile() {
         "raku": null, "easy": null, "normal": null, "hard": null, "extra": null
       };
       console.log('譜面データをロード', fumenObject);
-      $("#output").html(JSON.stringify(fumenObject, null, 4));
       if(fumenObject.info) {
         kaf.info_bpm = fumenObject.info.bpm;
         kaf.info_beat = fumenObject.info.beat;
@@ -657,6 +661,7 @@ function previewStart() {
   tap_timings = [];
 
   const playDelay = 100; // 処理待ち遅延(ms)
+  let minusDelay = 0;
 
   if(_start > kaf.maxMeasure) {
     message(`${_start}小節がありません`);
@@ -704,12 +709,16 @@ function previewStart() {
     }, playDelay);
   }
 
+  if(_start < 0) {
+    minusDelay = one_measure * -(_start) * 1000;
+  }
+
   //音源オフセット分遅延再生
   preAudio.currentTime = one_measure * _start;
   preAudio.volume = Number(kaf.preview_volume_music);
   setTimeout(() => {
     preAudio.play().catch((err) => console.warn(err));
-  }, _offset + playDelay);
+  }, _offset + playDelay + minusDelay);
 
   let comboNum = 0;
   const comboText = document.querySelector('#preline-combo-text');
