@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>譜面データ修復ツール</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mtsgi/kitstrap@0.5/d/kitstrap.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mtsgi/kitstrap@0.5/d/kitstrap-font.css">
+  <script src="./kaf.js"></script>
+</head>
+
+<body>
+  <h3>譜面データ修復ツール</h3>
+  <p>すべてのoptionキーの型を検査して修正します</p>
+  <input type="file" accept=".json, application/json" kit-e="loadFile change" kit-bind="file">
+  <table>
+    <tr>
+      <td>元データ</td>
+      <td>修正後データ</td>
+    </tr>
+    <tr>
+      <td>
+        <pre id="original">未ロード</pre>
+      </td>
+      <td>
+        <pre id="fixed">未ロード</pre>
+      </td>
+    </tr>
+  </table>
+
+  <script>
+    const kaf = new Kaf({
+      elem: 'body',
+      events: {
+        loadFile(e) {
+          console.log(e);
+          const reader = new FileReader();
+          reader.readAsText(e.target.files[0]);
+          console.log(e.target.files[0].name);
+          reader.onload = function (event) {
+            let count = 0;
+            document.querySelector("#original").innerHTML = event.target.result;
+            let chart = JSON.parse(event.target.result);
+            ["raku", "easy", "normal", "hard", "extra"].forEach(difficulty => {
+              console.log(difficulty);
+              console.group();
+              for (const i in chart[difficulty]) {
+                const note = chart[difficulty][i];
+                for (const k in note.end) {
+                  const end = note.end[k];
+                  if (typeof end.option === "number") {
+                    chart[difficulty][i].end[k] = {
+                      ...end,
+                      option: [end.option]
+                    }
+                    console.warn(chart[difficulty][i].end[k]);
+                    count += 1;
+                  }
+                }
+              }
+              console.groupEnd();
+            });
+            alert(`${count}ノーツを修正しました。`);
+            document.querySelector("#fixed").innerHTML = JSON.stringify(chart, null, 4);
+
+            let blob = new Blob([JSON.stringify(chart, null, 4)], { type: "application/json" });
+            let a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = e.target.files[0].name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
+        }
+      },
+      styles: {
+        td: {
+          verticalAlign: "top"
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
