@@ -207,7 +207,7 @@ $(document).ready(function() {
           "lane": Number($("#endform-lane").val()),
           "position": Number($("#endform-position").val()),
           "split": Number($("#endform-split").val()),
-          "option": -1,
+          "option": [],
           "end": []
         }
       ]
@@ -225,13 +225,13 @@ $(document).ready(function() {
     // 音札ノーツは全難易度に挿入
     if(type == 5) {
       let _otofudanotesobj = {
-        "type": type,
-        "measure": measure,
-        "lane": lane,
-        "position": position,
-        "split": split,
-        "option": option,
-        "end": end
+        type,
+        measure,
+        lane,
+        position,
+        split,
+        option,
+        end
       }
       try {
         fumenObject.raku.push(_otofudanotesobj);
@@ -245,13 +245,13 @@ $(document).ready(function() {
       }
     }
     else fumenObject[currentLevel].push({
-      "type": type,
-      "measure": measure,
-      "lane": lane,
-      "position": position,
-      "split": split,
-      "option": option,
-      "end": end
+      type,
+      measure,
+      lane,
+      position,
+      split,
+      option,
+      end
     });
     if(type != 5) message(`${measure}小節にノートを配置しました。`);
 

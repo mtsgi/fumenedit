@@ -58,9 +58,9 @@ class Kaf {
       if (el.hasAttribute('kit-e')) {
         el.getAttribute('kit-e').split(',').forEach(ev => {
           const ea = ev.trim().split(' ')
-          el.addEventListener(ea[1] || 'click', () => {
+          el.addEventListener(ea[1] || 'click', (event) => {
             if (!this._events[ea[0]]) Kaf.error(`[Runtime] Event ${ea[0]} was not found.`, el)
-            else this._events[ea[0]].apply(this)
+            else this._events[ea[0]].apply(this, [event])
           })
         })
       }
