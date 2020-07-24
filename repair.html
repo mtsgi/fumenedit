@@ -12,7 +12,7 @@
 
 <body>
   <h3>譜面データ修復ツール</h3>
-  <p>すべてのoptionキーの型を検査して修正します</p>
+  <p>すべてのノーツオブジェクトのキーの型を検査して修正します</p>
   <input type="file" accept=".json, application/json" kit-e="loadFile change" kit-bind="file">
   <table>
     <tr>
@@ -47,6 +47,26 @@
               console.group();
               for (const i in chart[difficulty]) {
                 const note = chart[difficulty][i];
+                if (typeof note.type !== "number") {
+                  chart[difficulty][i].type = Number(note.type);
+                  count++;
+                }
+                if (typeof note.measure !== "number") {
+                  chart[difficulty][i].measure = Number(note.measure);
+                  count++;
+                }
+                if (typeof note.lane !== "number") {
+                  chart[difficulty][i].type = Number(note.lane);
+                  count++;
+                }
+                if (typeof note.position !== "number") {
+                  chart[difficulty][i].position = Number(note.position);
+                  count++;
+                }
+                if (typeof note.split !== "number") {
+                  chart[difficulty][i].split = Number(note.split);
+                  count++;
+                }
                 for (const k in note.end) {
                   const end = note.end[k];
                   if (typeof end.option === "number") {
@@ -54,14 +74,33 @@
                       ...end,
                       option: [end.option]
                     }
-                    console.warn(chart[difficulty][i].end[k]);
                     count += 1;
+                  }
+                  if (typeof end.type !== "number") {
+                    chart[difficulty][i].end[k].type = Number(end.type);
+                    count++;
+                  }
+                  if (typeof end.measure !== "number") {
+                    chart[difficulty][i].end[k].measure = Number(end.measure);
+                    count++;
+                  }
+                  if (typeof end.lane !== "number") {
+                    chart[difficulty][i].end[k].type = Number(end.lane);
+                    count++;
+                  }
+                  if (typeof end.position !== "number") {
+                    chart[difficulty][i].end[k].position = Number(end.position);
+                    count++;
+                  }
+                  if (typeof end.split !== "number") {
+                    chart[difficulty][i].end[k].split = Number(end.split);
+                    count++;
                   }
                 }
               }
               console.groupEnd();
             });
-            alert(`${count}ノーツを修正しました。`);
+            alert(`${count}個の問題を修正しました。`);
             document.querySelector("#fixed").innerHTML = JSON.stringify(chart, null, 4);
 
             let blob = new Blob([JSON.stringify(chart, null, 4)], { type: "application/json" });
