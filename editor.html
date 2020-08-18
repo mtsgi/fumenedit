@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>エディタ</title>
+  <title>譜面エディタ</title>
   <script src="./jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mtsgi/kitstrap@0.5/d/kitstrap.css">
   <script src="./kaf.js"></script>
@@ -53,6 +53,8 @@
           <option value="3">3 - 左フリック</option>
           <option value="4">4 - 右フリック</option>
           <option value="5">5 - 音札ノーツ</option>
+          <option value="95">95 - 区切り線</option>
+          <option value="96">96 - LED制御</option>
           <option value="97">97 - 拍子変化</option>
           <option value="98">98 - BPM変化</option>
           <option value="99">99 - EOF</option>
@@ -84,6 +86,22 @@
         <kit-space></kit-space>
         オプション値(<span id="form-option-key">使用なし</span>)　
         <input type="text" id="form-option" value="-1" class="kit-textbox">
+        <kit-space></kit-space>
+
+        <div class="form-option" id="form-option-0">
+          オプション[0]：<span class="form-option-label">0</span><br>
+          <input type="text" kit:bind="form_option_0" value="-1" class="kit-textbox">
+        </div>
+
+        <div class="form-option" id="form-option-1">
+          オプション[1]：<span class="form-option-label">1</span><br>
+          <input type="text" kit:bind="form_option_1" value="-1" class="kit-textbox">
+        </div>
+
+        <div class="form-option" id="form-option-2">
+          オプション[2]：<span class="form-option-label">2</span><br>
+          <input type="text" kit:bind="form_option_2" value="-1" class="kit-textbox">
+        </div>
       </section>
     </form>
 

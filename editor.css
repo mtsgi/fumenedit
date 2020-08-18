@@ -13,7 +13,7 @@ main {
   left: 0;
   max-height: calc(100vh);
   overflow: scroll;
-  width: calc(100% - 320px);
+  width: calc(100% - 400px);
   background: #f0f0f0;
 }
 
@@ -45,6 +45,11 @@ form .pos {
   width: 50px;
 }
 
+form .form-option input {
+  margin-left: 10px;
+  width: 300px;
+}
+
 select {
   font-size: 16px;
   background: #fff;
@@ -73,8 +78,9 @@ input[type="button"] {
   overflow-y: scroll;
   overflow-x: hidden;
   position: fixed;
-  width: 320px;
+  width: 400px;
   height: 100%;
+  
   top: 0px;
   right: 0px;
   box-sizing: border-box;
@@ -111,7 +117,7 @@ input[type="button"] {
   border-left: 3px solid #303030;
   border-right: 3px solid #303030;
   animation: addNotes .6s ease-out;
-  z-index: 81;
+  z-index: 83;
   color: red;
 }
 
@@ -187,7 +193,7 @@ input[type="button"] {
   position: absolute;
   height: 10px;
   width: 300px;
-  left: 20px;
+  left: 50px;
   background-color: gold;
   background: linear-gradient(to right, gold, #FDE08D, gold);
   box-sizing: border-box;
@@ -204,7 +210,7 @@ input[type="button"] {
   width: 60px;
   box-sizing: border-box;
   /* animation: addNotes .6s ease-out; */
-  z-index: 83;
+  z-index: 82;
   transform: scaleX(3);
 }
 
@@ -354,11 +360,12 @@ input[type="button"] {
   background: linear-gradient(to left, transparent 19.5%, #E0E0E0 20%, transparent 20.5%, transparent 39.5%, #E0E0E0 40%, transparent 40.5%, transparent 59.5%, #E0E0E0 60%, transparent 60.5%, transparent 79.5%, #E0E0E0 80%, transparent 80.5%);
   border-top: 1px solid #909090;
   border-right: 1px solid #909090;
+  border-left: 1px solid #909090;
   text-align: right;
   line-height: 0px;
   height: 200px;
   width: 300px;
-  right: 0px;
+  right: 50px;
   top: 0px;
   color: #707070;
   font-size: 32px;
