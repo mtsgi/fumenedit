@@ -173,30 +173,45 @@ $(document).ready(function () {
     prev[currentLevel] = fumenObject[currentLevel];
     let type = Number($("#form-type").val())
     let measure = Number($("#form-measure").val());
+    const formValues = {
+      opt0: Number(kaf.form_option_0),
+      opt1: Number(kaf.form_option_1),
+      opt2: Number(kaf.form_option_2),
+      lane: Number($("#form")[0].lane.value),
+      position: Number($("#form-position").val()),
+      split: Number($("#form-split").val())
+    }
 
     let lane = -1;
-    if (type == 1 || type == 2) {
-      lane = Number($("#form")[0].lane.value);
+    if (type == 1 || type == 2 || type == 3 || type == 4) {
+      lane = formValues.lane;
     }
-    else if (type == 3 || type == 4) {
-      lane = Number($("#form")[0].lane.value);
-      // if(lane == 1 || lane == 5) {
-      //   message("そのレーン位置にフリックノーツを配置することはできません。");
-      //   return;
-      // }
+    else if (type == 95) {
+      lane = formValues.lane;
+      if(formValues.opt0 + lane > 6) {
+        message("そのレーン位置に配置することはできません。");
+        return;
+      }
     }
     else if (type == 5) lane = 3;
 
-    let position = Number($("#form-position").val());
-    let split = Number($("#form-split").val());
+    let position = formValues.position;
+    let split = formValues.split;
     let option = [];
-    if (type == 97 || type == 98) {
-      if (type == 97) option[0] = "beatchange";
-      else if (type == 98) option[0] = "bpmchange";
-      option[1] = Number($("#form-option").val());
-    }
     if (type == 3 || type == 4) {
-      option[0] = Number($("#form-option").val());
+      if (formValues.opt0 > 0) option[0] = formValues.opt0;
+      else option[0] = -1;
+      if (formValues.opt1 > 0 && formValues.opt2 > 0) {
+        option[1] = formValues.opt1;
+        option[2] = formValues.opt2;
+      }
+    }
+    if (type == 95) {
+      if (formValues.opt0 > 0) option[0] = formValues.opt0;
+      else option[0] = 5;
+    }
+    if (type == 97 || type == 98) {
+      option[0] = formValues.opt0;
     }
     let end = [];
     if (type == 2) {
@@ -408,6 +423,8 @@ $(document).ready(function () {
       case 4:
         formOptionElements[0].style.display = 'block';
         formOptionElements[0].querySelector('.form-option-label').textContent = 'width(幅)';
+        kaf.form_option_0 = '-1';
+        formOptionElements[0].querySelector('.kit-textbox').value = '-1';
         formOptionElements[1].style.display = 'block';
         formOptionElements[1].querySelector('.form-option-label').textContent = 'offsetNumer(OFFSET分子)';
         formOptionElements[2].style.display = 'block';
@@ -416,6 +433,8 @@ $(document).ready(function () {
       case 95:
         formOptionElements[0].style.display = 'block';
         formOptionElements[0].querySelector('.form-option-label').textContent = 'length(横の長さ)';
+        kaf.form_option_0 = '5';
+        formOptionElements[0].querySelector('.kit-textbox').value = '5';
         break;
       case 97:
         formOptionElements[0].style.display = 'block';
@@ -492,7 +511,7 @@ function drawPreview(obj) {
 
     // ノートを配置
     const positionTop = (i.measure * measureHeight) + measureHeight * (i.position / i.split);
-    const positionRight = (i.lane - 1) * 60 + 50;
+    let positionRight = (i.lane - 1) * 60 + 50;
     noteElement.classList.add(`type${i.type}`, `option${i.option}`);
     noteElement.style.right = `${positionRight}px`;
     noteElement.style.top = `${positionTop}px`;
@@ -506,8 +525,23 @@ function drawPreview(obj) {
     else if (i.type == 97) {
       noteElement.textContent = `${i.option}/4`;
     }
+    else if (i.type == 95) {
+      if (i.option[0]) {
+        noteElement.style.width = `${60 * i.option[0]}px`;
+      }
+    }
     else if (i.type == 99) {
       noteElement.textContent = 'EOF';
+    }
+    // フリックノーツ処理
+    else if (i.type == 3 || i.type == 4) {
+      if (i.option[0] > 0) {
+        noteElement.style.transform = `scaleX(${i.option[0]})`
+      }
+      if (i.option[1] > 0 && i.option[2] > 0) {
+        positionRight += 60 * (i.option[1] / i.option[2]);
+        noteElement.style.right = `${positionRight}px`;
+      }
     }
     // ロングノーツ処理
     else if (i.type == 2) {
@@ -590,29 +624,38 @@ function message(...text) {
 }
 
 function drawShadow() {
-  const _type = $("#form-type").val();
-  const _option = $("#form-option").val();
+  const _type = Number($("#form-type").val());
   const _lane = Number($("#form")[0].lane.value);
   const _measure = Number($("#form-measure").val());
   const _pos = Number($("#form-position").val());
   const _spl = Number($("#form-split").val());
 
+  const _opt0 = Number(kaf.form_option_0);
+  const _opt1 = Number(kaf.form_option_1);
+  const _opt2 = Number(kaf.form_option_2);
+
   // シャドーを描画
   $("#noteShadow, #noteShadowEnd, #long-shadow").remove();
   const shadowElement = document.createElement('span');
-  const shadowPositionRight = (_lane - 1) * 60;
+  let shadowPositionRight = (_lane - 1) * 60 + 50;
   shadowElement.id = 'noteShadow';
-  shadowElement.classList.add(`type${_type}`, `option${_option}`);
+  shadowElement.classList.add(`type${_type}`);
 
   // シャドーを配置
-  if (_type === 3 || _type === 4) { }
-  // shadowElement.style.right = `${shadowPositionRight}px`;
-  $("#preview").append("<span id='noteShadow'></span>");
-  $("#noteShadow")
-    .addClass(`type${_type}`)
-    .addClass(`option${_option}`)
-    .css("right", (_lane - 1) * 60)
-    .css("top", (_measure * measureHeight) + measureHeight * (_pos / _spl));
+  if (_type == 3 || _type == 4) {
+    if (_opt0 > 0) {
+      shadowElement.style.transform = `scaleX(${_opt0})`
+    }
+    if (_opt1 > 0 && _opt2 > 0) {
+      shadowPositionRight += 60 * (_opt1 / _opt2);
+    }
+  }
+  if (_type == 95 && _opt0) {
+    shadowElement.style.width = `${60 * _opt0}px`;
+  }
+  shadowElement.style.right = `${shadowPositionRight}px`;
+  shadowElement.style.top = `${(_measure * measureHeight) + measureHeight * (_pos / _spl)}px`;
+  document.querySelector('#preview').appendChild(shadowElement);
 
   // シャドー終点の描画
   if (_type == 2) {

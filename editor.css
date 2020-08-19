@@ -130,6 +130,7 @@ input[type="button"] {
 .-alldisp .type2 .noteinfo,
 .-alldisp .type3 .noteinfo,
 .-alldisp .type4 .noteinfo,
+.-alldisp .type5 .noteinfo,
 .-alldisp .type5 .noteinfo {
   color: #f0f0f0;
   text-shadow: 0 1px 1px black;
@@ -254,6 +255,16 @@ input[type="button"] {
   font-style: normal;
 }
 
+.type95 .noteinfo {
+  color: transparent;
+}
+
+.-alldisp .type95 .noteinfo,16
+.type95:hover .noteinfo {
+  color: #909090;
+}
+
+/*
 .type3.option1,
 .type4.option1 {
   transform: scaleX(1);
@@ -303,6 +314,18 @@ input[type="button"] {
 .type4.option5 .noteinfo {
   transform: rotate(180deg) scaleX(0.20);
 }
+*/
+
+.type95 {
+  transform: rotate(180deg);
+  color: #909090;
+  position: absolute;
+  background: #909090;
+  height: 1px;
+  width: 300px;
+  z-index: 80;
+  text-align: right;
+}
 
 .type97 {
   transform: rotate(180deg);
@@ -310,7 +333,7 @@ input[type="button"] {
   position: absolute;
   background: limegreen;
   height: 1px;
-  width: 320px;
+  width: 400px;
   left: 0px;
   animation: addNotes .6s ease-out;
   z-index: 97;
@@ -323,7 +346,7 @@ input[type="button"] {
   position: absolute;
   background: red;
   height: 1px;
-  width: 320px;
+  width: 400px;
   left: 0px;
   animation: addNotes .6s ease-out;
   z-index: 98;
@@ -337,7 +360,7 @@ input[type="button"] {
   background: transparent;
   height: 0px;
   width: 300px;
-  left: 20px;
+  left: 50px;
   z-index: 98;
   border-top: 3px dashed red;
 }
@@ -377,7 +400,7 @@ input[type="button"] {
   bottom: 0px;
   right: 0;
   height: 20px;
-  width: 320px;
+  width: 400px;
   background: transparent;
   color: red;
   border-top: 2px solid red;
@@ -388,7 +411,7 @@ input[type="button"] {
 
 #preline-combo-text {
   display: block;
-  width: calc(100% - 19px);
+  width: 100%;
   height: 100px;
   text-align: center;
   position: relative;
@@ -406,6 +429,7 @@ input[type="button"] {
 .keybeams {
   display: flex;
   position: relative;
+  padding-left: 50px;
 }
 
 .keybeam {
@@ -423,6 +447,7 @@ input[type="button"] {
 #keybeam-otofuda {
   position: absolute;
   width: 300px;
+  left: 50px;
   background : linear-gradient(#f7d51600 0%,#f7d51690 100%);
 }
 
