@@ -188,7 +188,7 @@ $(document).ready(function () {
     }
     else if (type == 95) {
       lane = formValues.lane;
-      if(formValues.opt0 + lane > 6) {
+      if (formValues.opt0 + lane > 6) {
         message("そのレーン位置に配置することはできません。");
         return;
       }
@@ -207,7 +207,8 @@ $(document).ready(function () {
       }
     }
     if (type == 95) {
-      if (formValues.opt0 > 0) option[0] = formValues.opt0;
+      if (position == 0) option[0] = -1; // 小節線非表示制御
+      else if (formValues.opt0 > 0) option[0] = formValues.opt0;
       else option[0] = 5;
     }
     if (type == 97 || type == 98) {
@@ -458,6 +459,7 @@ function drawPreview(obj) {
   let notesnum = 0, notesid = 0, maxMeasure = 0;
   let notes_tap = 0, notes_long = 0, notes_flick = 0, notes_otofuda = 0;
   let notes_1 = 0, notes_2 = 0, notes_3 = 0, notes_4 = 0, notes_5 = 0;
+  let hiddenMeasureLine = []; // 小節線非表示小節
   //1ノートずつ処理
   for (let i of obj) {
     notesid++;
@@ -529,6 +531,11 @@ function drawPreview(obj) {
       if (i.option[0]) {
         noteElement.style.width = `${60 * i.option[0]}px`;
       }
+      if (i.position == 0) {
+        noteElement.classList.add('-hidden');
+        noteElement.textContent = '非表示制御';
+        hiddenMeasureLine.push(i.measure);
+      }
     }
     else if (i.type == 99) {
       noteElement.textContent = 'EOF';
@@ -596,6 +603,8 @@ function drawPreview(obj) {
     measureElement.textContent = i;
     measureElement.id = `measure${i}`;
     measureElement.classList.add('measure');
+    if (hiddenMeasureLine.includes(i)) measureElement.classList.add('-hml');
+    if (i == maxMeasure) measureElement.classList.add('-last');
     previewElement.appendChild(measureElement);
     measureElement.style.top = `${i * measureHeight}px`;
     measureElement.style.height = `${measureHeight}px`;
@@ -652,6 +661,9 @@ function drawShadow() {
   }
   if (_type == 95 && _opt0) {
     shadowElement.style.width = `${60 * _opt0}px`;
+  }
+  if (_type == 95 && _pos == 0) {
+    shadowElement.classList.add('-hidden');
   }
   shadowElement.style.right = `${shadowPositionRight}px`;
   shadowElement.style.top = `${(_measure * measureHeight) + measureHeight * (_pos / _spl)}px`;
