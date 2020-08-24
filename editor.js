@@ -170,6 +170,50 @@ $(document).ready(function () {
     document.querySelector('#sudden').style.height = `${e.target.value}px`;
   });
 
+  // キービーム光らせる
+  document.addEventListener('keydown', e => {
+    switch (e.key) {
+      case "z":
+        document.querySelector('#keybeam-1').classList.add('-on');
+        break;
+      case "x":
+        document.querySelector('#keybeam-2').classList.add('-on');
+        break;
+      case "c":
+        document.querySelector('#keybeam-3').classList.add('-on');
+        break;
+      case "v":
+        document.querySelector('#keybeam-4').classList.add('-on');
+        break;
+      case "b":
+        document.querySelector('#keybeam-5').classList.add('-on');
+        break;
+      default:
+        break;
+    }
+  });
+  document.addEventListener('keyup', e => {
+    switch (e.key) {
+      case "z":
+        document.querySelector('#keybeam-1').classList.remove('-on');
+        break;
+      case "x":
+        document.querySelector('#keybeam-2').classList.remove('-on');
+        break;
+      case "c":
+        document.querySelector('#keybeam-3').classList.remove('-on');
+        break;
+      case "v":
+        document.querySelector('#keybeam-4').classList.remove('-on');
+        break;
+      case "b":
+        document.querySelector('#keybeam-5').classList.remove('-on');
+        break;
+      default:
+        break;
+    }
+  });
+
   //ノーツを追加
   $("#form-add").on("click", () => {
     prev[currentLevel] = fumenObject[currentLevel];
@@ -203,7 +247,7 @@ $(document).ready(function () {
     if (type == 3 || type == 4) {
       if (formValues.opt0 > 0) option[0] = formValues.opt0;
       else option[0] = -1;
-      if (formValues.opt1 > 0 && formValues.opt2 > 0) {
+      if (formValues.opt1 != 0 && formValues.opt2 > 0) {
         option[1] = formValues.opt1;
         option[2] = formValues.opt2;
       }
@@ -548,9 +592,10 @@ function drawPreview(obj) {
     // フリックノーツ処理
     else if (i.type == 3 || i.type == 4) {
       if (i.option[0] > 0) {
-        noteElement.style.transform = `scaleX(${i.option[0]})`
+        noteElement.style.transform = `scaleX(${i.option[0]})`;
+        noteElement.querySelector('.noteinfo').textContent += `(${i.option[0]}x)`;
       }
-      if (i.option[1] > 0 && i.option[2] > 0) {
+      if (i.option[1] != 0 && i.option[2] > 0) {
         positionRight += 60 * (i.option[1] / i.option[2]);
         noteElement.style.right = `${positionRight}px`;
       }
@@ -661,7 +706,7 @@ function drawShadow() {
     if (_opt0 > 0) {
       shadowElement.style.transform = `scaleX(${_opt0})`
     }
-    if (_opt1 > 0 && _opt2 > 0) {
+    if (_opt1 != 0 && _opt2 > 0) {
       shadowPositionRight += 60 * (_opt1 / _opt2);
     }
   }
