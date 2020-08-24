@@ -21,7 +21,9 @@ const kaf = new Kaf({
     },
     copy_measure() {
       const target_notes = fumenObject[currentLevel].filter(note => note.measure == this.copy_measure_from).filter(note => note.type != 2);
-      if (window.confirm(`${target_notes.length}ノーツを${this.copy_measure_level}の${this.copy_measure_to}小節にコピーします(ロングノーツはコピーしません)。よろしいですか？`)) {
+      if (
+        window.confirm(`${target_notes.length}ノーツを${this.copy_measure_level}の${this.copy_measure_to}小節にコピーします(ロングノーツはコピーしません)。よろしいですか？`)
+      ) {
         const converted_notes = target_notes.map(note => {
           let new_obj = Object.assign({}, note, { measure: Number(this.copy_measure_to) });
           return new_obj;
@@ -215,21 +217,30 @@ $(document).ready(function () {
       option[0] = formValues.opt0;
     }
     let end = [];
+    one_measure = 60 / Number(kaf.info_bpm) * Number(kaf.info_beat);
+    const self_timing = one_measure * measure + one_measure * (position / split);
     if (type == 2) {
+      const end_measure = Number($("#endform-measure").val());
+      const end_lane = Number($("#endform-lane").val());
+      const end_position = Number($("#endform-position").val());
+      const end_split = Number($("#endform-split").val());
+      const end_timing = one_measure * end_measure + one_measure * (end_position / end_split);
+      if (end_position < 0 || end_position >= end_split || self_timing >= end_timing) {
+        message("不正LNエラー（ロングノーツは始点が手前に存在する必要があります）");
+        return;
+      }
       end = [
         {
           "type": 1,
-          "measure": Number($("#endform-measure").val()),
-          "lane": Number($("#endform-lane").val()),
-          "position": Number($("#endform-position").val()),
-          "split": Number($("#endform-split").val()),
+          "measure": end_measure,
+          "lane": end_lane,
+          "position": end_position,
+          "split": end_split,
           "option": [],
           "end": []
         }
       ]
     }
-    one_measure = 60 / Number(kaf.info_bpm) * Number(kaf.info_beat);
-    const self_timing = one_measure * measure + one_measure * (position / split);
     // 重複チェック
     for (const note of fumenObject[currentLevel]) {
       const note_timing = one_measure * note.measure + one_measure * (note.position / note.split);
@@ -297,16 +308,10 @@ $(document).ready(function () {
       $("#form")[0].lane.value = Number($("#form")[0].lane.value) + 1;
       $("#endform-lane").val($("#form")[0].lane.value);
     }
-    //Shift押しながら上下でノーツ(始点)移動
+    //Shift押しながら上下でLN終点も移動
     else if (e.shiftKey) {
-      if (e.which == 38) {
-        $("#form-position").val(Number($("#form-position").val()) - 1);
-        $("#endform-position").val(Number($("#endform-position").val()) + 1);
-      }
-      else if (e.which == 40) {
-        $("#form-position").val(Number($("#form-position").val()) + 1);
-        $("#endform-position").val(Number($("#endform-position").val()) - 1);
-      }
+      if (e.which == 38) $("#endform-position").val(Number($("#endform-position").val()) + 1);
+      else if (e.which == 40) $("#endform-position").val(Number($("#endform-position").val()) - 1);
       let pos = Number($("#endform-position").val());
       let spl = Number($("#endform-split").val());
       if (pos < 0) {
@@ -324,8 +329,8 @@ $(document).ready(function () {
         $("#endform-split").val(1);
       };
     }
-    //スペースキーでノーツタイプ変更
-    else if (e.which == 32) {
+    // Commandキーでノーツタイプ変更
+    else if (e.which == 224) {
       if ($("#form-type").val() == 99) $("#form-type").val(1);
       else if ($("#form-type").val() == 5) $("#form-type").val(97);
       else $("#form-type").val(Number($("#form-type").val()) + 1);
@@ -568,7 +573,7 @@ function drawPreview(obj) {
         endNoteElement.classList.add(`type${_end.type}`);
         endNoteElement.style.right = `${endPositionRight}px`;
         endNoteElement.style.top = `${endPositionTop}px`;
-        if (_end.position < 0 || _end.position >= _end.split) {
+        if (_end.position < 0 || _end.position >= _end.split || positionTop >= endPositionTop) {
           endNoteElement.classList.add('-error');
         }
 
@@ -647,6 +652,7 @@ function drawShadow() {
   $("#noteShadow, #noteShadowEnd, #long-shadow").remove();
   const shadowElement = document.createElement('span');
   let shadowPositionRight = (_lane - 1) * 60 + 50;
+  let shadowPositionTop = (_measure * measureHeight) + measureHeight * (_pos / _spl);
   shadowElement.id = 'noteShadow';
   shadowElement.classList.add(`type${_type}`);
 
@@ -666,20 +672,43 @@ function drawShadow() {
     shadowElement.classList.add('-hidden');
   }
   shadowElement.style.right = `${shadowPositionRight}px`;
-  shadowElement.style.top = `${(_measure * measureHeight) + measureHeight * (_pos / _spl)}px`;
+  shadowElement.style.top = `${shadowPositionTop}px`;
   document.querySelector('#preview').appendChild(shadowElement);
 
   // シャドー終点の描画
   if (_type == 2) {
-    $("#noteShadow").text("n");
-    $("#preview").append("<span id='noteShadowEnd'>n</span>");
-    $("#noteShadowEnd").addClass("type" + $("#endform-type").val()).css("right", (Number($("#endform-lane").val()) - 1) * 60).css("top", (Number($("#endform-measure").val()) * measureHeight) + measureHeight * (Number($("#endform-position").val()) / Number($("#endform-split").val())));
-    $("#preview").append("<i id='long-shadow'></i>");
-    $("#long-shadow")
-      .addClass("long")
-      .css("right", (Number($("#endform-lane").val()) - 1) * 60)
-      .css("top", Number($("#form-measure").val()) * measureHeight + measureHeight * (Number($("#form-position").val()) / Number($("#form-split").val())))
-      .css("height", Math.abs((_measure * measureHeight) + measureHeight * (_pos / _spl) - ((Number($("#endform-measure").val()) * measureHeight) + measureHeight * (Number($("#endform-position").val()) / Number($("#endform-split").val())))));
+    const previewElement = document.querySelector('#preview');
+    const _end_type = Number($("#endform-type").val());
+    const _end_lane = Number($("#endform-lane").val());
+    const _end_measure = Number($("#endform-measure").val());
+    const _end_pos = Number($("#endform-position").val());
+    const _end_spl = Number($("#endform-split").val());
+
+    // 終端ノートを描画
+    const shadowEndElement = document.createElement('span');
+    shadowEndElement.id = 'noteShadowEnd';
+    shadowEndElement.classList.add(`type${_end_type}`);
+    previewElement.appendChild(shadowEndElement);
+
+    // 終端ノートを配置
+    const endShadowPositionRight = (_end_lane - 1) * 60 + 50;
+    const endShadowPositionTop = (_end_measure * measureHeight) + measureHeight * (_end_pos / _end_spl);
+    shadowEndElement.classList.add(`type${_end_type}`);
+    shadowEndElement.style.right = `${endShadowPositionRight}px`;
+    shadowEndElement.style.top = `${endShadowPositionTop}px`;
+    if (_end_pos < 0 || _end_pos >= _end_spl || shadowPositionTop >= endShadowPositionTop) {
+      shadowEndElement.classList.add('-error');
+    }
+
+    // LN帯を描画
+    if (_lane == _end_lane) {
+      previewElement.insertAdjacentHTML('beforeend', '<i id="long-shadow"></i>');
+      const shadowLongNoteElement = document.querySelector('#long-shadow');
+      shadowLongNoteElement.classList.add('long');
+      shadowLongNoteElement.style.right = `${endShadowPositionRight}px`;
+      shadowLongNoteElement.style.top = `${shadowPositionTop}px`;
+      shadowLongNoteElement.style.height = `${(endShadowPositionTop - shadowPositionTop)}px`;
+    }
   }
 }
 
