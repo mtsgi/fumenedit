@@ -562,7 +562,7 @@ function drawPreview(obj) {
 
     // ノートを配置
     const positionTop = (i.measure * measureHeight) + measureHeight * (i.position / i.split);
-    let positionRight = (i.lane - 1) * 60 + 50;
+    let positionRight = (i.lane - 1) * 60 + 40;
     noteElement.classList.add(`type${i.type}`, `option${i.option}`);
     noteElement.style.right = `${positionRight}px`;
     noteElement.style.top = `${positionTop}px`;
@@ -613,7 +613,7 @@ function drawPreview(obj) {
         endNoteElement.insertAdjacentHTML('beforeend', `<i class="noteinfo">${_end.position}/${_end.split}</i>`);
 
         // 終端ノートを配置
-        const endPositionRight = (_end.lane - 1) * 60 + 50;
+        const endPositionRight = (_end.lane - 1) * 60 + 40;
         const endPositionTop = (_end.measure * measureHeight) + measureHeight * (_end.position / _end.split);
         endNoteElement.classList.add(`type${_end.type}`);
         endNoteElement.style.right = `${endPositionRight}px`;
@@ -696,7 +696,7 @@ function drawShadow() {
   // シャドーを描画
   $("#noteShadow, #noteShadowEnd, #long-shadow").remove();
   const shadowElement = document.createElement('span');
-  let shadowPositionRight = (_lane - 1) * 60 + 50;
+  let shadowPositionRight = (_lane - 1) * 60 + 40;
   let shadowPositionTop = (_measure * measureHeight) + measureHeight * (_pos / _spl);
   shadowElement.id = 'noteShadow';
   shadowElement.classList.add(`type${_type}`);
@@ -736,7 +736,7 @@ function drawShadow() {
     previewElement.appendChild(shadowEndElement);
 
     // 終端ノートを配置
-    const endShadowPositionRight = (_end_lane - 1) * 60 + 50;
+    const endShadowPositionRight = (_end_lane - 1) * 60 + 40;
     const endShadowPositionTop = (_end_measure * measureHeight) + measureHeight * (_end_pos / _end_spl);
     shadowEndElement.classList.add(`type${_end_type}`);
     shadowEndElement.style.right = `${endShadowPositionRight}px`;

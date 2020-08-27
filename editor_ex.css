@@ -7,3 +7,7 @@
 main {
   background: #ddd;
 }
+
+::-webkit-scrollbar {
+    width: 0;
+}
